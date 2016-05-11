@@ -43,6 +43,10 @@ class CRM_CivirulesActions_GroupContact_Form_GroupId extends CRM_CivirulesAction
     $multiGroup->setButtonAttributes('add', array('value' => ts('Add >>')));
     $multiGroup->setButtonAttributes('remove', array('value' => ts('<< Remove')));
 
+    if ($this->action->name == 'GroupContactAdd') {
+      $this->add('checkbox', 'not_removed', ts('only if not previously removed'));
+    }
+
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
       array('type' => 'cancel', 'name' => ts('Cancel'))));
@@ -92,6 +96,7 @@ class CRM_CivirulesActions_GroupContact_Form_GroupId extends CRM_CivirulesAction
     if (!empty($data['group_ids']) && is_array($data['group_ids'])) {
       $defaultValues['type'] = 1;
     }
+    $defaultValues['not_removed'] = !empty($data['not_removed']);
     return $defaultValues;
   }
 
@@ -108,6 +113,7 @@ class CRM_CivirulesActions_GroupContact_Form_GroupId extends CRM_CivirulesAction
     } else {
       $data['group_ids'] = $this->_submitValues['group_ids'];
     }
+    $data['not_removed'] = $this->_submitValues['not_removed'];
 
     $this->ruleAction->action_params = serialize($data);
     $this->ruleAction->save();
