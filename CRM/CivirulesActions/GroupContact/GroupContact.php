@@ -43,6 +43,13 @@ abstract class CRM_CivirulesActions_GroupContact_GroupContact extends CRM_Civiru
       $params = array();
       $params['group_id'] = $groupId;
 
+      // if the option not_removed is set
+      //  skip this group if case the contact has previously been removed
+      if (   !empty($actionParams['not_removed']) 
+          && $this->hadContactBeenRemoved($triggerData->getContactId(), $groupId)) {
+        continue;
+      }
+
       //alter parameters by subclass
       $params = $this->alterApiParameters($params, $triggerData);
 
@@ -114,6 +121,21 @@ abstract class CRM_CivirulesActions_GroupContact_GroupContact extends CRM_Civiru
         break;
     }
     return '';
+  }
+
+
+  /**
+   * check if the contact is currently in status 'Removed' for
+   * the given group
+   *
+   * @return bool
+   **/
+  protected function hadContactBeenRemoved($contact_id, $group_id) {
+    $status_query = civicrm_api3('GroupContact', 'get', array(
+        'contact_id' => $contact_id, 
+        'group_id' => $group_id,
+        'status' => 'Removed'));
+    return $status_query['count'];
   }
 
 }

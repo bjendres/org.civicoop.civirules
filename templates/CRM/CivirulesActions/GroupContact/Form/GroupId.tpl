@@ -15,6 +15,13 @@
         <div class="content">{$form.group_ids.html}</div>
         <div class="clear"></div>
     </div>
+    {if $form.not_removed}
+    <div class="crm-section groups-opted-out">
+        <div class="label">{$form.not_removed.label}</div>
+        <div class="content">{$form.not_removed.html}</div>
+        <div class="clear"></div>
+    </div>
+    {/if}
 </div>
 <div class="crm-submit-buttons">
     {include file="CRM/common/formButtons.tpl" location="bottom"}
