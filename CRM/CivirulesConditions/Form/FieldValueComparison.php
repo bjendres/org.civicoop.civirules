@@ -43,7 +43,7 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesCon
           if (isset($field['title'])) {
             $label = $field['title'];
           } else {
-            $label = "";
+            $label = $field['name'];
           }
           if (empty($label)) {
             $label = $field['name'];
