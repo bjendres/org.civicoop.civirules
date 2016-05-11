@@ -113,7 +113,9 @@ class CRM_CivirulesActions_GroupContact_Form_GroupId extends CRM_CivirulesAction
     } else {
       $data['group_ids'] = $this->_submitValues['group_ids'];
     }
-    $data['not_removed'] = $this->_submitValues['not_removed'];
+    if (isset($this->_submitValues['not_removed'])) {
+      $data['not_removed'] = $this->_submitValues['not_removed'];
+    }
 
     $this->ruleAction->action_params = serialize($data);
     $this->ruleAction->save();
