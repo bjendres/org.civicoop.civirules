@@ -12,6 +12,8 @@ class CRM_Civirules_TriggerData_Post extends CRM_Civirules_TriggerData_TriggerDa
     $this->setEntityData($entity, $data);
     if ($entity == 'contact') {
       $this->contact_id = $objectId;
+    } elseif (strtolower($entity) == 'relationship' && isset($data['contact_id_a'])) {
+      $this->contact_id = $data['contact_id_a'];
     } elseif (isset($data['contact_id'])) {
       $this->contact_id = $data['contact_id'];
     }
