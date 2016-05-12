@@ -16,6 +16,13 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
     $field = $this->conditionParams['field'];
 
     $data = $triggerData->getEntityData($entity);
+    return $this->_getFieldValue($triggerData, $field, $data);
+  }
+
+  /**
+   * helper sub-function for getFieldValue() to enable better reuse
+   */
+  protected function _getFieldValue(CRM_Civirules_TriggerData_TriggerData $triggerData, $field, $data) {
     if (isset($data[$field])) {
       return $this->normalizeValue($data[$field]);
     }
@@ -45,6 +52,7 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
 
     return null;
   }
+
 
   /**
    * Returns an array of value when the custom field is a multi select

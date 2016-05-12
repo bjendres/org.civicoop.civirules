@@ -50,6 +50,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/condition/relationship/inheritedfieldvaluecomparison</path>
+    <page_callback>CRM_CivirulesConditions_Form_Relationship_InheritedFieldValueComparison</page_callback>
+    <title>Inherited Value comparison</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/groupcontact/groupid</path>
     <page_callback>CRM_CivirulesConditions_Form_GroupContact_GroupId</page_callback>
     <title>Group Id</title>
