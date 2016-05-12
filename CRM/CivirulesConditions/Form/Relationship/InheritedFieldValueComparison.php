@@ -45,6 +45,13 @@ class CRM_CivirulesConditions_Form_Relationship_InheritedFieldValueComparison ex
   public function setDefaultValues() {
     $defaultValues = parent::setDefaultValues();
 
+    $data = array();
+    $ruleCondition = new CRM_Civirules_BAO_RuleCondition();
+    $ruleCondition->id = $this->ruleConditionId;
+    if ($ruleCondition->find(true)) {
+      $data = unserialize($ruleCondition->condition_params);
+    }
+
     if (!empty($data['mode'])) {
       $defaultValues['mode'] = $data['mode'];
     }
