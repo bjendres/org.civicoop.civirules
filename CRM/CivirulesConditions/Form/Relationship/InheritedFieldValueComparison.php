@@ -14,14 +14,20 @@ class CRM_CivirulesConditions_Form_Relationship_InheritedFieldValueComparison ex
     $this->add('select', 'mode', ts('Mode'), $this->getModeOptions(), true);
     $this->add('select', 'field', ts('Field'), $this->getFields(), true);
     $this->assign('custom_field_multi_select_html_types', CRM_Civirules_Utils_CustomField::getMultiselectTypes());
+
+    // replace 'entity' field
+    $this->removeElement('entity');
+    $this->add('hidden', 'entity', 'Contact');
+
   }
 
 
   protected function getModeOptions() {
     return array(
-      CRM_CivirulesConditions_Relationship_InheritedFieldValueComparison::$IFVC_MODE_RELATED_ONLY  => ts("Only related contact's value"),
-      CRM_CivirulesConditions_Relationship_InheritedFieldValueComparison::$IFVC_MODE_RELATED_FIRST => ts("Related contact's value first, main contact's if not set"),
-      CRM_CivirulesConditions_Relationship_InheritedFieldValueComparison::$IFVC_MODE_MAIN_FIRST    => ts("Main contact's value first, related contact's if not set"),
+      CRM_CivirulesConditions_Relationship_InheritedFieldValueComparison::$IFVC_MODE_A_ONLY  => ts("Only related contact A's value"),
+      CRM_CivirulesConditions_Relationship_InheritedFieldValueComparison::$IFVC_MODE_B_ONLY  => ts("Only related contact B's value"),
+      CRM_CivirulesConditions_Relationship_InheritedFieldValueComparison::$IFVC_MODE_A_FIRST => ts("Contact A's value first, the other contact's if not set"),
+      CRM_CivirulesConditions_Relationship_InheritedFieldValueComparison::$IFVC_MODE_B_FIRST => ts("Contact B's value first, the other contact's if not set"),
       );
   }
 
@@ -43,6 +49,8 @@ class CRM_CivirulesConditions_Form_Relationship_InheritedFieldValueComparison ex
       $defaultValues['mode'] = $data['mode'];
     }
 
+    $defaultValues['entity'] = 'Contact';
+
     return $defaultValues;
   }
 
@@ -58,6 +66,7 @@ class CRM_CivirulesConditions_Form_Relationship_InheritedFieldValueComparison ex
     $data['value'] = $this->_submitValues['value'];
     $data['multi_value'] = explode("\r\n", $this->_submitValues['multi_value']);
     $data['mode'] = $this->_submitValues['mode'];
+    $data['entity'] = 'Contact';
     $data['field'] = substr($this->_submitValues['field'], strlen($data['entity'].'_'));
 
     $this->ruleCondition->condition_params = serialize($data);

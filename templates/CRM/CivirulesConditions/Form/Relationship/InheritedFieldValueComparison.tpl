@@ -44,35 +44,15 @@
 
 {literal}
 <script type="text/javascript">
-    {/literal}
-
-    {foreach from=$entities key=entity_key item=entity}
-        cj('#entity option[value="{$entity_key}"]').data('civi-entity', '{$entity}');
-    {/foreach}
-
-    {literal}
     cj(function() {
-        var all_fields = cj('#field').html();
-
         cj('#field').change(function() {
-            var entity = cj('#entity option:selected').data('civi-entity');
+            var entity = 'Contact';
             var field = cj('#field').val();
-            var field = field.replace(cj('#entity').val()+'_', "");
+            var field = field.replace(entity+'_', "");
             retrieveOptionsForEntityAndField(entity, field);
             cj('#operator').trigger('change');
         });
 
-        cj('#entity').change(function() {
-           var val = cj('#entity').val();
-            cj('#field').html(all_fields);
-            cj('#field option').each(function(index, el) {
-                if (cj(el).val().indexOf(val+'_') != 0) {
-                    cj(el).remove();
-                }
-            });
-            cj('#field').trigger('change');
-        });
-        cj('#entity').trigger('change');
     });
 
     function retrieveOptionsForEntityAndField(entity, field) {

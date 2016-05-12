@@ -10,9 +10,22 @@
 class CRM_CivirulesConditions_Relationship_InheritedFieldValueComparison extends CRM_CivirulesConditions_FieldValueComparison {
 
   /** define different inheritance modes: */
-  public static $IFVC_MODE_RELATED_ONLY  = 'related_only';   // Only related contact's value
-  public static $IFVC_MODE_RELATED_FIRST = 'related_first';  // Related contact's value first, main contact's if not set
-  public static $IFVC_MODE_MAIN_FIRST    = 'main_first';     // Main contact's value first, related contact's if not set
+  public static $IFVC_MODE_A_ONLY  = 'a_only';   // Only related contact A's value
+  public static $IFVC_MODE_B_ONLY  = 'b_only';   // Only related contact B's value
+  public static $IFVC_MODE_A_FIRST = 'a_first';  // Contact A's value first, the other contact's if not set
+  public static $IFVC_MODE_B_FIRST = 'b_first';  // Contact B's value first, the other contact's if not set
+
+  /**
+   * override to make sure there is relationship data
+   */
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    $relationship = $triggerData->getEntityData('relationship');
+    if (empty($relationship)) {
+      return FALSE;
+    } else {
+      return parent::isConditionValid($triggerData);
+    }
+  }
 
   /**
    * Returns the value of the field for the condition
@@ -27,29 +40,32 @@ class CRM_CivirulesConditions_Relationship_InheritedFieldValueComparison extends
     $field = $this->conditionParams['field'];
     $mode  = $this->conditionParams['mode'];
 
-    // TODO:
-    $main_contact_data    = array();
-    $related_contact_data = array();
+    // load contact data
+    $relationship = $triggerData->getEntityData('relationship');
+    $contact_a = civicrm_api3('Contact', 'getsingle', array('id' => $relationship['contact_id_a']));
+    $contact_b = civicrm_api3('Contact', 'getsingle', array('id' => $relationship['contact_id_b']));
 
     switch ($mode) {
-      case self::$IFVC_MODE_RELATED_ONLY:
-        return $this->_getFieldValue($triggerData, $field, $related_contact_data);
-        break;
+      case self::$IFVC_MODE_A_ONLY:
+        return $this->_getFieldValue($triggerData, $field, $contact_a);
 
-      case self::$IFVC_MODE_RELATED_FIRST:
-        $value = $this->_getFieldValue($triggerData, $field, $related_contact_data);
+      case self::$IFVC_MODE_B_ONLY:
+        return $this->_getFieldValue($triggerData, $field, $contact_b);
+
+      case self::$IFVC_MODE_A_FIRST:
+        $value = $this->_getFieldValue($triggerData, $field, $contact_a);
         if ($value != NULL) {
           return $value;
         } else {
-          return $this->_getFieldValue($triggerData, $field, $main_contact_data);
+          return $this->_getFieldValue($triggerData, $field, $contact_b);
         }
 
-      case self::$IFVC_MODE_MAIN_FIRST:
-        $value = $this->_getFieldValue($triggerData, $field, $main_contact_data);
+      case self::$IFVC_MODE_B_FIRST:
+        $value = $this->_getFieldValue($triggerData, $field, $contact_b);
         if ($value != NULL) {
           return $value;
         } else {
-          return $this->_getFieldValue($triggerData, $field, $related_contact_data);
+          return $this->_getFieldValue($triggerData, $field, $contact_a);
         }
       
       default:
