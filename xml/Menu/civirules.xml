@@ -183,6 +183,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/action/relationship/propagatevalue</path>
+    <page_callback>CRM_CivirulesActions_Relationship_Form_PropagateValue</page_callback>
+    <title>Propagate contact value via relationship</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/trigger/groupmembership</path>
     <page_callback>CRM_CivirulesCronTrigger_Form_GroupMembership</page_callback>
     <title>Group membership</title>
