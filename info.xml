@@ -14,8 +14,8 @@
     <author>CiviCooP</author>
     <email>helpdesk@civicoop.org</email>
   </maintainer>
-  <releaseDate>2016-05-12</releaseDate>
-  <version>1.2.icadev</version>
+  <releaseDate>2016-05-13</releaseDate>
+  <version>1.2.ica-dev62bca1d</version>
   <develStage>development</develStage>
   <compatibility>
     <ver>4.4</ver>
