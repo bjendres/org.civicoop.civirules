@@ -20,19 +20,16 @@ class CRM_CivirulesActions_Relationship_PropagateValue extends CRM_Civirules_Act
    *
    */
   public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
-    error_log("RUN!");
     $contribution = $triggerData->getEntityData('Contribution');
     $actionParams = $this->getActionParameters();
 
     // load contact data
     $relationship = $triggerData->getEntityData('relationship');
-    error_log($relationship);
     if (empty($relationship)) return;
 
     $field = $actionParams['field'];
-    error_log($field);
 
-    // this doesn't work with contacts in trash:
+    // the following doesn't work with contacts in trash:
     // $contact_ids[] = $relationship['contact_id_a'];
     // $contact_ids[] = $relationship['contact_id_b'];
     // $contacts = civicrm_api3('Contact', 'get', array('id' => array('IN', $contact_ids)));
@@ -86,7 +83,7 @@ class CRM_CivirulesActions_Relationship_PropagateValue extends CRM_Civirules_Act
     
     if (!empty($params)) {
       try {
-        civicrm_api3('Contact', 'Create', $params);
+        civicrm_api3('Contact', 'create', $params);
       } catch (CiviCRM_API3_Exception $ex) {}      
     }
   }
@@ -106,31 +103,28 @@ class CRM_CivirulesActions_Relationship_PropagateValue extends CRM_Civirules_Act
 
   /**
    * Returns a user friendly text explaining the condition params
-   * e.g. 'Older than 65'
    *
    * @return string
    * @access public
    */
   public function userFriendlyConditionParams() {
-    $return = "";
-    $dateString = "";
-    $params = $this->getActionParameters();
-    if (isset($params['thank_you_radio'])) {
-      switch ($params['thank_you_radio']) {
-        case 0:
-          $dateString = "date action executes";
-          break;
-        case 1:
-          $dateString = $params['number_of_days']." days after action executes";
-          break;
-        case 2:
-          $dateString = date('d M Y', strtotime($params['thank_you_date']));
-          break;
-      }
+    $actionParams = $this->getActionParameters();
+
+    switch ($actionParams['mode']) {
+      case self::$IVA_MODE_A_TO_B:
+        return ts("Override contact A's '%1' with contact B's", array(1=>$actionParams['field']));
+
+      case self::$IVA_MODE_B_TO_A:
+        return ts("Override contact A's '%1' with contact B's", array(1=>$actionParams['field']));
+      
+      case self::$IVA_MODE_A_TO_B_FILL:
+        return ts("Copy contact A's '%1' to contact B if not set", array(1=>$actionParams['field']));
+
+      case self::$IVA_MODE_B_TO_A_FILL:
+        return ts("Copy contact B's '%1' to contact A if not set", array(1=>$actionParams['field']));
+
+      default:
+        return ts("Configuration error");
     }
-    if (!empty($dateString)) {
-      $return = 'Thank You Date for Contribution will be set to : ' . $dateString;
-    }
-    return $return;
   }
 }

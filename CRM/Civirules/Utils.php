@@ -277,15 +277,15 @@ class CRM_Civirules_Utils {
 
   /**
    * Utility function to get all fields for an entity
+   * abridged version of CRM_CivirulesConditions_FieldValueComparison::getFieldValue
    */
-  public static function getFields($entity_name, $daoClassName) {
-    $key = $entity_name . '_';
+  public static function getFields($entity_name, $daoClassName, $prefix='') {
     $return = array();
 
     if (is_callable(array($daoClassName, 'fields'))) {
       $fields = call_user_func(array($daoClassName, 'fields'));
       foreach ($fields as $field) {
-        $fieldKey = $key . $field['name'];
+        $fieldKey = $prefix . $field['name'];
         if (isset($field['title'])) {
           $label = trim($field['title']);
         } else {
@@ -300,7 +300,7 @@ class CRM_Civirules_Utils {
       // get custom fields
       $customFields = self::getCustomfieldsForEntity($entity_name);
       foreach($customFields as $customFieldKey => $customFieldLabel) {
-        $return[$key.$customFieldKey] = $customFieldLabel;
+        $return[$prefix.$customFieldKey] = $customFieldLabel;
       }
     }
 
@@ -309,6 +309,7 @@ class CRM_Civirules_Utils {
 
   /**
    * Utility function to get all CUSTOM fields for an entity
+   * abridged version of CRM_CivirulesConditions_FieldValueComparison::getCustomfieldsForEntity
    */
   public static function getCustomfieldsForEntity($entity) {
     $extends = array($entity);
@@ -343,6 +344,7 @@ class CRM_Civirules_Utils {
 
   /**
    * Utility function to get all custom fields for a given custom group
+   * abridged version of CRM_CivirulesConditions_FieldValueComparison::getCustomFieldPerGroup
    */
   public static function getCustomFieldPerGroup($group_id, $group_label) {
     $fields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $group_id));

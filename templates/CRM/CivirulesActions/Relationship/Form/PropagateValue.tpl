@@ -1,5 +1,5 @@
 <h3>{$ruleActionHeader}</h3>
-<div class="crm-block crm-form-block crm-civirule-rule_action-block-contribution-thank-you-date">
+<div class="crm-block crm-form-block crm-civirule-rule_action-block-relationship-propagatevalue">
   <div class="crm-section">
       <div class="label">{$form.mode.label}</div>
       <div class="content">{$form.mode.html}</div>
