@@ -272,5 +272,88 @@ class CRM_Civirules_Utils {
     } catch (Exception $ex) {}
     return $isLater;
   }
+
+
+
+  /**
+   * Utility function to get all fields for an entity
+   * abridged version of CRM_CivirulesConditions_FieldValueComparison::getFieldValue
+   */
+  public static function getFields($entity_name, $daoClassName, $prefix='') {
+    $return = array();
+
+    if (is_callable(array($daoClassName, 'fields'))) {
+      $fields = call_user_func(array($daoClassName, 'fields'));
+      foreach ($fields as $field) {
+        $fieldKey = $prefix . $field['name'];
+        if (isset($field['title'])) {
+          $label = trim($field['title']);
+        } else {
+          $label = "";
+        }
+        if (empty($label)) {
+          $label = $field['name'];
+        }
+        $return[$fieldKey] = $label;
+      }
+
+      // get custom fields
+      $customFields = self::getCustomfieldsForEntity($entity_name);
+      foreach($customFields as $customFieldKey => $customFieldLabel) {
+        $return[$prefix.$customFieldKey] = $customFieldLabel;
+      }
+    }
+
+    return $return;
+  }
+
+  /**
+   * Utility function to get all CUSTOM fields for an entity
+   * abridged version of CRM_CivirulesConditions_FieldValueComparison::getCustomfieldsForEntity
+   */
+  public static function getCustomfieldsForEntity($entity) {
+    $extends = array($entity);
+    if ($entity == 'Contact') {
+      $contact_types = civicrm_api3('ContactType', 'get', array());
+      foreach($contact_types['values'] as $type) {
+        $extends[] = $type['name'];
+      }
+    }
+
+    $return = array();
+    $processedGroups = array();
+    foreach($extends as $extend) {
+      $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => $extend));
+      foreach($customGroups['values'] as $customGroup) {
+        if (in_array($customGroup['id'], $processedGroups)) {
+          continue;
+        }
+        if (!empty($customGroup['is_multiple'])) {
+          //do not include multiple custom groups
+          continue;
+        }
+
+        // get custom fields per group
+        $return = $return + self::getCustomFieldPerGroup($customGroup['id'], $customGroup['title']);
+        $processedGroups[] = $customGroup['id'];
+      }
+    }
+
+    return $return;
+  }
+
+  /**
+   * Utility function to get all custom fields for a given custom group
+   * abridged version of CRM_CivirulesConditions_FieldValueComparison::getCustomFieldPerGroup
+   */
+  public static function getCustomFieldPerGroup($group_id, $group_label) {
+    $fields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $group_id));
+    $return = array();
+    foreach($fields['values'] as $field) {
+      $key = 'custom_'.$field['id'];
+      $return[$key] = $group_label.': '.$field['label'];
+    }
+    return $return;
+  }  
 }
 

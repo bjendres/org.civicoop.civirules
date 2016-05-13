@@ -1,11 +1,11 @@
 <?php
-
 /**
- * This is similar to the FieldValueComparison condition, 
- * except that it will include data from a related contact
- * to potentially override that value
+ * Class for CiviRules Contact comparison of values inherited via relationship
+ * 
+ * ONLY works when 'Relationship' entity in trigger!
  *
- * @author endres@systopia.de
+ * @author Björn Endres (SYSTPIA) <endres@systopia.de>
+ * @license AGPL-3.0
  */
 class CRM_CivirulesConditions_Relationship_InheritedFieldValueComparison extends CRM_CivirulesConditions_FieldValueComparison {
 
@@ -54,7 +54,7 @@ class CRM_CivirulesConditions_Relationship_InheritedFieldValueComparison extends
 
       case self::$IFVC_MODE_A_FIRST:
         $value = $this->_getFieldValue($triggerData, $field, $contact_a);
-        if ($value != NULL) {
+        if (($value !== NULL) && ($value !== '')) {
           return $value;
         } else {
           return $this->_getFieldValue($triggerData, $field, $contact_b);
@@ -62,7 +62,7 @@ class CRM_CivirulesConditions_Relationship_InheritedFieldValueComparison extends
 
       case self::$IFVC_MODE_B_FIRST:
         $value = $this->_getFieldValue($triggerData, $field, $contact_b);
-        if ($value != NULL) {
+        if (($value !== NULL) && ($value !== '')) {
           return $value;
         } else {
           return $this->_getFieldValue($triggerData, $field, $contact_a);
@@ -97,7 +97,38 @@ class CRM_CivirulesConditions_Relationship_InheritedFieldValueComparison extends
    * @access public
    */
   public function userFriendlyConditionParams() {
-    $text = parent::userFriendlyConditionParams();
-    return $text . htmlentities(" (" . ts("inherited") . ")");
+    $value = $this->getComparisonValue();
+    if (is_array($value)) {
+      $value = implode(", ", $value);
+    }
+
+    switch ($this->conditionParams['mode']) {
+      case self::$IFVC_MODE_A_ONLY:
+        return htmlentities(ts("Contact %4's '%1' %2 '%3'", array(
+          1 => $this->conditionParams['field'],
+          2 => $this->getOperator(),
+          3 => $value, 4 => 'A')));
+
+      case self::$IFVC_MODE_B_ONLY:
+        return htmlentities(ts("Contact %4's '%1' %2 '%3'", array(
+          1 => $this->conditionParams['field'],
+          2 => $this->getOperator(),
+          3 => $value, 4 => 'B')));
+
+      case self::$IFVC_MODE_A_FIRST:
+        return htmlentities(ts("Contact %4's '%1' (or contact %5's if not set) %2 '%3'", array(
+          1 => $this->conditionParams['field'],
+          2 => $this->getOperator(),
+          3 => $value, 4 => 'A', 5 => 'B')));
+
+      case self::$IFVC_MODE_B_FIRST:
+        return htmlentities(ts("Contact %4's '%1' (or contact %5's if not set) %2 '%3'", array(
+          1 => $this->conditionParams['field'],
+          2 => $this->getOperator(),
+          3 => $value, 4 => 'B', 5 => 'A')));
+      
+      default:
+        return ts("Configuration error");
+    }
   }
 }
