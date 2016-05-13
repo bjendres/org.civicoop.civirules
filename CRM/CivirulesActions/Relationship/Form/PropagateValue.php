@@ -18,7 +18,7 @@ class CRM_CivirulesActions_Relationship_Form_PropagateValue extends CRM_Civirule
 
     $this->add('hidden', 'rule_action_id');
     $this->add('select', 'mode', ts('Mode'), $this->getModeOptions(), true);
-    $this->add('select', 'field', ts('Field'), $fields, true);
+    $this->add('select', 'field', ts('Field'), $fields, true, array('class' => 'crm-select2'));
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),

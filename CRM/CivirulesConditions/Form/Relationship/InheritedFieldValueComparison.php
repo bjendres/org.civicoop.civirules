@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Class for CiviRules Contact comparison of values inherited via relationship
+ * 
+ * ONLY works when 'Relationship' entity in trigger!
+ *
+ * @author Björn Endres (SYSTPIA) <endres@systopia.de>
+ * @license AGPL-3.0
+ */
 class CRM_CivirulesConditions_Form_Relationship_InheritedFieldValueComparison extends CRM_CivirulesConditions_Form_FieldValueComparison {
 
   /**
@@ -10,9 +17,11 @@ class CRM_CivirulesConditions_Form_Relationship_InheritedFieldValueComparison ex
   public function buildQuickForm() {
     parent::buildQuickForm();
 
+    $fields = CRM_Civirules_Utils::getFields('Contact', 'CRM_Contact_DAO_Contact', 'Contact_');
+
     $this->add('hidden', 'rule_condition_id');
     $this->add('select', 'mode', ts('Mode'), $this->getModeOptions(), true);
-    $this->add('select', 'field', ts('Field'), $this->getFields(), true);
+    $this->add('select', 'field', ts('Field'), $fields, true, array('class' => 'crm-select2'));
     $this->assign('custom_field_multi_select_html_types', CRM_Civirules_Utils_CustomField::getMultiselectTypes());
 
     // replace 'entity' field
