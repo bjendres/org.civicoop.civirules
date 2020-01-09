@@ -23,6 +23,7 @@ class CRM_CivirulesActions_Contact_Form_PrivacyOptions extends CRM_CivirulesActi
       'mail' => 'Do not mail',
       'sms' => 'Do not SMS',
       'trade' => 'Do not trade',
+      'opt_out' => 'Is Opt-Out',
     );
     $this->add('select', 'privacy_options', ts('Privacy Option(s)'), $privacyOptions, FALSE,
       array('id' => 'privacy_options', 'multiple' => 'multiple', 'class' => 'crm-select2'));

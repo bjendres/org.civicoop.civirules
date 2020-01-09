@@ -24,7 +24,11 @@ class CRM_CivirulesActions_Contact_SetPrivacyOptions extends CRM_Civirules_Actio
       $v = CRM_Utils_Type::escape($actionParams['on_or_off'], 'Integer');
 
       foreach ($actionParams['privacy_options'] as $privacyOption) {
-        $f = 'do_not_'.$privacyOption;
+        if ($privacyOption == 'opt_out') {
+          $f = 'is_'.$privacyOption;
+        } else {
+          $f = 'do_not_'.$privacyOption;
+        }
         $sqlUpd[] = "{$f} = {$v}";
       }
       $sqlUpdStr = implode(', ', $sqlUpd);
@@ -67,6 +71,7 @@ class CRM_CivirulesActions_Contact_SetPrivacyOptions extends CRM_Civirules_Actio
       'mail' => 'Do not mail',
       'sms' => 'Do not SMS',
       'trade' => 'Do not trade',
+      'opt_out' => 'Is Opt-Out',
     );
     $actionLabels = array();
     $actionParams = $this->getActionParameters();
