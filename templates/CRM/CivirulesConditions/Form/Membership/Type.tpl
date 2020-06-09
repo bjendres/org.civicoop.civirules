@@ -25,7 +25,7 @@
   cj(function() {
     cj('#operator').change(function() {
       var operator = cj('#operator').val();
-      if (operator == 2) {
+      if ((operator == 2) || (operator == 3)) {
         cj('.crm-section.membership_type_id').addClass('hiddenElement');
         cj('.crm-section.membership_type_ids').removeClass('hiddenElement');
       } else {

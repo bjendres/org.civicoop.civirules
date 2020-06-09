@@ -1,18 +1,19 @@
 <?php
 
+use CRM_Civirules_ExtensionUtil as E;
+
 class CRM_CivirulesConditions_Membership_Type extends CRM_Civirules_Condition {
 
-  private $conditionParams = array();
+  private $conditionParams = [];
 
   /**
    * Method to set the Rule Condition data
    *
    * @param array $ruleCondition
-   * @access public
    */
   public function setRuleConditionData($ruleCondition) {
     parent::setRuleConditionData($ruleCondition);
-    $this->conditionParams = array();
+    $this->conditionParams = [];
     if (!empty($this->ruleCondition['condition_params'])) {
       $this->conditionParams = unserialize($this->ruleCondition['condition_params']);
     }
@@ -33,16 +34,25 @@ class CRM_CivirulesConditions_Membership_Type extends CRM_Civirules_Condition {
           $isConditionValid = TRUE;
         }
       break;
+
       case 1:
         if ($membership['membership_type_id'] != $this->conditionParams['membership_type_id']) {
           $isConditionValid = TRUE;
         }
       break;
+
       case 2:
         if (in_array($membership['membership_type_id'], $this->conditionParams['membership_type_ids'])) {
           $isConditionValid = TRUE;
         }
         break;
+
+      case 3:
+        if (!in_array($membership['membership_type_id'], $this->conditionParams['membership_type_ids'])) {
+          $isConditionValid = TRUE;
+        }
+        break;
+
     }
     return $isConditionValid;
   }
@@ -54,12 +64,9 @@ class CRM_CivirulesConditions_Membership_Type extends CRM_Civirules_Condition {
    *
    * @param int $ruleConditionId
    * @return bool|string
-   * @access public
-   * @abstract
    */
   public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/membershiptype', 'rule_condition_id='
-      .$ruleConditionId);
+    return CRM_Utils_System::url('civicrm/civirule/form/condition/membershiptype', 'rule_condition_id=' . $ruleConditionId);
   }
 
   /**
@@ -67,28 +74,30 @@ class CRM_CivirulesConditions_Membership_Type extends CRM_Civirules_Condition {
    * e.g. 'Older than 65'
    *
    * @return string
-   * @access public
    */
   public function userFriendlyConditionParams() {
-    $params = array(
+    $params = [
       'is_active' => 1,
-      'options' => array('limit' => 0, 'sort' => "name ASC"),
-    );
+      'options' => ['limit' => 0, 'sort' => "name ASC"],
+    ];
     try {
       $membershipTypes = civicrm_api3('MembershipType', 'Get', $params);
       $operator = null;
       if ($this->conditionParams['operator'] == 0) {
-        $operator = 'equals';
+        $operator = E::ts('equals');
       }
       if ($this->conditionParams['operator'] == 1) {
-        $operator = 'is not equal to';
+        $operator = E::ts('is not equal to');
       }
       if ($this->conditionParams['operator'] == 2) {
-        $operator = 'one of';
+        $operator = E::ts('is one of');
+      }
+      if ($this->conditionParams['operator'] == 3) {
+        $operator = E::ts('is NOT one of');
       }
       $membershipTypeLabels = [];
       foreach ($membershipTypes['values'] as $membershipType) {
-        if ($this->conditionParams['operator'] == 2) {
+        if (in_array($this->conditionParams['operator'], [2, 3])) {
           if (in_array($membershipType['id'], $this->conditionParams['membership_type_ids'])) {
             $membershipTypeLabels[] = $membershipType['name'];
           }
@@ -96,8 +105,9 @@ class CRM_CivirulesConditions_Membership_Type extends CRM_Civirules_Condition {
           $membershipTypeLabels[] = $membershipType['name'];
         }
       }
-      return 'Membership type '.$operator.' '.implode(', ', $membershipTypeLabels);
-    } catch (CiviCRM_API3_Exception $ex) {}
+      return E::ts('Membership type %1 %2', [1 => $operator, 2=> implode(', ', $membershipTypeLabels)]);
+    }
+    catch (CiviCRM_API3_Exception $ex) {}
     return '';
   }
 
@@ -111,6 +121,7 @@ class CRM_CivirulesConditions_Membership_Type extends CRM_Civirules_Condition {
    *
    * @param CRM_Civirules_Trigger $trigger
    * @param CRM_Civirules_BAO_Rule $rule
+   *
    * @return bool
    */
   public function doesWorkWithTrigger(CRM_Civirules_Trigger $trigger, CRM_Civirules_BAO_Rule $rule) {
