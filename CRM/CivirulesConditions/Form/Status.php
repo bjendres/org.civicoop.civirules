@@ -81,6 +81,7 @@ class CRM_CivirulesConditions_Form_Status extends CRM_CivirulesConditions_Form_F
     if (isset($data[$this->getStatusFieldForEntity($this->ruleConditionEntity)])) {
       $data['status_id'] = $data[$this->getStatusFieldForEntity($this->ruleConditionEntity)];
     }
+    $data['status_id'] = $data['status_id'] ?? NULL;
     if (!is_array($data['status_id'])) {
       $data['status_id'] = [$data['status_id']];
     }
