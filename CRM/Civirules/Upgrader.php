@@ -744,5 +744,11 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     return TRUE;
   }
 
+  public function upgrade_2060() {
+    $this->ctx->log->info('Applying update 2060 - Add condition case custom field changed is one of.');
+    CRM_Civirules_Utils_Upgrader::insertConditionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/conditions.json');
+    return TRUE;
+  }
+
 }
 

@@ -14,8 +14,8 @@
     <author>CiviCooP</author>
     <email>helpdesk@civicoop.org</email>
   </maintainer>
-  <releaseDate>2020-09-25</releaseDate>
-  <version>2.17</version>
+  <releaseDate>2020-10-21</releaseDate>
+  <version>2.18</version>
   <develStage>stable</develStage>
   <compatibility>
     <ver>4.7</ver>

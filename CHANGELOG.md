@@ -1,11 +1,14 @@
 # CHANGELOG
 
-## Version 2.18 (not yet released)
+## Version 2.19 (not yet released)
+
+## Version 2.18
 
 * Add ability to send activity email for Add/Edit Activity Actions (!85)
 * Fix calls to wrong API function in "UpdateNumericValue.php" (!84)
 * Fix activityScheduledDate trigger so it does not re-trigger every day (!83)
 * Ability to modify the activity from a rule triggered by an Activity trigger (!82)
+* Add condition case custom field changed is one of
 
 ## Version 2.17
 
@@ -20,7 +23,7 @@
 ## Version 2.16
 
 * Show createdby/date in the list if rule has not been modified since it was created
-* Improved error handling. 
+* Improved error handling.
 * Fixed #82 - Participant Role condition saves now the value instead of the id
 * Fix generic status comparison to work with Campaign and other entities
 

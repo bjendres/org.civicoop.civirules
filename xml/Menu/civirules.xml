@@ -549,4 +549,11 @@
     <access_arguments>access CiviCRM</access_arguments>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/civirule/form/condition/casecustomfield</path>
+    <page_callback>CRM_CivirulesConditions_Form_Case_CaseCustomFieldChanged</page_callback>
+    <title>Case Custom Field Changed</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
 </menu>
