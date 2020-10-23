@@ -2,6 +2,8 @@
 
 ## Version 2.19 (not yet released)
 
+* Add trigger for relationship start date !86
+
 ## Version 2.18
 
 * Add ability to send activity email for Add/Edit Activity Actions (!85)
