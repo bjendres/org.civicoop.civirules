@@ -1,8 +1,10 @@
 # CHANGELOG
 
-## Version 2.19 (not yet released)
+## Version 2.19
 
 * Add trigger for relationship start date !86
+* Add trigger for relationship end date !88
+* Added action to remove subtypes of a contact !88
 
 ## Version 2.18
 
