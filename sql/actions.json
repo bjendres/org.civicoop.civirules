@@ -24,5 +24,6 @@
   {"name":"participant_update_status","label":"Update Participant Status","class_name":"CRM_CivirulesActions_Participant_UpdateStatus"},
   {"name":"Relationship_add", "label":"Add relationship", "class_name":"CRM_CivirulesActions_Relationship_Add"},
   {"name":"membership_add","label":"Add Membership","class_name":"CRM_CivirulesActions_Membership_Add"},
-  {"name":"contribution_financial_type","label":"Set the Financial Type for a Contribution","class_name":"CRM_CivirulesActions_Contribution_FinancialType"}
+  {"name":"contribution_financial_type","label":"Set the Financial Type for a Contribution","class_name":"CRM_CivirulesActions_Contribution_FinancialType"},
+  {"name":"remove_contact_sub_type","label":"Remove one or more sub contact types","class_name":"CRM_CivirulesActions_Contact_RemoveSubtype"}
 ]
