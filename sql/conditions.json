@@ -8,7 +8,7 @@
   {"name":"activity_of_type","label":"Activity is (not) one of Type(s)","class_name":"CRM_CivirulesConditions_Activity_Type"},
   {"name":"address_is_unique","label":"Address is Unique","class_name":"CRM_CivirulesConditions_Address_IsUnique"},
   {"name":"case_activity_days","label":"Days since Last Case Activity","class_name":"CRM_CivirulesConditions_Case_CaseActivity"},
-  {"name":"case_status","label":"Case Status is (not) one of","class_name":"CRM_CivirulesConditions_Case_CaseStatus"},
+  {"name":"case_status","label":"Case Status is (not) one of","class_name":"CRM_CivirulesConditions_Case_Status"},
   {"name":"case_type","label":"Case is (not) one of Type(s)","class_name":"CRM_CivirulesConditions_Case_CaseType"},
   {"name":"is_case_client","label":"Is Client of the Case","class_name":"CRM_CivirulesConditions_Case_IsClient"},
   {"name":"only_once_for_case","label":"Execute Action only Once for Case","class_name":"CRM_CivirulesConditions_Case_OnlyOnce"},
