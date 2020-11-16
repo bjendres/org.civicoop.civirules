@@ -2,6 +2,8 @@
 
 ## Version 2.20 (not yet released)
 
+* Activity Scheduled date trigger: Don't trigger for deleted activities !90 
+
 ## Version 2.19
 
 * Add trigger for relationship start date !86
