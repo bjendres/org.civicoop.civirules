@@ -62,6 +62,7 @@ class CRM_CivirulesActions_Form_Form extends CRM_Core_Form {
     parent::preProcess();
 
     $this->setFormTitle();
+    $this->assign('ruleActionHelp', $this->getHelpText());
   }
 
   function cancelAction() {
@@ -107,4 +108,13 @@ class CRM_CivirulesActions_Form_Form extends CRM_Core_Form {
     CRM_Utils_System::setTitle($title);
   }
 
+  /**
+   * Returns help text for this action.
+   * The help text is shown to the administrator who is configuring the action.
+   *
+   * @return string
+   */
+  protected function getHelpText() {
+    return '';
+  }
 }
