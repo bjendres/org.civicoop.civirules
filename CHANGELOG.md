@@ -2,9 +2,10 @@
 
 ## Version 2.20 (not yet released)
 
-* Activity Scheduled date trigger: Don't trigger for deleted activities !90 
+* Activity Scheduled date trigger: Don't trigger for deleted activities !90
 * Rename Case status condition class so it works !79
 * Resolved #90 by passing through a list of named parameters
+* Add 'is NOT one of' operator to 'Membership Type' condition and fix form validation on rule save (!66)
 
 ## Version 2.19
 
