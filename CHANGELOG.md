@@ -4,6 +4,7 @@
 
 * Activity Scheduled date trigger: Don't trigger for deleted activities !90 
 * Rename Case status condition class so it works !79
+* Resolved #90 by passing through a list of named parameters
 
 ## Version 2.19
 
