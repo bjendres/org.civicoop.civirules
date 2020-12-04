@@ -19,7 +19,7 @@ class CRM_CivirulesConditions_Utils_GroupContact {
     ) {
       return FALSE;
     }
-    $query = "SELECT saved_search_id FROM `civicrm_group` WHERE group_id=%1";
+    $query = "SELECT saved_search_id FROM `civicrm_group` WHERE id=%1";
     $queryParams = [
       1 => [$group_id, 'Positive'],
     ];
