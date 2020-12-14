@@ -246,21 +246,16 @@ class CRM_Civirules_Engine {
     );
     $ruleConditions = CRM_Civirules_BAO_RuleCondition::getValues($conditionParams);
     foreach ($ruleConditions as $ruleConditionId => $ruleCondition) {
-      $isConditionValid = self::checkCondition($ruleCondition, $triggerData);
       if ($firstCondition) {
-        $isValid = $isConditionValid ? true : false;
+        $isValid = self::checkCondition($ruleCondition, $triggerData);
         $firstCondition = false;
       } elseif ($ruleCondition['condition_link'] == 'AND') {
-        if ($isConditionValid && $isValid) {
-          $isValid = true;
-        } else {
-          $isValid = false;
+        if ($isValid) {
+          $isValid = self::checkCondition($ruleCondition, $triggerData);
         }
       } elseif ($ruleCondition['condition_link'] == 'OR'){
-        if ($isConditionValid || $isValid) {
-          $isValid = true;
-        } else {
-          $isValid = false;
+        if (!$isValid) {
+          $isValid = self::checkCondition($ruleCondition, $triggerData);;
         }
       } else {
         $isValid = false; //we should never reach this statement
