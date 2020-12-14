@@ -6,6 +6,7 @@
 * Rename Case status condition class so it works !79
 * Resolved #90 by passing through a list of named parameters
 * Add 'is NOT one of' operator to 'Membership Type' condition and fix form validation on rule save (!66)
+* Refactor 'contact in group' condition to not reference the `id` column in the group contact cache table 
 
 ## Version 2.19
 
