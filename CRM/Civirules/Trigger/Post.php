@@ -77,7 +77,7 @@ class CRM_Civirules_Trigger_Post extends CRM_Civirules_Trigger {
    * @access public
    * @static
    */
-  public static function post( $op, $objectName, $objectId, &$objectRef ) {
+  public static function post($op, $objectName, $objectId, &$objectRef, $eventID) {
     // Do not trigger when objectName is empty. See issue #19
     if (empty($objectName)) {
       return;
@@ -90,7 +90,7 @@ class CRM_Civirules_Trigger_Post extends CRM_Civirules_Trigger {
     $triggers = CRM_Civirules_BAO_Rule::findRulesByObjectNameAndOp($objectName, $op);
     foreach($triggers as $trigger) {
       if ($trigger instanceof CRM_Civirules_Trigger_Post) {
-        $trigger->triggerTrigger($op, $objectName, $objectId, $objectRef);
+        $trigger->triggerTrigger($op, $objectName, $objectId, $objectRef, $eventID);
       }
     }
   }
@@ -103,8 +103,8 @@ class CRM_Civirules_Trigger_Post extends CRM_Civirules_Trigger {
    * @param $objectId
    * @param $objectRef
    */
-  public function triggerTrigger($op, $objectName, $objectId, $objectRef) {
-    $triggerData = $this->getTriggerDataFromPost($op, $objectName, $objectId, $objectRef);
+  public function triggerTrigger($op, $objectName, $objectId, $objectRef, $eventID) {
+    $triggerData = $this->getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID);
     CRM_Civirules_Engine::triggerRule($this, clone $triggerData);
   }
 
@@ -118,14 +118,16 @@ class CRM_Civirules_Trigger_Post extends CRM_Civirules_Trigger {
    * @param $objectName
    * @param $objectId
    * @param $objectRef
+   * @param string $eventID
+   *
    * @return CRM_Civirules_TriggerData_Edit|CRM_Civirules_TriggerData_Post
    */
-  protected function getTriggerDataFromPost($op, $objectName, $objectId, $objectRef) {
+  protected function getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID = NULL) {
     $entity = CRM_Civirules_Utils_ObjectName::convertToEntity($objectName);
     $data = $this->convertObjectRefToDataArray($entity, $objectRef, $objectId);
     if ($op == 'edit') {
       //set also original data with an edit event
-      $oldData = CRM_Civirules_Utils_PreData::getPreData($entity, $objectId);
+      $oldData = CRM_Civirules_Utils_PreData::getPreData($entity, $objectId, $eventID);
       $triggerData = new CRM_Civirules_TriggerData_Edit($entity, $objectId, $data, $oldData);
     } else {
       $triggerData = new CRM_Civirules_TriggerData_Post($entity, $objectId, $data);

@@ -21,7 +21,7 @@ class CRM_Civirules_Utils_PreData {
    * @static
    *
    */
-  public static function pre($op, $objectName, $objectId, $params) {
+  public static function pre($op, $objectName, $objectId, $params, $eventID) {
     // Do not trigger when objectName is empty. See issue #19
     if (empty($objectName)) {
       return;
@@ -78,7 +78,7 @@ class CRM_Civirules_Utils_PreData {
       }
 
     }
-    self::setPreData($entity, $id, $data);
+    self::setPreData($entity, $id, $data, $eventID);
   }
 
   /**
@@ -90,8 +90,8 @@ class CRM_Civirules_Utils_PreData {
    * @access protected
    * @static
    */
-  protected static function setPreData($entity, $entityId, $data) {
-    self::$preData[$entity][$entityId] = $data;
+  protected static function setPreData($entity, $entityId, $data, $eventID) {
+    self::$preData[$entity][$entityId][$eventID] = $data;
   }
 
   /**
@@ -103,9 +103,9 @@ class CRM_Civirules_Utils_PreData {
    * @access protected
    * @static
    */
-  public static function getPreData($entity, $entityId) {
-    if (isset(self::$preData[$entity][$entityId])) {
-      return self::$preData[$entity][$entityId];
+  public static function getPreData($entity, $entityId, $eventID) {
+    if (isset(self::$preData[$entity][$entityId][$eventID])) {
+      return self::$preData[$entity][$entityId][$eventID];
     }
     return array();
   }
