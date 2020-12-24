@@ -8,6 +8,8 @@
 * Add 'is NOT one of' operator to 'Membership Type' condition and fix form validation on rule save (!66)
 * Refactor 'contact in group' condition to not reference the `id` column in the group contact cache table !93
 * Optimize trigger condition evaluation !94
+* Refactored the menu code, making it resistant against order extension menu code that can make this menu disappear.
+
 
 ## Version 2.19
 
