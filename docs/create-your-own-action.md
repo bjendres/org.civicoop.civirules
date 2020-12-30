@@ -62,10 +62,10 @@ When you have created the action in your own extension you can add a `civirules_
 In your extension upgrader class add the following line:
 
 ```php
-
-CRM_Civirules_Utils_Upgrader::insertActionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'civirules_actions.json');
-
-```        
+    if (!method_exists('CRM_Civirules_Utils_Upgrader', 'insertActionsFromJson'))
+      throw new Exception('Method CRM_Civirules_Utils_Upgrader::insertActionsFromJson() not found. Is the CiviRules extension enabled?');
+    CRM_Civirules_Utils_Upgrader::insertActionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'civirules_actions.json');
+```
 
 The advantage of this alternative way is that it also checks whether the action already exists and if so it updates the action.
 
@@ -182,10 +182,10 @@ When you have created the action in your own extension you can add a `civirules_
 In your extension upgrader class add the following line:
 
 ```php
-
-CRM_Civirules_Utils_Upgrader::insertActionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'civirules_actions.json');
-
-```        
+    if (!method_exists('CRM_Civirules_Utils_Upgrader', 'insertActionsFromJson'))
+      throw new Exception('Method CRM_Civirules_Utils_Upgrader::insertActionsFromJson() not found. Is the CiviRules extension enabled?');
+    CRM_Civirules_Utils_Upgrader::insertActionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'civirules_actions.json');
+```
 
 The advantage of this alternative way is that it also checks whether the action already exists and if so it updates the action.
 
