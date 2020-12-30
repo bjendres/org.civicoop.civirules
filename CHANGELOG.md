@@ -9,7 +9,7 @@
 * Refactor 'contact in group' condition to not reference the `id` column in the group contact cache table !93
 * Optimize trigger condition evaluation !94
 * Refactored the menu code, making it resistant against order extension menu code that can make this menu disappear.
-
+* Add pre/post eventID tracking to map original/current values for 'Old value/New value' comparisons - requires CiviCRM 5.34: [CiviCRM#19209](https://github.com/civicrm/civicrm-core/pull/19209).
 
 ## Version 2.19
 

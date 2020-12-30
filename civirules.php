@@ -16,7 +16,26 @@ use CRM_Civirules_ExtensionUtil as E;
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
  */
 function civirules_civicrm_config(&$config) {
+  if (isset(Civi::$statics[__FUNCTION__])) { return; }
+  Civi::$statics[__FUNCTION__] = 1;
   _civirules_civix_civicrm_config($config);
+
+  // eventID param added in 5.34: https://github.com/civicrm/civicrm-core/pull/19209
+  if (version_compare(CRM_Utils_System::version(), '5.34', '>=')) {
+    // These events were added in 5.26: https://github.com/civicrm/civicrm-core/pull/16714
+    \Civi::dispatcher()
+      ->addListener('civi.dao.preUpdate', 'civirules_trigger_preupdate');
+    \Civi::dispatcher()
+      ->addListener('civi.dao.postUpdate', 'civirules_trigger_postupdate');
+    \Civi::dispatcher()
+      ->addListener('civi.dao.preInsert', 'civirules_trigger_preinsert');
+    \Civi::dispatcher()
+      ->addListener('civi.dao.postInsert', 'civirules_trigger_postinsert');
+  }
+  else {
+    \Civi::dispatcher()->addListener('hook_civicrm_pre', 'civirules_symfony_civicrm_pre');
+    \Civi::dispatcher()->addListener('hook_civicrm_post', 'civirules_symfony_civicrm_post');
+  }
 }
 
 /**
@@ -214,22 +233,50 @@ function civirules_civicrm_navigationMenu(&$menu) {
 }
 
 
-function civirules_civicrm_pre($op, $objectName, $objectId, &$params) {
-  CRM_Civirules_Utils_PreData::pre($op, $objectName, $objectId, $params);
-  CRM_Civirules_Utils_CustomDataFromPre::pre($op, $objectName, $objectId, $params);
+function civirules_symfony_civicrm_pre($event) {
+  CRM_Civirules_Utils_PreData::pre($event->action, $event->entity, $event->id, $event->params, 1);
+  CRM_Civirules_Utils_CustomDataFromPre::pre($event->action, $event->entity, $event->id, $event->params);
 }
 
-function civirules_civicrm_post( $op, $objectName, $objectId, &$objectRef ) {
+function civirules_symfony_civicrm_post($event) {
   if (CRM_Core_Transaction::isActive()) {
-    CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', [$op, $objectName, $objectId, $objectRef]);
+    CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', [$event->action, $event->entity, $event->id, $event->object, 1]);
   }
   else {
-    civirules_civicrm_post_callback($op, $objectName, $objectId, $objectRef);
+    civirules_civicrm_post_callback($event->action, $event->entity, $event->id, $event->object, 1);
   }
 }
 
-function civirules_civicrm_post_callback( $op, $objectName, $objectId, $objectRef) {
-  CRM_Civirules_Trigger_Post::post($op, $objectName, $objectId, $objectRef);
+function civirules_trigger_preinsert($event) {
+  CRM_Civirules_Utils_PreData::pre('create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  CRM_Civirules_Utils_CustomDataFromPre::pre('create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+}
+
+function civirules_trigger_postinsert($event) {
+  if (CRM_Core_Transaction::isActive()) {
+    CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', ['create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID]);
+  }
+  else {
+    civirules_civicrm_post_callback('create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  }
+}
+
+function civirules_trigger_preupdate($event) {
+  CRM_Civirules_Utils_PreData::pre('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  CRM_Civirules_Utils_CustomDataFromPre::pre('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+}
+
+function civirules_trigger_postupdate($event) {
+  if (CRM_Core_Transaction::isActive()) {
+    CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', ['edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID]);
+  }
+  else {
+    civirules_civicrm_post_callback('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  }
+}
+
+function civirules_civicrm_post_callback($op, $objectName, $objectId, $objectRef, $eventID) {
+  CRM_Civirules_Trigger_Post::post($op, $objectName, $objectId, $objectRef, $eventID);
 }
 
 function civirules_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
