@@ -63,6 +63,7 @@
   {"name":"activity_is_future_date","label":"Activity Date in the Future","class_name":"CRM_CivirulesConditions_Activity_ActivityIsFuture"},
   {"name":"activity_is_past_date","label":"Activity Date in the Past","class_name":"CRM_CivirulesConditions_Activity_ActivityIsPast"},
   {"name":"activity_date_comparison","label":"Activity Date is .....","class_name":"CRM_CivirulesConditions_Activity_Date"},
+  {"name":"generic_date_comparison","label":"Activity/Participation/Event Date is .....","class_name":"CRM_CivirulesConditions_Generic_Date"},
   {"name":"xth_contribution_contact","label":"xth Contribution of Contact","class_name":"CRM_CivirulesConditions_Contribution_xthContribution"},
   {"name":"contact_in_domain","label":"Contact (not) in Domain","class_name":"CRM_CivirulesConditions_Contact_InDomain"},
   {"name":"participant_status_changed", "label":"Compare Old Participant Status to New Participant Status", "class_name": "CRM_CivirulesConditions_Participant_StatusChanged"},
