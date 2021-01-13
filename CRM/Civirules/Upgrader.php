@@ -756,5 +756,11 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     return TRUE;
   }
 
+  public function upgrade_2062() {
+    $this->ctx->log->info('Applying update 2062 - Add generic date comparison class.');
+    CRM_Civirules_Utils_Upgrader::insertConditionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/conditions.json');
+    return TRUE;
+  }
+
 }
 
