@@ -13,6 +13,7 @@
   {"name":"set_contact_sub_type","label":"Set Subtype for a Contact","class_name":"CRM_CivirulesActions_Contact_Subtype"},
   {"name":"update_numeric_value","label":"Update Numeric Value","class_name":"CRM_CivirulesActions_Contact_UpdateNumericValue"},
   {"name":"update_date_value","label":"Update Date Value","class_name":"CRM_CivirulesActions_Contact_UpdateDateValue"},
+  {"name":"advanced_update_date_value","label":"Advanced Update Date Value","class_name":"CRM_CivirulesActions_Generic_UpdateDateValue"},
   {"name":"set_custom_field","label":"Set Custom Field","class_name":"CRM_CivirulesActions_Contact_SetCustomField"},
   {"name":"set_contribution_thank_date","label":"Set Thank You Date for a Contribution","class_name":"CRM_CivirulesActions_Contribution_ThankYouDate"},
   {"name":"add_contact_group","label":"Add Contact to a Group","class_name":"CRM_CivirulesActions_GroupContact_Add"},
