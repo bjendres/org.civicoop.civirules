@@ -1,6 +1,6 @@
 <?php
 /**
- * Class for CiviRules AgeComparison (extending generic ValueComparison)
+ * Class for CiviRules Contact HasTag condition
  *
  * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
  * @license AGPL-3.0
@@ -59,7 +59,11 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
   protected function contactHasNotTag(int $contact_id, array $tag_ids): bool {
     $isValid = TRUE;
 
-    $tags = CRM_Core_BAO_EntityTag::getTag($contact_id);
+    $tags = \Civi\Api4\EntityTag::get(FALSE)
+      ->addSelect('tag_id')
+      ->addWhere('entity_table:name', '=', 'Contact')
+      ->addWhere('entity_id', '=', $contact_id)
+      ->execute()->column('tag_id');
     foreach($tag_ids as $tag_id) {
       if (in_array($tag_id, $tags)) {
         $isValid = FALSE;
@@ -78,7 +82,11 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
   protected function contactHasAllTags(int $contact_id, array $tag_ids): bool {
     $isValid = 0;
 
-    $tags = CRM_Core_BAO_EntityTag::getTag($contact_id);
+    $tags = \Civi\Api4\EntityTag::get(FALSE)
+      ->addSelect('tag_id')
+      ->addWhere('entity_table:name', '=', 'Contact')
+      ->addWhere('entity_id', '=', $contact_id)
+      ->execute()->column('tag_id');
     foreach($tag_ids as $tag_id) {
       if (in_array($tag_id, $tags)) {
         $isValid++;
@@ -101,7 +109,11 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
   protected function contactHasOneOfTags(int $contact_id, array $tag_ids): bool {
     $isValid = FALSE;
 
-    $tags = CRM_Core_BAO_EntityTag::getTag($contact_id);
+    $tags = \Civi\Api4\EntityTag::get(FALSE)
+      ->addSelect('tag_id')
+      ->addWhere('entity_table:name', '=', 'Contact')
+      ->addWhere('entity_id', '=', $contact_id)
+      ->execute()->column('tag_id');
     foreach($tag_ids as $tag_id) {
       if (in_array($tag_id, $tags)) {
         $isValid = TRUE;
