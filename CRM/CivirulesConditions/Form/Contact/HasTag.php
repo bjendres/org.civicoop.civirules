@@ -15,9 +15,30 @@ class CRM_CivirulesConditions_Form_Contact_HasTag extends CRM_CivirulesCondition
    */
   protected function getTags() {
     $bao = new CRM_Core_BAO_Tag();
-    $tags = $bao->getTree('civicrm_contact');
-    $options = array();
-    foreach($tags as $tag_id => $tag) {
+    switch ($this->trigger->object_name) {
+      case 'Contact':
+        $tableName = 'civicrm_contact';
+        break;
+
+      case 'Activity':
+        $tableName = 'civicrm_activity';
+        break;
+
+      case 'Case':
+        $tableName = 'civicrm_case';
+        break;
+
+      case 'File':
+        $tableName = 'civicrm_file';
+        break;
+
+      default:
+        return [];
+    };
+
+    $tags = $bao->getTree($tableName);
+    $options = [];
+    foreach ($tags as $tag_id => $tag) {
       $parent = '';
       $this->buildOptionsFromTree($options, $tags, $parent);
     }

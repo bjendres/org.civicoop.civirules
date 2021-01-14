@@ -1,14 +1,14 @@
 <?php
 /**
- * Class for CiviRules Contact HasTag condition
+ * Class for CiviRules generic HasTag condition
  *
  * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_Generic_HasTag extends CRM_Civirules_Condition {
 
-  private $conditionParams = [];
+  protected $conditionParams = [];
 
   /**
    * Method to set the Rule Condition data
@@ -32,37 +32,39 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData): bool {
     $isConditionValid = FALSE;
-    $contact_id = $triggerData->getContactId();
-    if (empty($contact_id)) {
+    $entityID = $triggerData->getEntityId();
+
+    if (empty($entityID)) {
       return FALSE;
     }
     switch($this->conditionParams['operator']) {
       case 'in one of':
-        $isConditionValid = $this->contactHasOneOfTags($contact_id, $this->conditionParams['tag_ids']);
+        $isConditionValid = $this->entityHasOneOfTags($entityID, $this->conditionParams['tag_ids'], $triggerData->getEntity());
         break;
       case 'in all of':
-        $isConditionValid = $this->contactHasAllTags($contact_id, $this->conditionParams['tag_ids']);
+        $isConditionValid = $this->entityHasAllTags($entityID, $this->conditionParams['tag_ids'], $triggerData->getEntity());
         break;
       case 'not in':
-        $isConditionValid = $this->contactHasNotTag($contact_id, $this->conditionParams['tag_ids']);
+        $isConditionValid = $this->entityHasNotTag($entityID, $this->conditionParams['tag_ids'], $triggerData->getEntity());
         break;
     }
     return $isConditionValid;
   }
 
   /**
-   * @param int $contact_id
+   * @param int $entityID
    * @param array $tag_ids
+   * @param string $entity
    *
    * @return bool
    */
-  protected function contactHasNotTag(int $contact_id, array $tag_ids): bool {
+  protected function entityHasNotTag(int $entityID, array $tag_ids, string $entity = 'Contact'): bool {
     $isValid = TRUE;
 
     $tags = \Civi\Api4\EntityTag::get(FALSE)
       ->addSelect('tag_id')
-      ->addWhere('entity_table:name', '=', 'Contact')
-      ->addWhere('entity_id', '=', $contact_id)
+      ->addWhere('entity_table:name', '=', $entity)
+      ->addWhere('entity_id', '=', $entityID)
       ->execute()->column('tag_id');
     foreach($tag_ids as $tag_id) {
       if (in_array($tag_id, $tags)) {
@@ -74,18 +76,19 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
   }
 
   /**
-   * @param int $contact_id
+   * @param int $entityID
    * @param array $tag_ids
+   * @param string $entity
    *
    * @return bool
    */
-  protected function contactHasAllTags(int $contact_id, array $tag_ids): bool {
+  protected function entityHasAllTags(int $entityID, array $tag_ids, string $entity = 'Contact'): bool {
     $isValid = 0;
 
     $tags = \Civi\Api4\EntityTag::get(FALSE)
       ->addSelect('tag_id')
-      ->addWhere('entity_table:name', '=', 'Contact')
-      ->addWhere('entity_id', '=', $contact_id)
+      ->addWhere('entity_table:name', '=', $entity)
+      ->addWhere('entity_id', '=', $entityID)
       ->execute()->column('tag_id');
     foreach($tag_ids as $tag_id) {
       if (in_array($tag_id, $tags)) {
@@ -101,18 +104,19 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
   }
 
   /**
-   * @param int $contact_id
+   * @param int $entityID
    * @param array $tag_ids
+   * @param string $entity
    *
    * @return bool
    */
-  protected function contactHasOneOfTags(int $contact_id, array $tag_ids): bool {
+  protected function entityHasOneOfTags(int $entityID, array $tag_ids, string $entity = 'Contact'): bool {
     $isValid = FALSE;
 
     $tags = \Civi\Api4\EntityTag::get(FALSE)
       ->addSelect('tag_id')
-      ->addWhere('entity_table:name', '=', 'Contact')
-      ->addWhere('entity_id', '=', $contact_id)
+      ->addWhere('entity_table:name', '=', $entity)
+      ->addWhere('entity_id', '=', $entityID)
       ->execute()->column('tag_id');
     foreach($tag_ids as $tag_id) {
       if (in_array($tag_id, $tags)) {
@@ -134,7 +138,7 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
    * @return bool|string
    */
   public function getExtraDataInputUrl(int $ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/contact_hastag/', 'rule_condition_id='.$ruleConditionId);
+    return CRM_Utils_System::url('civicrm/civirule/form/condition/contact_hastag/', 'rule_condition_id=' . $ruleConditionId);
   }
 
   /**
@@ -144,7 +148,7 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
    * @return string
    */
   public function userFriendlyConditionParams(): string {
-    $operators = CRM_CivirulesConditions_Contact_InGroup::getOperatorOptions();
+    $operators = self::getOperatorOptions();
     $operator = $this->conditionParams['operator'];
     $operatorLabel = ts('unknown');
     if (isset($operators[$operator])) {
@@ -173,6 +177,21 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
       'in all of' => ts('In all selected'),
       'not in' => ts('Not in selected'),
     ];
+  }
+
+  /**
+   * This function validates whether this condition works with the selected trigger.
+   *
+   * @param CRM_Civirules_Trigger $trigger
+   * @param CRM_Civirules_BAO_Rule $rule
+   *
+   * @return bool
+   */
+  public function doesWorkWithTrigger(CRM_Civirules_Trigger $trigger, CRM_Civirules_BAO_Rule $rule) {
+    if (in_array($trigger->getObjectName(), ['Contact', 'Activity', 'Case', 'File'])) {
+      return TRUE;
+    }
+    return FALSE;
   }
 
 }
