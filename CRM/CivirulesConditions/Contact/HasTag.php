@@ -8,32 +8,30 @@
 
 class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
 
-  private $conditionParams = array();
+  private $conditionParams = [];
 
   /**
    * Method to set the Rule Condition data
    *
    * @param array $ruleCondition
-   * @access public
    */
-  public function setRuleConditionData($ruleCondition) {
+  public function setRuleConditionData(array $ruleCondition) {
     parent::setRuleConditionData($ruleCondition);
-    $this->conditionParams = array();
+    $this->conditionParams = [];
     if (!empty($this->ruleCondition['condition_params'])) {
       $this->conditionParams = unserialize($this->ruleCondition['condition_params']);
     }
   }
 
   /**
-   * This method returns true or false when an condition is valid or not
+   * This method returns TRUE or FALSE when an condition is valid or not
    *
    * @param CRM_Civirules_TriggerData_TriggerData $triggerData
+   *
    * @return bool
-   * @access public
-   * @abstract
    */
-  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
-    $isConditionValid = false;
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData): bool {
+    $isConditionValid = FALSE;
     $contact_id = $triggerData->getContactId();
     switch($this->conditionParams['operator']) {
       case 'in one of':
@@ -49,20 +47,32 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
     return $isConditionValid;
   }
 
-  protected function contactHasNotTag($contact_id, $tag_ids) {
-    $isValid = true;
+  /**
+   * @param int $contact_id
+   * @param array $tag_ids
+   *
+   * @return bool
+   */
+  protected function contactHasNotTag(int $contact_id, array $tag_ids): bool {
+    $isValid = TRUE;
 
     $tags = CRM_Core_BAO_EntityTag::getTag($contact_id);
     foreach($tag_ids as $tag_id) {
       if (in_array($tag_id, $tags)) {
-        $isValid = false;
+        $isValid = FALSE;
       }
     }
 
     return $isValid;
   }
 
-  protected function contactHasAllTags($contact_id, $tag_ids) {
+  /**
+   * @param int $contact_id
+   * @param array $tag_ids
+   *
+   * @return bool
+   */
+  protected function contactHasAllTags(int $contact_id, array $tag_ids): bool {
     $isValid = 0;
 
     $tags = CRM_Core_BAO_EntityTag::getTag($contact_id);
@@ -73,19 +83,25 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
     }
 
     if (count($tag_ids) == $isValid && count($tag_ids) > 0) {
-      return true;
+      return TRUE;
     }
 
-    return false;
+    return FALSE;
   }
 
-  protected function contactHasOneOfTags($contact_id, $tag_ids) {
-    $isValid = false;
+  /**
+   * @param int $contact_id
+   * @param array $tag_ids
+   *
+   * @return bool
+   */
+  protected function contactHasOneOfTags(int $contact_id, array $tag_ids): bool {
+    $isValid = FALSE;
 
     $tags = CRM_Core_BAO_EntityTag::getTag($contact_id);
     foreach($tag_ids as $tag_id) {
       if (in_array($tag_id, $tags)) {
-        $isValid = true;
+        $isValid = TRUE;
         break;
       }
     }
@@ -96,14 +112,13 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
   /**
    * Returns a redirect url to extra data input from the user after adding a condition
    *
-   * Return false if you do not need extra data input
+   * Return FALSE if you do not need extra data input
    *
    * @param int $ruleConditionId
+   *
    * @return bool|string
-   * @access public
-   * @abstract
    */
-  public function getExtraDataInputUrl($ruleConditionId) {
+  public function getExtraDataInputUrl(int $ruleConditionId) {
     return CRM_Utils_System::url('civicrm/civirule/form/condition/contact_hastag/', 'rule_condition_id='.$ruleConditionId);
   }
 
@@ -112,9 +127,8 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
    * e.g. 'Older than 65'
    *
    * @return string
-   * @access public
    */
-  public function userFriendlyConditionParams() {
+  public function userFriendlyConditionParams(): string {
     $operators = CRM_CivirulesConditions_Contact_InGroup::getOperatorOptions();
     $operator = $this->conditionParams['operator'];
     $operatorLabel = ts('unknown');
@@ -127,7 +141,7 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
       if (strlen($tags)) {
         $tags .= ', ';
       }
-      $tags .= civicrm_api3('Tag', 'getvalue', array('return' => 'name', 'id' => $tid));
+      $tags .= civicrm_api3('Tag', 'getvalue', ['return' => 'name', 'id' => $tid]);
     }
 
     return $operatorLabel.' tags ('.$tags.')';
@@ -137,14 +151,13 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
    * Method to get operators
    *
    * @return array
-   * @access protected
    */
-  public static function getOperatorOptions() {
-    return array(
+  public static function getOperatorOptions(): array {
+    return [
       'in one of' => ts('In one of selected'),
       'in all of' => ts('In all selected'),
       'not in' => ts('Not in selected'),
-    );
+    ];
   }
 
 }

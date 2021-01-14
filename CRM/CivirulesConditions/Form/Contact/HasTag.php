@@ -1,6 +1,6 @@
 <?php
 /**
- * Class for CiviRules Condition Contribution has contact a tag
+ * Class for CiviRules Condition parameters form - entity has tag
  *
  * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
  * @license AGPL-3.0
@@ -12,7 +12,6 @@ class CRM_CivirulesConditions_Form_Contact_HasTag extends CRM_CivirulesCondition
    * Method to get tags
    *
    * @return array
-   * @access protected
    */
   protected function getTags() {
     $bao = new CRM_Core_BAO_Tag();
@@ -26,13 +25,18 @@ class CRM_CivirulesConditions_Form_Contact_HasTag extends CRM_CivirulesCondition
     return $options;
   }
 
-  protected function buildOptionsFromTree(&$options, $tree, $parent) {
-    foreach($tree as $tag_id => $tag) {
+  /**
+   * @param array $options
+   * @param array $tree
+   * @param string $parent
+   */
+  protected function buildOptionsFromTree(array &$options, array $tree, string $parent) {
+    foreach ($tree as $tag_id => $tag) {
       if ($tag['is_selectable']) {
-        $options[$tag_id] = trim($parent.' '.$tag['name']);
+        $options[$tag_id] = trim($parent . ' ' . $tag['name']);
       }
       if (isset($tag['children']) && is_array($tag['children'])) {
-        $this->buildOptionsFromTree($options, $tag['children'], $tag['name'].':');
+        $this->buildOptionsFromTree($options, $tag['children'], $tag['name'] . ':');
       }
     }
   }
@@ -41,7 +45,6 @@ class CRM_CivirulesConditions_Form_Contact_HasTag extends CRM_CivirulesCondition
    * Method to get operators
    *
    * @return array
-   * @access protected
    */
   protected function getOperators() {
     return CRM_CivirulesConditions_Contact_HasTag::getOperatorOptions();
@@ -49,26 +52,24 @@ class CRM_CivirulesConditions_Form_Contact_HasTag extends CRM_CivirulesCondition
 
   /**
    * Overridden parent method to build form
-   *
-   * @access public
    */
   public function buildQuickForm() {
     $this->add('hidden', 'rule_condition_id');
 
-    $tag = $this->add('select', 'tag_ids', ts('Tags'), $this->getTags(), true);
+    $tag = $this->add('select', 'tag_ids', ts('Tags'), $this->getTags(), TRUE);
     $tag->setMultiple(TRUE);
-    $this->add('select', 'operator', ts('Operator'), $this->getOperators(), true);
+    $this->add('select', 'operator', ts('Operator'), $this->getOperators(), TRUE);
 
-    $this->addButtons(array(
-      array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
-      array('type' => 'cancel', 'name' => ts('Cancel'))));
+    $this->addButtons([
+      ['type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,],
+      ['type' => 'cancel', 'name' => ts('Cancel')]
+    ]);
   }
 
   /**
    * Overridden parent method to set default values
    *
    * @return array $defaultValues
-   * @access public
    */
   public function setDefaultValues() {
     $defaultValues = parent::setDefaultValues();
@@ -86,7 +87,6 @@ class CRM_CivirulesConditions_Form_Contact_HasTag extends CRM_CivirulesCondition
    * Overridden parent method to process form data after submission
    *
    * @throws Exception when rule condition not found
-   * @access public
    */
   public function postProcess() {
     $data['tag_ids'] = $this->_submitValues['tag_ids'];
@@ -96,4 +96,5 @@ class CRM_CivirulesConditions_Form_Contact_HasTag extends CRM_CivirulesCondition
 
     parent::postProcess();
   }
+
 }
