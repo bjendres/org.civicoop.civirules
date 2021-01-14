@@ -33,6 +33,9 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData): bool {
     $isConditionValid = FALSE;
     $contact_id = $triggerData->getContactId();
+    if (empty($contact_id)) {
+      return FALSE;
+    }
     switch($this->conditionParams['operator']) {
       case 'in one of':
         $isConditionValid = $this->contactHasOneOfTags($contact_id, $this->conditionParams['tag_ids']);
