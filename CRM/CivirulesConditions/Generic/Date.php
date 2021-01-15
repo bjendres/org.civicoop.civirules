@@ -64,7 +64,7 @@ class CRM_CivirulesConditions_Generic_Date extends CRM_Civirules_Condition {
       try {
         $activityDate = new DateTime($entityData[$source_field_id]);
       } catch (Exception $ex) {
-        Civi::log()->error(ts('Could not parse activity_date_time ') . $activityData['activity_date_time']
+        Civi::log()->error(ts('Could not parse activity_date_time ') . $entityData[$source_field_id]
           . ts(' into a DateTime object in ') . __METHOD__ . ts(', condition returned as false'));
         return false;
       }
