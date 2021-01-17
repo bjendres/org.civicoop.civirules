@@ -14,8 +14,8 @@
  */
 class CRM_CivirulesPostTrigger_Participant extends CRM_Civirules_Trigger_Post {
 
-  protected function getTriggerDataFromPost($op, $objectName, $objectId, $objectRef) {
-    $triggerData = parent::getTriggerDataFromPost($op, $objectName, $objectId, $objectRef);
+  protected function getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID = NULL) {
+    $triggerData = parent::getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID);
     $participant = $triggerData->getEntityData('Participant');
     $event = civicrm_api3('Event', 'getsingle', array('id' => $participant['event_id']));
     $triggerData->setEntityData('Event', $event);

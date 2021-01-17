@@ -45,12 +45,12 @@ class CRM_Civirules_TrashRestoreApiWrapper implements API_Wrapper {
     if(isset($apiRequest['trashed']) && $apiRequest['trashed']){
       $contact = CRM_Contact_BAO_Contact::findById($apiRequest['params']['id']);
       // the trash trigger is marked with an update action - so simulate this
-      CRM_Civirules_Trigger_Post::post('update', $contact->contact_type, $contact->id, $contact);
+      CRM_Civirules_Trigger_Post::post('update', $contact->contact_type, $contact->id, $contact, NULL);
     }
     if(isset($apiRequest['restored']) && $apiRequest['restored']){
       $contact = CRM_Contact_BAO_Contact::findById($apiRequest['params']['id']);
       // the trash trigger is marked with an update action - so simulate this
-      CRM_Civirules_Trigger_Post::post('update', $contact->contact_type, $contact->id, $contact);
+      CRM_Civirules_Trigger_Post::post('update', $contact->contact_type, $contact->id, $contact, NULL);
     }
     return $result;
   }

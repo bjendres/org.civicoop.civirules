@@ -12,14 +12,6 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
    * sequence as there will be dependencies in the foreign keys
    */
   public function install() {
-    $this->executeSqlFile('sql/createCiviruleAction.sql');
-    $this->executeSqlFile('sql/createCiviruleCondition.sql');
-    $this->executeSqlFile('sql/createCiviruleTrigger.sql');
-    $this->executeSqlFile('sql/createCiviruleRule.sql');
-    $this->executeSqlFile('sql/createCiviruleRuleAction.sql');
-    $this->executeSqlFile('sql/createCiviruleRuleCondition.sql');
-    $this->executeSqlFile('sql/createCiviruleRuleLog.sql');
-    $this->executeSqlFile('sql/createCiviruleRuleTag.sql');
     $ruleTagOptionGroup = CRM_Civirules_Utils_OptionGroup::getSingleWithName('civirule_rule_tag');
     if (empty($ruleTagOptionGroup)) {
       CRM_Civirules_Utils_OptionGroup::create('civirule_rule_tag', 'Tags for CiviRules', 'Tags used to filter CiviRules on the CiviRules page');

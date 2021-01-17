@@ -33,8 +33,8 @@ class CRM_CivirulesPostTrigger_Relationship extends CRM_Civirules_Trigger_Post {
    * @param $objectRef
    * @return CRM_Civirules_TriggerData_Edit|CRM_Civirules_TriggerData_Post
    */
-  protected function getTriggerDataFromPost($op, $objectName, $objectId, $objectRef) {
-    $triggerData = parent::getTriggerDataFromPost($op, $objectName, $objectId, $objectRef);
+  protected function getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID = NULL) {
+    $triggerData = parent::getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID);
     $relationship = $triggerData->getEntityData('Relationship');
     if (!empty($relationship['case_id'])) {
       try {
@@ -66,8 +66,8 @@ class CRM_CivirulesPostTrigger_Relationship extends CRM_Civirules_Trigger_Post {
    * @param $objectId
    * @param $objectRef
    */
-  public function triggerTrigger($op, $objectName, $objectId, $objectRef) {
-    $t = $this->getTriggerDataFromPost($op, $objectName, $objectId, $objectRef);
+  public function triggerTrigger($op, $objectName, $objectId, $objectRef, $eventID) {
+    $t = $this->getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID);
     $relationship = $t->getEntityData('Relationship');
     if (!empty($relationship['contact_id_a'])) {
       $triggerData = clone $t;

@@ -28,8 +28,8 @@ class CRM_CivirulesPostTrigger_Case extends CRM_Civirules_Trigger_Post {
    * @param $objectId
    * @param $objectRef
    */
-  public function triggerTrigger($op, $objectName, $objectId, $objectRef) {
-    $t = $this->getTriggerDataFromPost($op, $objectName, $objectId, $objectRef);
+  public function triggerTrigger($op, $objectName, $objectId, $objectRef, $eventID) {
+    $t = $this->getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID);
 
     if ($op == 'create') {
       $triggerData = clone $t;
