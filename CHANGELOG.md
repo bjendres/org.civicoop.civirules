@@ -12,6 +12,7 @@
 * Add pre/post eventID tracking to map original/current values for 'Old value/New value' comparisons - requires CiviCRM 5.34: [CiviCRM#19209](https://github.com/civicrm/civicrm-core/pull/19209).
 * Added action to update a date value (!100)
 * Added condition to compare a date value (!100)
+* Add human readable summary of Update Date Value action (!101)
 
 ## Version 2.19
 
