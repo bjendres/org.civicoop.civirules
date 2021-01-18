@@ -13,6 +13,7 @@
 * Added action to update a date value (!100)
 * Added condition to compare a date value (!100)
 * Add human readable summary of Update Date Value action (!101)
+* Renamed condition "Contact does (not) have tag" to "Entity Has\Does (Not) Have Tag(s)". And made this work with entities that support tags in core: Contact, Activity, Case, File (!103)
 
 ## Version 2.19
 
