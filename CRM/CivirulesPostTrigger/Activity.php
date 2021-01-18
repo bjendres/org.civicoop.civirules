@@ -36,6 +36,9 @@ class CRM_CivirulesPostTrigger_Activity extends CRM_Civirules_Trigger_Post {
    */
   public function triggerTrigger($op, $objectName, $objectId, $objectRef, $eventID = NULL) {
     $triggerData = $this->getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID);
+    if (empty($triggerData->getEntityId())) {
+      $triggerData->setEntityId($objectId);
+    }
     //trigger for activity trigger for every source_contact_id, target_contact_id and assignee_contact_id
     $activityContact = new CRM_Activity_BAO_ActivityContact();
     $activityContact->activity_id = $objectId;

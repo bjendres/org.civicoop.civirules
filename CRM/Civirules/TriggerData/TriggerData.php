@@ -83,6 +83,9 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
     if (!empty($this->contact_id)) {
       return $this->contact_id;
     }
+    if (!empty($this->entity_data['contact']['id'])) {
+      return $this->entity_data['contact']['id'];
+    }
     foreach($this->entity_data as $entity => $data) {
       if (!empty($data['contact_id'])) {
         return $data['contact_id'];
