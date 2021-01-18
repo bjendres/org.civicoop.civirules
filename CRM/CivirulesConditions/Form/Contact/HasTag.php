@@ -68,7 +68,7 @@ class CRM_CivirulesConditions_Form_Contact_HasTag extends CRM_CivirulesCondition
    * @return array
    */
   protected function getOperators() {
-    return CRM_CivirulesConditions_Contact_HasTag::getOperatorOptions();
+    return CRM_CivirulesConditions_Generic_HasTag::getOperatorOptions();
   }
 
   /**
