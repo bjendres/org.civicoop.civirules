@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Version 2.20 (not yet released)
+## Version 2.20
 
 * Activity Scheduled date trigger: Don't trigger for deleted activities !90
 * Rename Case status condition class so it works !79
