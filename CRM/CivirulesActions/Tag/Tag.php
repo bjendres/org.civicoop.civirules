@@ -17,8 +17,28 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
    */
   protected function alterApiParameters($params, CRM_Civirules_TriggerData_TriggerData $triggerData) {
     //this function could be overridden in subclasses to alter parameters to meet certain criteria
-    $params['entity_id'] = $triggerData->getContactId();
-    $params['entity_table'] = 'civicrm_contact';
+    $params['entity_id'] = $triggerData->getEntityId();
+    switch ($triggerData->getEntity()) {
+      case 'Contact':
+        $tableName = 'civicrm_contact';
+        break;
+
+      case 'Activity':
+        $tableName = 'civicrm_activity';
+        break;
+
+      case 'Case':
+        $tableName = 'civicrm_case';
+        break;
+
+      case 'File':
+        $tableName = 'civicrm_file';
+        break;
+
+      default:
+        $tableName = '';
+    }
+    $params['entity_table'] = $tableName;
     return $params;
   }
 
@@ -111,15 +131,11 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
   protected function getActionLabel($tag) {
     switch ($this->getApiAction()) {
       case 'create':
-        return ts('Add tag (%1) to contact', [
-          1 => $tag
-        ]);
-        break;
+        return ts('Add tag (%1)', [1 => $tag]);
+
       case 'delete':
-        return ts('Remove tag (%1) from contact', [
-          1 => $tag
-        ]);
-        break;
+        return ts('Remove tag (%1)', [1 => $tag]);
+
     }
     return '';
   }
