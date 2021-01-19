@@ -47,6 +47,7 @@
   {"name":"group_type","label":"Group is (not) one of Type(s)","class_name":"CRM_CivirulesConditions_Group_GroupType"},
   {"name":"group_contact_group_id","label":"Group is","class_name":"CRM_CivirulesConditions_GroupContact_GroupId"},
   {"name":"active_membership_type","label":"Contact has Active Membership of Type","class_name":"CRM_CivirulesConditions_Membership_ActiveMembership"},
+  {"name":"has_not_active_membership_type","label":"Contact has not an Active Membership of Type","class_name":"CRM_CivirulesConditions_Membership_HasNotActiveMembership"},
   {"name":"contact_has_membership","label":"Contact has Membership of Status and Type","class_name":"CRM_CivirulesConditions_Membership_ContactHasMembership"},
   {"name":"contribution_recur_payment_processor","label":"Recurring Contribution Payment Processor is","class_name":"CRM_CivirulesConditions_ContributionRecur_PaymentProcessor"},
   {"name":"membership_status","label":"Membership Status is (not) one of","class_name":"CRM_CivirulesConditions_Membership_Status"},

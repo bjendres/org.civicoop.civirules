@@ -147,6 +147,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/condition/hasnotactivemembershiptype</path>
+    <page_callback>CRM_CivirulesConditions_Form_Membership_HasNotActiveMembership</page_callback>
+    <title>membership type</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/contacthasmembership</path>
     <page_callback>CRM_CivirulesConditions_Form_Membership_ContactHasMembership</page_callback>
     <title>contact has membership</title>

@@ -1,8 +1,8 @@
 <?php
 
-class CRM_CivirulesConditions_Membership_ActiveMembership extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_Membership_HasNotActiveMembership extends CRM_Civirules_Condition {
 
-  protected $_conditionParams = array();
+  private $_conditionParams = array();
 
   /**
    * This method returns true or false when an condition is valid or not
@@ -19,9 +19,9 @@ class CRM_CivirulesConditions_Membership_ActiveMembership extends CRM_Civirules_
 
     $memberships = civicrm_api3('Membership', 'get', $params);
     if (isset($memberships['values']) && count($memberships['values']) > 0) {
-      return true;
+      return false;
     }
-    return false;
+    return true;
   }
 
   /**
@@ -35,7 +35,7 @@ class CRM_CivirulesConditions_Membership_ActiveMembership extends CRM_Civirules_
    * @abstract
    */
   public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/activemembershiptype', 'rule_condition_id=' .$ruleConditionId);
+    return CRM_Utils_System::url('civicrm/civirule/form/condition/hasnotactivemembershiptype', 'rule_condition_id=' .$ruleConditionId);
   }
 
   /**
