@@ -14,10 +14,9 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
    * @param array $params
    * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return array $params
-   * @access protected
    */
   protected function alterApiParameters($params, CRM_Civirules_TriggerData_TriggerData $triggerData) {
-    //this function could be overridden in subclasses to alter parameters to meet certain criteraia
+    //this function could be overridden in subclasses to alter parameters to meet certain criteria
     $params['entity_id'] = $triggerData->getContactId();
     $params['entity_table'] = 'civicrm_contact';
     return $params;
@@ -27,21 +26,20 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
    * Process the action
    *
    * @param CRM_Civirules_TriggerData_TriggerData $triggerData
-   * @access public
    */
   public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $entity = $this->getApiEntity();
     $action = $this->getApiAction();
 
     $action_params = $this->getActionParameters();
-    $tag_ids = array();
+    $tag_ids = [];
     if (!empty($action_params['tag_id'])) {
-      $tag_ids = array($action_params['tag_id']);
+      $tag_ids = [$action_params['tag_id']];
     } elseif (!empty($action_params['tag_ids']) && is_array($action_params['tag_ids'])) {
       $tag_ids = $action_params['tag_ids'];
     }
     foreach($tag_ids as $tag_id) {
-      $params = array();
+      $params = [];
       $params['tag_id'] = $tag_id;
 
       //alter parameters by subclass
@@ -71,10 +69,9 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
    *
    * @param int $ruleActionId
    * @return bool|string
-   * @access public
    */
   public function getExtraDataInputUrl($ruleActionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/action/tag', 'rule_action_id='.$ruleActionId);
+    return CRM_Utils_System::url('civicrm/civirule/form/action/tag', 'rule_action_id=' . $ruleActionId);
   }
 
   /**
@@ -82,17 +79,16 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
    * e.g. 'Older than 65'
    *
    * @return string
-   * @access public
    */
   public function userFriendlyConditionParams() {
     $params = $this->getActionParameters();
     if (!empty($params['tag_id'])) {
-      $tag = civicrm_api3('Tag', 'getvalue', array('return' => 'name', 'id' => $params['tag_id']));
+      $tag = civicrm_api3('Tag', 'getvalue', ['return' => 'name', 'id' => $params['tag_id']]);
       return $this->getActionLabel($tag);
     } elseif (!empty($params['tag_ids']) && is_array($params['tag_ids'])) {
       $tags = '';
       foreach($params['tag_ids'] as $tag_id) {
-        $tag = civicrm_api3('Tag', 'getvalue', array('return' => 'name', 'id' => $tag_id));
+        $tag = civicrm_api3('Tag', 'getvalue', ['return' => 'name', 'id' => $tag_id]);
         if (strlen($tags)) {
           $tags .= ', ';
         }
@@ -107,7 +103,6 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
    * Method to set the api entity
    *
    * @return string
-   * @access protected
    */
   protected function getApiEntity() {
     return 'EntityTag';
@@ -116,14 +111,14 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
   protected function getActionLabel($tag) {
     switch ($this->getApiAction()) {
       case 'create':
-        return ts('Add tag (%1) to contact', array(
+        return ts('Add tag (%1) to contact', [
           1 => $tag
-        ));
+        ]);
         break;
       case 'delete':
-        return ts('Remove tag (%1) from contact', array(
+        return ts('Remove tag (%1) from contact', [
           1 => $tag
-        ));
+        ]);
         break;
     }
     return '';
