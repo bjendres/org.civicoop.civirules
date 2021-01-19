@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## Version 2.21 (not yet released)
+
 ## Version 2.20
 
 * Activity Scheduled date trigger: Don't trigger for deleted activities !90
