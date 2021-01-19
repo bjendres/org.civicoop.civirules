@@ -5,6 +5,7 @@
   <class>Action</class>
   <name>civirule_action</name>
   <comment>FIXME</comment>
+  <table_type>Innodb</table_type>
   <log>true</log>
 
   <field>

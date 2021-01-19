@@ -5,6 +5,7 @@
   <class>RuleLog</class>
   <name>civirule_rule_log</name>
   <comment>FIXME</comment>
+  <table_type>Innodb</table_type>
   <log>true</log>
 
   <field>

@@ -69,7 +69,7 @@ CREATE TABLE `civirule_action` (
  
  
  
-)    ;
+)  ENGINE=Innodb  ;
 
 -- /*******************************************************
 -- *
@@ -95,7 +95,7 @@ CREATE TABLE `civirule_condition` (
  
  
  
-)    ;
+)  ENGINE=Innodb  ;
 
 -- /*******************************************************
 -- *
@@ -125,7 +125,7 @@ CREATE TABLE `civirule_trigger` (
  
  
  
-)    ;
+)  ENGINE=Innodb  ;
 
 -- /*******************************************************
 -- *
@@ -151,8 +151,10 @@ CREATE TABLE `civirule_rule` (
 ,
         PRIMARY KEY (`id`)
  
-)    ;
  
+,          CONSTRAINT FK_civirule_rule_trigger_id FOREIGN KEY (`trigger_id`) REFERENCES `civirule_trigger`(`id`) ON DELETE NO ACTION  
+)  ENGINE=Innodb  ;
+
 -- /*******************************************************
 -- *
 -- * civirule_rule_action
@@ -175,7 +177,7 @@ CREATE TABLE `civirule_rule_action` (
  
  
 ,          CONSTRAINT FK_civirule_rule_action_rule_id FOREIGN KEY (`rule_id`) REFERENCES `civirule_rule`(`id`) ON DELETE CASCADE,          CONSTRAINT FK_civirule_rule_action_action_id FOREIGN KEY (`action_id`) REFERENCES `civirule_action`(`id`) ON DELETE CASCADE  
-)    ;
+)  ENGINE=Innodb  ;
 
 -- /*******************************************************
 -- *
@@ -198,7 +200,7 @@ CREATE TABLE `civirule_rule_condition` (
  
  
 ,          CONSTRAINT FK_civirule_rule_condition_rule_id FOREIGN KEY (`rule_id`) REFERENCES `civirule_rule`(`id`) ON DELETE CASCADE,          CONSTRAINT FK_civirule_rule_condition_action_id FOREIGN KEY (`action_id`) REFERENCES `civirule_action`(`id`) ON DELETE CASCADE  
-)    ;
+)  ENGINE=Innodb  ;
 
 -- /*******************************************************
 -- *
@@ -231,7 +233,7 @@ CREATE TABLE `civirule_rule_log` (
   )
   
  
-)    ;
+)  ENGINE=Innodb  ;
 
 -- /*******************************************************
 -- *
@@ -251,6 +253,6 @@ CREATE TABLE `civirule_rule_tag` (
  
  
 ,          CONSTRAINT FK_civirule_rule_tag_rule_id FOREIGN KEY (`rule_id`) REFERENCES `civirule_rule`(`id`) ON DELETE CASCADE  
-)    ;
+)  ENGINE=Innodb  ;
 
  

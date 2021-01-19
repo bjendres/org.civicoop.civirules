@@ -5,6 +5,7 @@
   <class>RuleCondition</class>
   <name>civirule_rule_condition</name>
   <comment>FIXME</comment>
+  <table_type>Innodb</table_type>
   <log>true</log>
 
   <field>

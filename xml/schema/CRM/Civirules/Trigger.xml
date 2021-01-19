@@ -5,6 +5,7 @@
   <class>Trigger</class>
   <name>civirule_trigger</name>
   <comment>FIXME</comment>
+  <table_type>Innodb</table_type>
   <log>true</log>
 
   <field>
