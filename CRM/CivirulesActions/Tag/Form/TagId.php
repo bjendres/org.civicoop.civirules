@@ -17,8 +17,29 @@ class CRM_CivirulesActions_Tag_Form_TagId extends CRM_CivirulesActions_Form_Form
    */
   protected function getTags() {
     $bao = new CRM_Core_BAO_Tag();
-    $tags = $bao->getTree('civicrm_contact');
-    $options = array();
+    switch ($this->trigger->object_name) {
+      case 'Contact':
+        $tableName = 'civicrm_contact';
+        break;
+
+      case 'Activity':
+        $tableName = 'civicrm_activity';
+        break;
+
+      case 'Case':
+        $tableName = 'civicrm_case';
+        break;
+
+      case 'File':
+        $tableName = 'civicrm_file';
+        break;
+
+      default:
+        return [];
+    };
+    $tags = $bao->getTree($tableName);
+
+    $options = [];
     foreach($tags as $tag_id => $tag) {
       $parent = '';
       $this->buildOptionsFromTree($options, $tags, $parent);
@@ -46,29 +67,30 @@ class CRM_CivirulesActions_Tag_Form_TagId extends CRM_CivirulesActions_Form_Form
   public function buildQuickForm() {
     $this->add('hidden', 'rule_action_id');
 
-    $this->add('select', 'type', ts('Single/Multiple'), array(
+    $this->add('select', 'type', ts('Single/Multiple'), [
       0 => ts('Select one tag'),
       1 => ts('Select multiple tags'),
-    ));
+    ]);
 
-    $this->add('select', 'tag_id', ts('Tag'), array('' => ts('-- please select --')) + $this->getTags());
+    $this->add('select', 'tag_id', ts('Tag'), ['' => ts('-- please select --')] + $this->getTags());
 
-    $multiGroup = $this->addElement('advmultiselect', 'tag_ids', ts('Tags'), $this->getTags(), array(
+    $multiGroup = $this->addElement('advmultiselect', 'tag_ids', ts('Tags'), $this->getTags(), [
       'size' => 5,
       'style' => 'width:250px',
       'class' => 'advmultiselect',
-    ));
+    ]);
 
-    $multiGroup->setButtonAttributes('add', array('value' => ts('Add >>')));
-    $multiGroup->setButtonAttributes('remove', array('value' => ts('<< Remove')));
+    $multiGroup->setButtonAttributes('add', ['value' => ts('Add >>')]);
+    $multiGroup->setButtonAttributes('remove', ['value' => ts('<< Remove')]);
 
-    $this->addButtons(array(
-      array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
-      array('type' => 'cancel', 'name' => ts('Cancel'))));
+    $this->addButtons([
+      ['type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,],
+      ['type' => 'cancel', 'name' => ts('Cancel')]
+    ]);
   }
 
   public function addRules() {
-    $this->addFormRule(array('CRM_CivirulesActions_Tag_Form_TagId', 'validateTagFields'));
+    $this->addFormRule(['CRM_CivirulesActions_Tag_Form_TagId', 'validateTagFields']);
   }
 
   /**
@@ -80,7 +102,7 @@ class CRM_CivirulesActions_Tag_Form_TagId extends CRM_CivirulesActions_Form_Form
    * @static
    */
   static function validateTagFields($fields) {
-    $errors = array();
+    $errors = [];
     if ($fields['type'] == 0 && empty($fields['tag_id'])) {
       $errors['tag_id'] = ts('You have to select at least one tag');
     } elseif ($fields['type'] == 1 && (empty($fields['tag_ids']) || count($fields['tag_ids']) < 1)) {
