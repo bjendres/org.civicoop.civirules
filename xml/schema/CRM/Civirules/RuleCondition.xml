@@ -37,18 +37,18 @@
     <default>NULL</default>
   </field>
   <field>
-    <name>action_id</name>
+    <name>condition_id</name>
     <type>int unsigned</type>
     <defualt>NULL</defualt>
   </field>
   <foreignKey>
-    <name>action_id</name>
-    <table>civirule_action</table>
+    <name>condition_id</name>
+    <table>civirule_condition</table>
     <key>id</key>
     <onDelete>CASCADE</onDelete>
   </foreignKey>
   <field>
-    <name>action_params</name>
+    <name>condition_params</name>
     <type>text</type>
     <default>NULL</default>
   </field>
