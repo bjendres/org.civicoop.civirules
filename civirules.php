@@ -332,26 +332,7 @@ function civirules_civirules_alter_trigger_data(CRM_Civirules_TriggerData_Trigge
  * @param array $entityTypes
  */
 function civirules_civicrm_entityTypes(&$entityTypes) {
-  $entityTypes['CRM_Civirules_BAO_Action'] = array(
-    'name' => 'CiviRuleAction',
-    'class' => 'CRM_Civirules_BAO_Action',
-    'table' => 'civirule_action',
-  );
-  $entityTypes['CRM_Civirules_BAO_Condition'] = array(
-    'name' => 'CiviRuleCondition',
-    'class' => 'CRM_Civirules_BAO_Condition',
-    'table' => 'civirule_condition',
-  );
-  $entityTypes['CRM_Civirules_BAO_Trigger'] = array(
-    'name' => 'CiviRuleTrigger',
-    'class' => 'CRM_Civirules_BAO_Trigger',
-    'table' => 'civirule_trigger',
-  );
-  $entityTypes['CRM_Civirules_BAO_Rule'] = array(
-    'name' => 'CiviRuleRule',
-    'class' => 'CRM_Civirules_BAO_Rule',
-    'table' => 'civirule_rule',
-  );
+  _civirules_civix_civicrm_entityTypes($entityTypes);
 }
 
 /**
