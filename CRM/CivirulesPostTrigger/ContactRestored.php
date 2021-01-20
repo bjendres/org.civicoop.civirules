@@ -24,8 +24,8 @@ class CRM_CivirulesPostTrigger_ContactRestored extends CRM_Civirules_Trigger_Pos
    * @param $objectId
    * @param $objectRef
    */
-  public function triggerTrigger($op, $objectName, $objectId, $objectRef) {
-    $triggerData = $this->getTriggerDataFromPost($op, $objectName, $objectId, $objectRef);
+  public function triggerTrigger($op, $objectName, $objectId, $objectRef, $eventID) {
+    $triggerData = $this->getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID);
     // check if it is realy a restore (is_deleted flag is 0)
     if($objectRef->is_deleted==0) {
       CRM_Civirules_Engine::triggerRule($this, clone $triggerData);

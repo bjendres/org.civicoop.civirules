@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+  <base>CRM/Civirules</base>
+  <class>RuleLog</class>
+  <name>civirule_rule_log</name>
+  <comment>FIXME</comment>
+  <table_type>Innodb</table_type>
+  <log>true</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Unique RuleLog ID</comment>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+  <field>
+    <name>rule_id</name>
+    <type>int unsigned</type>
+    <default>NULL</default>
+  </field>
+  <index>
+    <name>rule_id</name>
+    <fieldName>rule_id</fieldName>
+  </index>
+  <field>
+    <name>contact_id</name>
+    <type>int unsigned</type>
+    <default>NULL</default>
+  </field>
+  <index>
+    <name>contact_id</name>
+    <fieldName>contact_id</fieldName>
+  </index>
+  <index>
+    <name>rule_contact_id</name>
+    <fieldName>rule_id</fieldName>
+    <fieldName>contact_id</fieldName>
+  </index>
+  <field>
+    <name>entity_table</name>
+    <type>varchar</type>
+    <length>255</length>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>entity_id</name>
+    <type>int unsigned</type>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>log_date</name>
+    <type>datetime</type>
+    <default>NULL</default>
+  </field>
+
+</table>

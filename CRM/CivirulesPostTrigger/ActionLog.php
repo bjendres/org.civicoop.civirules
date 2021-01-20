@@ -29,8 +29,8 @@ class CRM_CivirulesPostTrigger_ActionLog extends CRM_Civirules_Trigger_Post {
    * @param $objectRef
    * @return CRM_Civirules_TriggerData_Edit|CRM_Civirules_TriggerData_Post
    */
-  protected function getTriggerDataFromPost($op, $objectName, $objectId, $objectRef) {
-    $triggerData = parent::getTriggerDataFromPost($op, $objectName, $objectId, $objectRef);
+  protected function getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID = NULL) {
+    $triggerData = parent::getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID);
     $actionLogData = $triggerData->getEntityData('ActionLog');
     $actionLog = CRM_Core_BAO_ActionLog::findById($actionLogData['id']);
     $triggerData->setContactId($actionLog->contact_id);
@@ -38,3 +38,4 @@ class CRM_CivirulesPostTrigger_ActionLog extends CRM_Civirules_Trigger_Post {
   }
 
 }
+

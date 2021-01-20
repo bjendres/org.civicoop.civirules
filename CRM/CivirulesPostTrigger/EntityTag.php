@@ -28,7 +28,7 @@ class CRM_CivirulesPostTrigger_EntityTag extends CRM_Civirules_Trigger_Post {
    * @param $objectId
    * @param $objectRef
    */
-  public function triggerTrigger($op, $objectName, $objectId, $objectRef) {
+  public function triggerTrigger($op, $objectName, $objectId, $objectRef, $eventID) {
 
     $entity = CRM_Civirules_Utils_ObjectName::convertToEntity($objectName);
 
