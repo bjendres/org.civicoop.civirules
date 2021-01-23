@@ -20,7 +20,5 @@ function _civicrm_api3_civi_rule_condition_delete_spec(&$spec) {
  * @see civicrm_api3_create_error
  */
 function civicrm_api3_civi_rule_condition_delete($params) {
-  CRM_Civirules_BAO_Condition::deleteWithId($params['id']);
-  $returnValues[$params['id']] = array();
-  return civicrm_api3_create_success($returnValues, $params, 'CiviRuleAction', 'Create');
+  return _civicrm_api3_basic_delete('CRM_Civirules_BAO_Condition', $params);
 }

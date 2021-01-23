@@ -9,7 +9,6 @@
  * @throws API_Exception
  */
 function civicrm_api3_civi_rule_action_get($params) {
-  $returnValues = CRM_Civirules_BAO_Action::getValues($params);
-  return civicrm_api3_create_success($returnValues, $params, 'CiviRuleAction', 'Get');
+  return _civicrm_api3_basic_get('CRM_Civirules_BAO_Action', $params);
 }
 
