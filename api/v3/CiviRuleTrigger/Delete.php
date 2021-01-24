@@ -8,7 +8,7 @@
  * @return void
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC/API+Architecture+Standards
  */
-function _civicrm_api3_civi_rule_trigger_Delete_spec(&$spec) {
+function _civicrm_api3_civi_rule_trigger_delete_spec(&$spec) {
   $spec['id']['api_required'] = 1;
 }
 
@@ -21,11 +21,7 @@ function _civicrm_api3_civi_rule_trigger_Delete_spec(&$spec) {
  * @see civicrm_api3_create_error
  * @throws API_Exception
  */
-function civicrm_api3_civi_rule_trigger_Delete($params) {
-  if (!array_key_exists('id', $params) || empty($params['id'])) {
-    throw new API_Exception('Parameter id is mandatory and can not be empty in ' . __METHOD__, 0010);
-  } else {
-    return civicrm_api3_create_success(CRM_Civirules_BAO_Trigger::deleteWithId($params['id']), $params, 'CiviRuleTrigger', 'Delete');
-  }
+function civicrm_api3_civi_rule_trigger_delete($params) {
+  return _civicrm_api3_basic_delete('CRM_Civirules_BAO_Trigger', $params);
 }
 

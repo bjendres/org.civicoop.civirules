@@ -77,7 +77,7 @@ class CRM_Civirules_Engine {
       $triggerData->delayedSubmitDateTime = CRM_Utils_Time::getTime('YmdHis');
       self::delayAction($delay, $actionEngine);
     } else {
-      //there is no delay so process action immediatly
+      //there is no delay so process action immediately
       $triggerData->isDelayedExecution = FALSE;
       try {
         $actionEngine->execute();

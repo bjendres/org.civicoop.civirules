@@ -4,8 +4,6 @@
  * This is used for documentation and validation.
  *
  * @param array $spec description of fields supported by this API call
- * @return void
- * @see http://wiki.civicrm.org/confluence/display/CRM/API+Architecture+Standards
  */
 function _civicrm_api3_civi_rule_action_create_spec(&$spec) {
   $spec['label']['api_required'] = 0;
@@ -31,8 +29,7 @@ function civicrm_api3_civi_rule_action_create($params) {
   /*
    * set created or modified date and user_id
    */
-  $session = CRM_Core_Session::singleton();
-  $userId = $session->get('userID');
+  $userId = CRM_Core_Session::getLoggedInContactID();
   if (isset($params['id'])) {
     $params['modified_date'] = date('Ymd');
     $params['modified_user_id'] = $userId;
@@ -40,6 +37,6 @@ function civicrm_api3_civi_rule_action_create($params) {
     $params['created_date'] = date('Ymd');
     $params['created_user_id'] = $userId;
   }
-  $returnValues = CRM_Civirules_BAO_Action::add($params);
-  return civicrm_api3_create_success($returnValues, $params, 'CiviRuleAction', 'Create');
+
+  return _civicrm_api3_basic_create('CRM_Civirules_BAO_Action', $params);
 }
