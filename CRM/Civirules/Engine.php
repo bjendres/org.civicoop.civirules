@@ -260,6 +260,21 @@ class CRM_Civirules_Engine {
       } else {
         $isValid = false; //we should never reach this statement
       }
+      $conditionsValid[$ruleConditionId] = "$ruleConditionId=" . ($isValid ? 'true' : 'false');
+    }
+
+    if ($triggerData->getTrigger()->getRuleDebugEnabled()) {
+      // Debugging - log validation of conditions
+      if (!empty($ruleConditions)) {
+        $context = [];
+        $context['rule_id'] = $triggerData->getTrigger()->getRuleId();
+        $context['conditions_valid'] = implode(';', $conditionsValid);
+        $context['contact_id'] = $triggerData->getContactId();
+        $context['entity_id'] = $triggerData->getEntityId();
+        CRM_Civirules_Utils_LoggerFactory::log("Rule {$context['rule_id']}: Conditions: {$context['conditions_valid']}",
+          $context,
+          \Psr\Log\LogLevel::DEBUG);
+      }
     }
     return $isValid;
   }

@@ -135,8 +135,6 @@ CREATE TABLE `civirule_trigger` (
 -- *
 -- *******************************************************/
 CREATE TABLE `civirule_rule` (
-
-
      `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT 'Unique Rule ID',
      `name` varchar(80)   DEFAULT NULL ,
      `label` varchar(128)   DEFAULT NULL ,
@@ -147,13 +145,11 @@ CREATE TABLE `civirule_rule` (
      `created_date` date   DEFAULT NULL ,
      `created_user_id` int   DEFAULT NULL ,
      `modified_date` date   DEFAULT NULL ,
-     `modified_user_id` int   DEFAULT NULL  
-,
-        PRIMARY KEY (`id`)
- 
- 
-,          CONSTRAINT FK_civirule_rule_trigger_id FOREIGN KEY (`trigger_id`) REFERENCES `civirule_trigger`(`id`) ON DELETE NO ACTION  
-)  ENGINE=Innodb  ;
+     `modified_user_id` int   DEFAULT NULL
+     `is_debug` tinyint DEFAULT 0,
+     PRIMARY KEY (`id`),
+     CONSTRAINT FK_civirule_rule_trigger_id FOREIGN KEY (`trigger_id`) REFERENCES `civirule_trigger`(`id`) ON DELETE NO ACTION
+) ENGINE=Innodb;
 
 -- /*******************************************************
 -- *

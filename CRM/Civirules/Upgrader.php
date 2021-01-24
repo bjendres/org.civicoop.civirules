@@ -778,5 +778,13 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     return TRUE;
   }
 
+  public function upgrade_2067() {
+    $this->ctx->log->info('Applying update 2067 - Add "is_debug" field to civirule_rule.');
+    if (!CRM_Core_BAO_SchemaHandler::checkIfFieldExists('civirule_rule', 'is_debug')) {
+      CRM_Core_DAO::executeQuery('ALTER TABLE civirule_rule ADD COLUMN `is_debug` tinyint DEFAULT 0');
+    }
+    return TRUE;
+  }
+
 }
 
