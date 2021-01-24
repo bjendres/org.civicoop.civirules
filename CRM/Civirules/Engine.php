@@ -6,6 +6,8 @@
  * @license AGPL-3.0
  */
 
+use CRM_Civirules_ExtensionUtil as E;
+
 class CRM_Civirules_Engine {
 
   const QUEUE_NAME = 'org.civicoop.civirules.action';
@@ -16,10 +18,9 @@ class CRM_Civirules_Engine {
    * The trigger will check the conditions and if conditions are valid then the actions are executed
    *
    * @param CRM_Civirules_Trigger $trigger
-   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
+   *
    * @return bool true when conditions are valid; false when conditions are not valid
-   * @access public
-   * @static
    */
   public static function triggerRule(CRM_Civirules_Trigger $trigger, CRM_Civirules_TriggerData_TriggerData $triggerData) {
     try {
@@ -33,7 +34,7 @@ class CRM_Civirules_Engine {
       }
     } catch (Exception $e) {
       $message = "Error on {file} (Line {line})\r\n\r\n{exception_message}";
-      $context = array();
+      $context = [];
       $context['line'] = $e->getLine();
       $context['file'] = $e->getFile();
       $context['exception_message'] = $e->getMessage();
@@ -45,14 +46,12 @@ class CRM_Civirules_Engine {
   /**
    * Method to execute the actions
    *
-   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
-   * @access protected
-   * @static
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    */
   protected static function executeActions(CRM_Civirules_TriggerData_TriggerData $triggerData) {
-    $actionParams = array(
+    $actionParams = [
       'rule_id' => $triggerData->getTrigger()->getRuleId(),
-    );
+    ];
     $ruleActions = CRM_Civirules_BAO_RuleAction::getValues($actionParams);
     foreach ($ruleActions as $ruleAction) {
       self::executeAction($triggerData, $ruleAction);
@@ -62,10 +61,8 @@ class CRM_Civirules_Engine {
   /**
    * Method to execute a single action
    *
-   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @param array $ruleAction
-   * @access protected
-   * @static
    */
   public static function executeAction(CRM_Civirules_TriggerData_TriggerData &$triggerData, $ruleAction) {
     $actionEngine = CRM_Civirules_ActionEngine_Factory::getEngine($ruleAction, $triggerData);
@@ -92,25 +89,26 @@ class CRM_Civirules_Engine {
    * Process delayed actions
    *
    * @param int $maxRunTime
+   *
    * @return array
    */
   public static function processDelayedActions($maxRunTime=30) {
-    $queue = CRM_Queue_Service::singleton()->create(array(
+    $queue = CRM_Queue_Service::singleton()->create([
       'type' => 'Civirules',
       'name' => self::QUEUE_NAME,
       'reset' => false, //do not flush queue upon creation
-    ));
+    ]);
 
-    $returnValues = array();
+    $returnValues = [];
 
-    //retrieve the queue
-    $runner = new CRM_Queue_Runner(array(
-      'title' => ts('Process delayed civirules actions'), //title fo the queue
-      'queue' => $queue, //the queue object
-      'errorMode'=> CRM_Queue_Runner::ERROR_CONTINUE, //continue on error otherwise the queue will hang
-    ));
+    // retrieve the queue
+    $runner = new CRM_Queue_Runner([
+      'title' => E::ts('Process delayed civirules actions'), // title for the queue
+      'queue' => $queue, // the queue object
+      'errorMode'=> CRM_Queue_Runner::ERROR_CONTINUE, // continue on error otherwise the queue will hang
+    ]);
 
-    $stopTime = time() + $maxRunTime; //stop executing next item after 30 seconds
+    $stopTime = time() + $maxRunTime; // stop executing next item after 30 seconds
     while((time() < $stopTime) && $queue->numberOfItems() > 0) {
       $result = $runner->runNext(false);
       $returnValues[] = $result;
@@ -175,24 +173,24 @@ class CRM_Civirules_Engine {
    * @param CRM_Civirules_ActionEngine_AbstractActionEngine $actionEngine
    */
   public static function delayAction(DateTime $delayTo, CRM_Civirules_ActionEngine_AbstractActionEngine $actionEngine) {
-    $queue = CRM_Queue_Service::singleton()->create(array(
+    $queue = CRM_Queue_Service::singleton()->create([
       'type' => 'Civirules',
       'name' => self::QUEUE_NAME,
-      'reset' => false, //do not flush queue upon creation
-    ));
+      'reset' => false, // do not flush queue upon creation
+    ]);
 
-    //create a task with the action and eventData as parameters
+    // create a task with the action and eventData as parameters
     $task = new CRM_Queue_Task(
-      array('CRM_Civirules_Engine', 'executeDelayedAction'), //call back method
-      array($actionEngine) //parameters
+      ['CRM_Civirules_Engine', 'executeDelayedAction'], // call back method
+      [$actionEngine] // parameters
     );
 
-    //save the task with a delay
+    // save the task with a delay
     $dao              = new CRM_Queue_DAO_QueueItem();
     $dao->queue_name  = $queue->getName();
-    $dao->submit_time = CRM_Utils_Time::getTime('YmdHis');
+    $dao->submit_time = CRM_Utils_Time::date('YmdHis');
     $dao->data        = serialize($task);
-    $dao->weight      = 0; //weight, normal priority
+    $dao->weight      = 0; // weight, normal priority
     $dao->release_time = $delayTo->format('YmdHis');
     $dao->save();
   }
@@ -205,6 +203,7 @@ class CRM_Civirules_Engine {
    *
    * @param $ruleAction
    * @param CRM_Civirules_ActionEngine_AbstractActionEngine $actionEngine
+   *
    * @return bool|\DateTime
    */
   public static function getActionDelay($ruleAction, CRM_Civirules_ActionEngine_AbstractActionEngine $actionEngine) {
@@ -232,18 +231,17 @@ class CRM_Civirules_Engine {
   /**
    * Method to check if all conditions are valid
    *
-   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
+   *
    * @return bool
-   * @access protected
-   * @static
    */
   public static function areConditionsValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isValid = true;
     $firstCondition = true;
 
-    $conditionParams = array(
+    $conditionParams = [
       'rule_id' => $triggerData->getTrigger()->getRuleId(),
-    );
+    ];
     $ruleConditions = CRM_Civirules_BAO_RuleCondition::getValues($conditionParams);
     foreach ($ruleConditions as $ruleConditionId => $ruleCondition) {
       if ($firstCondition) {
@@ -253,14 +251,15 @@ class CRM_Civirules_Engine {
         if ($isValid) {
           $isValid = self::checkCondition($ruleCondition, $triggerData);
         }
-      } elseif ($ruleCondition['condition_link'] == 'OR'){
+      } elseif ($ruleCondition['condition_link'] == 'OR') {
         if (!$isValid) {
-          $isValid = self::checkCondition($ruleCondition, $triggerData);;
+          $isValid = self::checkCondition($ruleCondition, $triggerData);
         }
       } else {
-        $isValid = false; //we should never reach this statement
+        $isValid = false; // we should never reach this statement
       }
     }
+
     return $isValid;
   }
 
@@ -268,10 +267,9 @@ class CRM_Civirules_Engine {
    * Method to check condition
    *
    * @param array $ruleCondition
-   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
+   *
    * @return bool
-   * @access protected
-   * @static
    */
   public static function checkCondition($ruleCondition, CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $condition = CRM_Civirules_BAO_Condition::getConditionObjectById($ruleCondition['condition_id'], false);
@@ -301,25 +299,25 @@ class CRM_Civirules_Engine {
     $ruleId = $trigger->getRuleId();
     $contactId = $triggerData->getContactId();
 
-    $params = array();
+    $params = [];
     if ($triggerData->getEntityId() && $table && $contactId) {
       $sql = "INSERT INTO `civirule_rule_log` (`rule_id`, `contact_id`, `entity_table`, `entity_id`, `log_date`) VALUES (%1, %2, %3, %4, NOW())";
-      $params[1] = array($ruleId, 'Integer');
-      $params[2] = array($contactId, 'Integer');
-      $params[3] = array($table, 'String');
-      $params[4] = array($triggerData->getEntityId(), 'Integer');
+      $params[1] = [$ruleId, 'Integer'];
+      $params[2] = [$contactId, 'Integer'];
+      $params[3] = [$table, 'String'];
+      $params[4] = [$triggerData->getEntityId(), 'Integer'];
     } elseif ($triggerData->getEntityId() && $table) {
       $sql = "INSERT INTO `civirule_rule_log` (`rule_id`, `entity_table`, `entity_id`, `log_date`) VALUES (%1, %2, %3, NOW())";
-      $params[1] = array($ruleId, 'Integer');
-      $params[2] = array($table, 'String');
-      $params[3] = array($triggerData->getEntityId(), 'Integer');
+      $params[1] = [$ruleId, 'Integer'];
+      $params[2] = [$table, 'String'];
+      $params[3] = [$triggerData->getEntityId(), 'Integer'];
     } elseif ($contactId) {
       $sql = "INSERT INTO `civirule_rule_log` (`rule_id`, `contact_id`, `log_date`) VALUES (%1, %2, NOW())";
-      $params[1] = array($ruleId, 'Integer');
-      $params[2] = array($contactId, 'Integer');
+      $params[1] = [$ruleId, 'Integer'];
+      $params[2] = [$contactId, 'Integer'];
     } else {
       $sql = "INSERT INTO `civirule_rule_log` (`rule_id`, `log_date`) VALUES (%1, NOW())";
-      $params[1] = array($ruleId, 'Integer');
+      $params[1] = [$ruleId, 'Integer'];
     }
 
     if (empty($ruleId)) {
@@ -330,3 +328,4 @@ class CRM_Civirules_Engine {
   }
 
 }
+
