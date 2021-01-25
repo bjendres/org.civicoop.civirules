@@ -13,6 +13,11 @@ abstract class CRM_Civirules_Trigger {
    */
   protected $ruleTitle;
 
+  /**
+   * @var bool
+   */
+  protected $ruleDebugEnabled;
+
   public function setRuleId($ruleId) {
     $this->ruleId = $ruleId;
   }
@@ -42,6 +47,17 @@ abstract class CRM_Civirules_Trigger {
       }
     }
     return $this->ruleTitle;
+  }
+
+  public function getRuleDebugEnabled() {
+    if (empty($this->ruleDebugEnabled) && !empty($this->ruleId)) {
+      $rule = new CRM_Civirules_BAO_Rule();
+      $rule->id = $this->ruleId;
+      if ($rule->find(true)) {
+        $this->ruleDebugEnabled = $rule->is_debug;
+      }
+    }
+    return $this->ruleDebugEnabled;
   }
 
   /**

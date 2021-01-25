@@ -79,5 +79,10 @@
     <type>int</type>
     <default>NULL</default>
   </field>
+  <field>
+    <name>is_debug</name>
+    <type>boolean</type>
+    <default>0</default>
+  </field>
 
 </table>
