@@ -61,7 +61,8 @@ class CRM_CivirulesConditions_Generic_HasTag extends CRM_Civirules_Condition {
   protected function entityHasNotTag(int $entityID, array $tag_ids, string $entity = 'Contact'): bool {
     $isValid = TRUE;
 
-    $tags = \Civi\Api4\EntityTag::get(FALSE)
+    $tags = \Civi\Api4\EntityTag::get()
+      ->setCheckPermissions(FALSE)
       ->addSelect('tag_id')
       ->addWhere('entity_table:name', '=', $entity)
       ->addWhere('entity_id', '=', $entityID)
@@ -85,7 +86,8 @@ class CRM_CivirulesConditions_Generic_HasTag extends CRM_Civirules_Condition {
   protected function entityHasAllTags(int $entityID, array $tag_ids, string $entity = 'Contact'): bool {
     $isValid = 0;
 
-    $tags = \Civi\Api4\EntityTag::get(FALSE)
+    $tags = \Civi\Api4\EntityTag::get()
+      ->setCheckPermissions(FALSE)
       ->addSelect('tag_id')
       ->addWhere('entity_table:name', '=', $entity)
       ->addWhere('entity_id', '=', $entityID)
@@ -113,7 +115,8 @@ class CRM_CivirulesConditions_Generic_HasTag extends CRM_Civirules_Condition {
   protected function entityHasOneOfTags(int $entityID, array $tag_ids, string $entity = 'Contact'): bool {
     $isValid = FALSE;
 
-    $tags = \Civi\Api4\EntityTag::get(FALSE)
+    $tags = \Civi\Api4\EntityTag::get()
+      ->setCheckPermissions(FALSE)
       ->addSelect('tag_id')
       ->addWhere('entity_table:name', '=', $entity)
       ->addWhere('entity_id', '=', $entityID)
