@@ -2,6 +2,9 @@
 
 ## Version 2.21 (not yet released)
 
+* HasTag API4 compatibility with 5.28 (!110)
+* Code cleanup engine.php (!111)
+
 ## Version 2.20
 
 * Activity Scheduled date trigger: Don't trigger for deleted activities !90
