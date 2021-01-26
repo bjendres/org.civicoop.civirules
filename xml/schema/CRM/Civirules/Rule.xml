@@ -55,6 +55,12 @@
     <default>1</default>
   </field>
   <field>
+    <name>description</name>
+    <type>varchar</type>
+    <length>255</length>
+    <default>NULL</default>
+  </field>
+  <field>
     <name>help_text</name>
     <type>text</type>
     <default>NULL</default>
