@@ -141,6 +141,7 @@ CREATE TABLE `civirule_rule` (
      `trigger_id` int unsigned   DEFAULT NULL ,
      `trigger_params` text   DEFAULT NULL ,
      `is_active` int NOT NULL  DEFAULT 1 ,
+     `description` varchar(255)   DEFAULT NULL ,
      `help_text` text   DEFAULT NULL ,
      `created_date` date   DEFAULT NULL ,
      `created_user_id` int   DEFAULT NULL ,
