@@ -145,7 +145,7 @@ CREATE TABLE `civirule_rule` (
      `created_date` date   DEFAULT NULL ,
      `created_user_id` int   DEFAULT NULL ,
      `modified_date` date   DEFAULT NULL ,
-     `modified_user_id` int   DEFAULT NULL
+     `modified_user_id` int   DEFAULT NULL,
      `is_debug` tinyint DEFAULT 0,
      PRIMARY KEY (`id`),
      CONSTRAINT FK_civirule_rule_trigger_id FOREIGN KEY (`trigger_id`) REFERENCES `civirule_trigger`(`id`) ON DELETE NO ACTION
