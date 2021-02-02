@@ -1,6 +1,7 @@
 # CHANGELOG
+## Version 2.22 (not yet released)
 
-## Version 2.21 (not yet released)
+## Version 2.21
 
 * HasTag API4 compatibility with 5.28 (!110)
 * Code cleanup engine.php (!111)
