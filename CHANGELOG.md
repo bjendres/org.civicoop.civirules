@@ -5,6 +5,7 @@
 * HasTag API4 compatibility with 5.28 (!110)
 * Code cleanup engine.php (!111)
 * Add debug flag to rule and log condition validation if enabled (!112)
+* Retrieve campaign data if data not complete from getEntityData (!113)
 
 ## Version 2.20
 
