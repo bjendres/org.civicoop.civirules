@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+  <base>CRM/Civirules</base>
+  <class>RuleCondition</class>
+  <name>civirule_rule_condition</name>
+  <comment>FIXME</comment>
+  <table_type>Innodb</table_type>
+  <log>true</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Unique RuleCondition ID</comment>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+
+  <field>
+    <name>rule_id</name>
+    <type>int unsigned</type>
+    <defualt>NULL</defualt>
+  </field>
+  <foreignKey>
+    <name>rule_id</name>
+    <table>civirule_rule</table>
+    <key>id</key>
+    <onDelete>CASCADE</onDelete>
+  </foreignKey>
+  <field>
+    <name>condition_link</name>
+    <type>varchar</type>
+    <length>3</length>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>condition_id</name>
+    <type>int unsigned</type>
+    <defualt>NULL</defualt>
+  </field>
+  <foreignKey>
+    <name>condition_id</name>
+    <table>civirule_condition</table>
+    <key>id</key>
+    <onDelete>CASCADE</onDelete>
+  </foreignKey>
+  <field>
+    <name>condition_params</name>
+    <type>text</type>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>is_active</name>
+    <type>int</type>
+    <default>1</default>
+  </field>
+</table>

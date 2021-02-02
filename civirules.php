@@ -16,7 +16,26 @@ use CRM_Civirules_ExtensionUtil as E;
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
  */
 function civirules_civicrm_config(&$config) {
+  if (isset(Civi::$statics[__FUNCTION__])) { return; }
+  Civi::$statics[__FUNCTION__] = 1;
   _civirules_civix_civicrm_config($config);
+
+  // eventID param added in 5.34: https://github.com/civicrm/civicrm-core/pull/19209
+  if (version_compare(CRM_Utils_System::version(), '5.34', '>=')) {
+    // These events were added in 5.26: https://github.com/civicrm/civicrm-core/pull/16714
+    \Civi::dispatcher()
+      ->addListener('civi.dao.preUpdate', 'civirules_trigger_preupdate');
+    \Civi::dispatcher()
+      ->addListener('civi.dao.postUpdate', 'civirules_trigger_postupdate');
+    \Civi::dispatcher()
+      ->addListener('civi.dao.preInsert', 'civirules_trigger_preinsert');
+    \Civi::dispatcher()
+      ->addListener('civi.dao.postInsert', 'civirules_trigger_postinsert');
+  }
+  else {
+    \Civi::dispatcher()->addListener('hook_civicrm_pre', 'civirules_symfony_civicrm_pre');
+    \Civi::dispatcher()->addListener('hook_civicrm_post', 'civirules_symfony_civicrm_post');
+  }
 }
 
 /**
@@ -125,18 +144,18 @@ function _civirules_upgrade_to_2x_backup() {
   if (!CRM_Core_DAO::checkTableExists('civirule_rule_action_backup')) {
     // Backup the current action and condition connected to a civirule
     CRM_Core_DAO::executeQuery("
-      CREATE TABLE `civirule_rule_action_backup` 
-      SELECT `civirule_rule_action`.*, `civirule_action`.`class_name` as `action_class_name` 
-      FROM `civirule_rule_action` 
-      INNER JOIN `civirule_action` ON `civirule_rule_action`.`action_id` = `civirule_action`.`id` 
+      CREATE TABLE `civirule_rule_action_backup`
+      SELECT `civirule_rule_action`.*, `civirule_action`.`class_name` as `action_class_name`
+      FROM `civirule_rule_action`
+      INNER JOIN `civirule_action` ON `civirule_rule_action`.`action_id` = `civirule_action`.`id`
     ");
   }
   if (!CRM_Core_DAO::checkTableExists('civirule_rule_action_backup')) {
     CRM_Core_DAO::executeQuery("
       CREATE TABLE `civirule_rule_condition_backup`
-      SELECT `civirule_rule_condition`.*, `civirule_condition`.`class_name` as `condition_class_name` 
-      FROM `civirule_rule_condition` 
-      INNER JOIN `civirule_condition` ON `civirule_rule_condition`.`condition_id` = `civirule_condition`.`id` 
+      SELECT `civirule_rule_condition`.*, `civirule_condition`.`class_name` as `condition_class_name`
+      FROM `civirule_rule_condition`
+      INNER JOIN `civirule_condition` ON `civirule_rule_condition`.`condition_id` = `civirule_condition`.`id`
     ");
   }
 }
@@ -169,111 +188,95 @@ function civirules_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
  */
-function civirules_civicrm_navigationMenu( &$params ) {
-  // Get the maximum key of $params
-  $maxKey = CRM_Civirules_Utils::getMenuKeyMax($params);
-  $newNavId = $maxKey + 1;
-  // retrieve the option group id of the rule tags option group
+function civirules_civicrm_navigationMenu(&$menu) {
+
+  _civirules_civix_insert_navigation_menu($menu, 'Administer', [
+    'label' => E::ts('CiviRules'),
+    'name' => 'CiviRules',
+    'url' => NULL,
+    'permission' => 'administer CiviCRM',
+    'operator' => NULL,
+    'separator' => NULL,
+  ]);
+
+  _civirules_civix_insert_navigation_menu($menu, 'Administer/CiviRules', [
+    'label' => E::ts('Manage Rules'),
+    'name' => 'Manage Rules',
+    'url' => CRM_Utils_System::url('civicrm/civirules/form/rulesview', 'reset=1', TRUE),
+    'permission' => 'administer CiviCRM',
+    'operator' => NULL,
+    'separator' => 0,
+  ]);
+
+  _civirules_civix_insert_navigation_menu($menu, 'Administer/CiviRules', [
+    'label' => E::ts('New Rule'),
+    'name' => 'New Rule',
+    'url' => CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=add', TRUE),
+    'permission' => 'administer CiviCRM',
+    'operator' => NULL,
+    'separator' => 0,
+  ]);
+
   $optionGroup = CRM_Civirules_Utils_OptionGroup::getSingleWithName('civirule_rule_tag');
-  // retrieve the id of the "Administer" menu item
-  foreach($params as $key => $item) {
-  	if (isset($item['attributes']['name']) && $item['attributes']['name'] === 'Administer') {
-  	  $administerID = $item['attributes']['navID'];
-  	}
-  }
-  $params[$administerID]['child'][$newNavId] = array(
-    'attributes' => array(
-      'label' => 'CiviRules',
-      'name' => 'CiviRules',
-      'url' => NULL,
-      'permission' => 'administer CiviCRM',
-      'operator' => NULL,
-      'separator' => NULL,
-      'parentID' => $administerID,
-      'navID' => $newNavId,
-      'active' => 1
-    ));
-	$parentId = $newNavId;
-	$newNavId++;
-  // add child menu for manage rules
-  $params[$administerID]['child'][$parentId]['child'][$newNavId] = array(
-    'attributes' => array(
-      'label' => ts('Manage Rules'),
-      'name' => ts('Manage Rules'),
-      'url' => CRM_Utils_System::url('civicrm/civirules/form/rulesview', 'reset=1', TRUE),
-      'permission' => 'administer CiviCRM',
-      'operator' => NULL,
-      'separator' => 0,
-      'parentID' => $parentId,
-      'navID' => $newNavId,
-      'active' => 1
-    ),
-    'child' => NULL
-  );
-  $newNavId++;
-  $params[$administerID]['child'][$parentId]['child'][$newNavId] = array(
-    'attributes' => array(
-      'label' => ts('New Rule'),
-      'name' => ts('New Rule'),
-      'url' => CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=add', TRUE),
-      'permission' => 'administer CiviCRM',
-      'operator' => NULL,
-      'separator' => 0,
-      'parentID' => $parentId,
-      'navID' => $newNavId,
-      'active' => 1
-    ),
-    'child' => NULL
-  );
-  $newNavId++;
-  // add child menu for rule tags if option group id set with version check because 4.4 has other url pattern
   if (isset($optionGroup['id']) && !empty($optionGroup['id'])) {
-    try {
-      $apiVersion = civicrm_api3('Domain', 'getvalue', array('current_domain' => "TRUE", 'return' => 'version'));
-      $civiVersion = (float) substr($apiVersion, 0, 3);
-      if ($civiVersion < 4.6) {
-        $ruleTagUrl = CRM_Utils_System::url('civicrm/admin/optionValue', 'reset=1&gid='.$optionGroup['id'], TRUE);
-      } else {
-        $ruleTagUrl = CRM_Utils_System::url('civicrm/admin/options', 'reset=1&gid='.$optionGroup['id'], TRUE);
-      }
-    } catch (CiviCRM_API3_Exception $ex) {
-      $ruleTagUrl = CRM_Utils_System::url('civicrm/admin/options', 'reset=1&gid='.$optionGroup['id'], TRUE);
-    }
-
-    $params[$administerID]['child'][$parentId]['child'][$newNavId] = array(
-      'attributes' => array (
-        'label'      => ts('CiviRule Tags'),
-        'name'       => ts('CiviRules Tags'),
-        'url'        => $ruleTagUrl,
-        'permission' => 'administer CiviCRM',
-        'operator'   => NULL,
-        'separator'  => 0,
-        'parentID'   => $parentId,
-        'navID'      => $newNavId,
-        'active'     => 1
-      ),
-      'child' => NULL
-    );
-		$newNavId++;
+    $ruleTagUrl = CRM_Utils_System::url('civicrm/admin/options', 'reset=1&gid=' . $optionGroup['id'], TRUE);
+    _civirules_civix_insert_navigation_menu($menu, 'Administer/CiviRules', [
+      'label' => E::ts('CiviRule Tags'),
+      'name' => E::ts('CiviRules Tags'),
+      'url' => $ruleTagUrl,
+      'permission' => 'administer CiviCRM',
+      'operator' => NULL,
+      'separator' => 0,
+    ]);
   }
+  _civirules_civix_navigationMenu($menu);
 }
 
-function civirules_civicrm_pre($op, $objectName, $objectId, &$params) {
-  CRM_Civirules_Utils_PreData::pre($op, $objectName, $objectId, $params);
-  CRM_Civirules_Utils_CustomDataFromPre::pre($op, $objectName, $objectId, $params);
+
+function civirules_symfony_civicrm_pre($event) {
+  CRM_Civirules_Utils_PreData::pre($event->action, $event->entity, $event->id, $event->params, 1);
+  CRM_Civirules_Utils_CustomDataFromPre::pre($event->action, $event->entity, $event->id, $event->params);
 }
 
-function civirules_civicrm_post( $op, $objectName, $objectId, &$objectRef ) {
+function civirules_symfony_civicrm_post($event) {
   if (CRM_Core_Transaction::isActive()) {
-    CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', [$op, $objectName, $objectId, $objectRef]);
+    CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', [$event->action, $event->entity, $event->id, $event->object, 1]);
   }
   else {
-    civirules_civicrm_post_callback($op, $objectName, $objectId, $objectRef);
+    civirules_civicrm_post_callback($event->action, $event->entity, $event->id, $event->object, 1);
   }
 }
 
-function civirules_civicrm_post_callback( $op, $objectName, $objectId, $objectRef) {
-  CRM_Civirules_Trigger_Post::post($op, $objectName, $objectId, $objectRef);
+function civirules_trigger_preinsert($event) {
+  CRM_Civirules_Utils_PreData::pre('create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  CRM_Civirules_Utils_CustomDataFromPre::pre('create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+}
+
+function civirules_trigger_postinsert($event) {
+  if (CRM_Core_Transaction::isActive()) {
+    CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', ['create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID]);
+  }
+  else {
+    civirules_civicrm_post_callback('create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  }
+}
+
+function civirules_trigger_preupdate($event) {
+  CRM_Civirules_Utils_PreData::pre('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  CRM_Civirules_Utils_CustomDataFromPre::pre('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+}
+
+function civirules_trigger_postupdate($event) {
+  if (CRM_Core_Transaction::isActive()) {
+    CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', ['edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID]);
+  }
+  else {
+    civirules_civicrm_post_callback('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  }
+}
+
+function civirules_civicrm_post_callback($op, $objectName, $objectId, $objectRef, $eventID) {
+  CRM_Civirules_Trigger_Post::post($op, $objectName, $objectId, $objectRef, $eventID);
 }
 
 function civirules_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
@@ -329,26 +332,7 @@ function civirules_civirules_alter_trigger_data(CRM_Civirules_TriggerData_Trigge
  * @param array $entityTypes
  */
 function civirules_civicrm_entityTypes(&$entityTypes) {
-  $entityTypes['CRM_Civirules_BAO_Action'] = array(
-    'name' => 'CiviRuleAction',
-    'class' => 'CRM_Civirules_BAO_Action',
-    'table' => 'civirule_action',
-  );
-  $entityTypes['CRM_Civirules_BAO_Condition'] = array(
-    'name' => 'CiviRuleCondition',
-    'class' => 'CRM_Civirules_BAO_Condition',
-    'table' => 'civirule_condition',
-  );
-  $entityTypes['CRM_Civirules_BAO_Trigger'] = array(
-    'name' => 'CiviRuleTrigger',
-    'class' => 'CRM_Civirules_BAO_Trigger',
-    'table' => 'civirule_trigger',
-  );
-  $entityTypes['CRM_Civirules_BAO_Rule'] = array(
-    'name' => 'CiviRuleRule',
-    'class' => 'CRM_Civirules_BAO_Rule',
-    'table' => 'civirule_rule',
-  );
+  _civirules_civix_civicrm_entityTypes($entityTypes);
 }
 
 /**

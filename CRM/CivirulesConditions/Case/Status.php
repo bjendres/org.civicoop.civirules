@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 
-class CRM_CivirulesConditions_Case_CaseStatus extends CRM_CivirulesConditions_Generic_Status {
+class CRM_CivirulesConditions_Case_Status extends CRM_CivirulesConditions_Generic_Status {
 
   /**
    * The entity name (eg. Membership)

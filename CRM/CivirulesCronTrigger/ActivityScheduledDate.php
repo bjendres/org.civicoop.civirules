@@ -77,6 +77,7 @@ class CRM_CivirulesCronTrigger_ActivityScheduledDate extends CRM_CivirulesCronTr
               AND `rule_log`.`rule_id` = %1
             WHERE `a`.`activity_type_id` IN (%3)
               AND `a`.`status_id` IN (%4)
+              AND `a`.`is_deleted` = 0
               AND `rule_log`.`id` IS NULL
               {$activity_date_time_statement}
               {$activityContactWhereClause}

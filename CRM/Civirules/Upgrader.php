@@ -12,14 +12,6 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
    * sequence as there will be dependencies in the foreign keys
    */
   public function install() {
-    $this->executeSqlFile('sql/createCiviruleAction.sql');
-    $this->executeSqlFile('sql/createCiviruleCondition.sql');
-    $this->executeSqlFile('sql/createCiviruleTrigger.sql');
-    $this->executeSqlFile('sql/createCiviruleRule.sql');
-    $this->executeSqlFile('sql/createCiviruleRuleAction.sql');
-    $this->executeSqlFile('sql/createCiviruleRuleCondition.sql');
-    $this->executeSqlFile('sql/createCiviruleRuleLog.sql');
-    $this->executeSqlFile('sql/createCiviruleRuleTag.sql');
     $ruleTagOptionGroup = CRM_Civirules_Utils_OptionGroup::getSingleWithName('civirule_rule_tag');
     if (empty($ruleTagOptionGroup)) {
       CRM_Civirules_Utils_OptionGroup::create('civirule_rule_tag', 'Tags for CiviRules', 'Tags used to filter CiviRules on the CiviRules page');
@@ -747,6 +739,50 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
   public function upgrade_2060() {
     $this->ctx->log->info('Applying update 2060 - Add condition case custom field changed is one of.');
     CRM_Civirules_Utils_Upgrader::insertConditionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/conditions.json');
+    return TRUE;
+  }
+
+  public function upgrade_2061() {
+    $this->ctx->log->info('Applying update 2061 - Update classname for Case Status condition.');
+    CRM_Civirules_Utils_Upgrader::insertConditionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/conditions.json');
+    return TRUE;
+  }
+
+  public function upgrade_2062() {
+    $this->ctx->log->info('Applying update 2062 - Add generic date comparison class.');
+    CRM_Civirules_Utils_Upgrader::insertConditionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/conditions.json');
+    return TRUE;
+  }
+
+  public function upgrade_2063() {
+    $this->ctx->log->info('Applying update 2063 - Add advanced update date action.');
+    CRM_Civirules_Utils_Upgrader::insertActionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/actions.json');
+    return TRUE;
+  }
+
+  public function upgrade_2064() {
+    $this->ctx->log->info('Applying update 2064 - Make Has/Does not have Tag generic for supported entities.');
+    CRM_Civirules_Utils_Upgrader::insertConditionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/conditions.json');
+    return TRUE;
+  }
+
+  public function upgrade_2065() {
+    $this->ctx->log->info('Applying update 2065 - Adding condition Contact has not an active membership of type.');
+    CRM_Civirules_Utils_Upgrader::insertConditionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/conditions.json');
+    return TRUE;
+  }
+
+  public function upgrade_2066() {
+    $this->ctx->log->info('Applying update 2066 - Make Add/Remove Tag action generic for supported entities.');
+    CRM_Civirules_Utils_Upgrader::insertActionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/actions.json');
+    return TRUE;
+  }
+
+  public function upgrade_2067() {
+    $this->ctx->log->info('Applying update 2067 - Add "is_debug" field to civirule_rule.');
+    if (!CRM_Core_BAO_SchemaHandler::checkIfFieldExists('civirule_rule', 'is_debug')) {
+      CRM_Core_DAO::executeQuery('ALTER TABLE civirule_rule ADD COLUMN `is_debug` tinyint DEFAULT 0');
+    }
     return TRUE;
   }
 

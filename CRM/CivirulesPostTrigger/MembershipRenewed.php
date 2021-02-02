@@ -33,8 +33,8 @@ class CRM_CivirulesPostTrigger_MembershipRenewed extends CRM_Civirules_Trigger_P
    * @param $objectId
    * @param $objectRef
    */
-  public function triggerTrigger($op, $objectName, $objectId, $objectRef) {
-    $triggerData = $this->getTriggerDataFromPost($op, $objectName, $objectId, $objectRef);
+  public function triggerTrigger($op, $objectName, $objectId, $objectRef, $eventID) {
+    $triggerData = $this->getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID);
     $membership = $triggerData->getEntityData('Membership');
     $originalMembership = $triggerData->getOriginalData();
 

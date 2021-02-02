@@ -163,4 +163,69 @@ class CRM_CivirulesActions_Contact_UpdateDateValue extends CRM_Civirules_Action 
   public function getExtraDataInputUrl($ruleActionId) {
     return CRM_Utils_System::url('civicrm/civirule/form/action/contact/updatedatevalue', 'rule_action_id='.$ruleActionId);
   }
+
+  /**
+   * Returns a user friendly text explaining the condition params
+   * e.g. 'Older than 65'
+   *
+   * @return string
+   * @access public
+   * @throws \CiviCRM_API3_Exception
+   */
+  public function userFriendlyConditionParams() {
+    
+    $action_params = $this->getActionParameters();
+
+    $target_field_id = $action_params['target_field_id'];
+    $target_field = '"' . $this->getHumanReadableFieldLabel($target_field_id) . '"';
+
+    if ($action_params['update_operation']==='set') {
+      
+      return 'Set '. $target_field . ' to "'. $action_params['update_operand'] . '"';
+    }
+
+    $source_field_id = $action_params['source_field_id'];
+    $source_field = '"' . $this->getHumanReadableFieldLabel($source_field_id) . '"';
+    
+    $update = empty($action_params['update_operand']) ? '' : ' modifield by "' . $action_params['update_operand'] . '"';
+
+    if ($action_params['update_operation']==='modify') {
+
+      return 'Set '. $target_field .' to the value of ' . $source_field . $update;
+    }
+
+    if ($action_params['update_operation']==='max_modify') {
+      
+      return 'Set ' . $target_field . ' to the Global Maximum value of ' . $source_field . $update;
+    }
+
+    if ($action_params['update_operation']==='min_modify') {
+      
+      return 'Set ' . $target_field . ' to the Global Minimum value of ' . $source_field . $update;
+    }
+
+    return 'Error';
+  }
+
+  /**
+   * Find the human readable label for a field
+   * 
+   * @param string|int $field_identifier
+   * @access protected
+   * @return string
+   * @throws \CiviCRM_API3_Exception
+   */
+  protected function getHumanReadableFieldLabel($field_identifier) {
+
+    // Custom fields
+    if (is_numeric($field_identifier)) {
+      $custom_field = civicrm_api3('CustomField', 'getsingle', [
+        'id' => $field_identifier,
+      ]);
+      return $custom_field['label'];
+    }
+
+    // Built in Fields
+    return ucwords(str_replace('_', ' ', $field_identifier));
+  }
 }

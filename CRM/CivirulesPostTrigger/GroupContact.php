@@ -39,7 +39,7 @@ class CRM_CivirulesPostTrigger_GroupContact extends CRM_Civirules_Trigger_Post {
    * @param $objectId
    * @param $objectRef
    */
-  public function triggerTrigger($op, $objectName, $objectId, $objectRef) {
+  public function triggerTrigger($op, $objectName, $objectId, $objectRef, $eventID) {
     //in case of GroupContact $objectRef consist of an array of contactIds
     //so convert this array to group contact objects
     //we do this by a query on the group_contact table to retrieve the latest records for this group and contact
@@ -53,7 +53,7 @@ class CRM_CivirulesPostTrigger_GroupContact extends CRM_Civirules_Trigger_Post {
     while ($dao->fetch()) {
       $data = array();
       CRM_Core_DAO::storeValues($dao, $data);
-      $triggerData = $this->getTriggerDataFromPost($op, $objectName, $objectId, $data);
+      $triggerData = $this->getTriggerDataFromPost($op, $objectName, $objectId, $data, $eventID);
       $triggerData->setEntityData('Group', $group);
       CRM_Civirules_Engine::triggerRule($this, clone $triggerData);
     }

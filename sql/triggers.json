@@ -100,4 +100,7 @@
   {"name": "changed_campaign", "label": "Campaign is changed", "object_name": "Campaign", "op": "edit", "class_name": null, "cron": "0"},
   {"name": "deleted_campaign", "label": "Campaign is deleted", "object_name": "Campaign", "op": "delete", "class_name": null, "cron": "0"},
   {"name": "created_actionlog", "label": "Scheduled Reminder log is added", "object_name": "ActionLog", "op": "create", "class_name":"CRM_CivirulesPostTrigger_ActionLog", "cron": "0"},
-  {"name": "changed_actionlog", "label": "Scheduled Reminder log is changed", "object_name": "ActionLog", "op": "edit", "class_name":"CRM_CivirulesPostTrigger_ActionLog", "cron": "0"}]
+  {"name": "changed_actionlog", "label": "Scheduled Reminder log is changed", "object_name": "ActionLog", "op": "edit", "class_name":"CRM_CivirulesPostTrigger_ActionLog", "cron": "0"},
+  {"name": "relationship_activated", "label": "Relationship start date reached", "object_name": "Relationship", "op": "edit", "class_name": "CRM_CivirulesCronTrigger_RelationshipStartDate", "cron": "1"},
+  {"name": "relationship_deactivated", "label": "Relationship end date reached", "object_name": "Relationship", "op": "edit", "class_name": "CRM_CivirulesCronTrigger_RelationshipEndDate", "cron": "1"}
+]

@@ -6,31 +6,34 @@
  * @license AGPL-3.0
  */
 
+use CRM_Civirules_ExtensionUtil as E;
+
 class CRM_CivirulesConditions_Form_Membership_Type extends CRM_CivirulesConditions_Form_Form {
 
   /**
-   * Overridden parent method to build form
-   *
-   * @access public
+   * Overridden parent method to build for,
    */
   public function buildQuickForm() {
     $this->add('hidden', 'rule_condition_id');
 
     $membershipTypes = CRM_Civirules_Utils::getMembershipTypes();
-    $membershipTypes[0] = ts('- select -');
+    $membershipTypes[0] = E::ts('- select -');
     asort($membershipTypes);
-    $this->add('select', 'membership_type_id', ts('Membership Type'), $membershipTypes, true);
-    $this->add('select', 'operator', ts('Operator'), array('equals', 'is not equal to', 'one of'), true);
-    $this->add('select', 'membership_type_ids', ts('Membership Types'), $membershipTypes, true, array(
+    $this->add('select', 'membership_type_id', E::ts('Membership Type'), $membershipTypes, FALSE);
+    $this->add('select', 'operator', E::ts('Operator'), [E::ts('equals'), E::ts('is not equal to'), E::ts('is one of'), E::ts('is NOT one of')], TRUE);
+    $this->add('select', 'membership_type_ids', E::ts('Membership Types'), $membershipTypes, FALSE, [
       'style' => 'min-width:250px',
       'class' => 'crm-select2 huge',
       'placeholder' => ts('- Select membership type -'),
-      'multiple' => true,
-    ));
+      'multiple' => TRUE,
+    ]);
 
-    $this->addButtons(array(
-      array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
-      array('type' => 'cancel', 'name' => ts('Cancel'))));
+    $this->addButtons([
+      ['type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,],
+      ['type' => 'cancel', 'name' => ts('Cancel')]
+    ]);
+
+    $this->addFormRule([__CLASS__, 'formRule']);
   }
 
   /**
@@ -52,6 +55,22 @@ class CRM_CivirulesConditions_Form_Membership_Type extends CRM_CivirulesConditio
       $defaultValues['operator'] = $data['operator'];
     }
     return $defaultValues;
+  }
+
+  /**
+   * Global validation rules for the form.
+   *
+   * @param array $fields
+   *   Posted values of the form.
+   *
+   * @return array
+   *   list of errors to be posted back to the form
+   */
+  public static function formRule($fields) {
+    if (empty($fields['membership_type_id']) && empty($fields['membership_type_ids'])) {
+      $errors['membership_type_id'] = E::ts('Membership Type is a required field.');
+    }
+    return $errors ?? [];
   }
 
   /**

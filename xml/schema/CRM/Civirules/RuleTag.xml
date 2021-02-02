@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+  <base>CRM/Civirules</base>
+  <class>RuleTag</class>
+  <name>civirule_rule_tag</name>
+  <comment>FIXME</comment>
+  <table_type>Innodb</table_type>
+  <log>true</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Unique RuleTag ID</comment>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+
+  <field>
+    <name>rule_id</name>
+    <type>int unsigned</type>
+    <defualt>NULL</defualt>
+  </field>
+  <foreignKey>
+    <name>rule_id</name>
+    <table>civirule_rule</table>
+    <key>id</key>
+    <onDelete>CASCADE</onDelete>
+  </foreignKey>
+  <field>
+    <name>rule_tag_id</name>
+    <type>int</type>
+    <default>NULL</default>
+  </field>
+
+</table>

@@ -14,9 +14,8 @@ class CRM_CivirulesPostTrigger_CaseActivity extends CRM_CivirulesPostTrigger_Act
    * Override getTriggerDataFromPost() so that we can append the Case
    * entity to the trigger data.
    */
-  protected function getTriggerDataFromPost($op, $objectName, $objectId, $objectRef) {
-    $triggerData = parent::getTriggerDataFromPost($op, $objectName,
-                                                  $objectId, $objectRef);
+  protected function getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID = NULL) {
+    $triggerData = parent::getTriggerDataFromPost($op, $objectName, $objectId, $objectRef, $eventID);
 
     $case = new CRM_Case_BAO_Case();
     if ($objectRef instanceof CRM_Activity_DAO_Activity && $objectRef->case_id) {
@@ -48,11 +47,11 @@ class CRM_CivirulesPostTrigger_CaseActivity extends CRM_CivirulesPostTrigger_Act
    * @param $objectId
    * @param $objectRef
    */
-  public function triggerTrigger($op, $objectName, $objectId, $objectRef) {
+  public function triggerTrigger($op, $objectName, $objectId, $objectRef, $eventID = NULL) {
     if ($this->isCaseActivity($op, $objectName, $objectId, $objectRef)) {
       // It is a Case-related activity -- let our parent trigger
       // actually trigger the rule.
-      parent::triggerTrigger($op, $objectName, $objectId, $objectRef);
+      parent::triggerTrigger($op, $objectName, $objectId, $objectRef, $eventID);
     }
   }
 

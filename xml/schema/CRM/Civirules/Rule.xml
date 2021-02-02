@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+  <base>CRM/Civirules</base>
+  <class>Rule</class>
+  <name>civirule_rule</name>
+  <comment>FIXME</comment>
+  <table_type>Innodb</table_type>
+  <log>true</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Unique Rule ID</comment>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+
+  <field>
+    <name>name</name>
+    <type>varchar</type>
+    <length>80</length>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>label</name>
+    <type>varchar</type>
+    <length>128</length>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>trigger_id</name>
+    <type>int unsigned</type>
+    <default>NULL</default>
+  </field>
+  <foreignKey>
+    <name>trigger_id</name>
+    <table>civirule_trigger</table>
+    <key>id</key>
+    <onDelete>NO ACTION</onDelete>
+    <onUpdate>NO ACTION</onUpdate>
+  </foreignKey>
+  <field>
+    <name>trigger_params</name>
+    <type>text</type>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>is_active</name>
+    <type>int</type>
+    <required>true</required>
+    <default>1</default>
+  </field>
+  <field>
+    <name>description</name>
+    <type>varchar</type>
+    <length>255</length>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>help_text</name>
+    <type>text</type>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>created_date</name>
+    <type>date</type>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>created_user_id</name>
+    <type>int</type>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>modified_date</name>
+    <type>date</type>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>modified_user_id</name>
+    <type>int</type>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>is_debug</name>
+    <type>boolean</type>
+    <default>0</default>
+  </field>
+
+</table>
