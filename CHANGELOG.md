@@ -8,7 +8,7 @@
 * Fix calls to wrong API function in "UpdateNumericValue.php" (!84)
 * Fix activityScheduledDate trigger so it does not re-trigger every day (!83)
 * Ability to modify the activity from a rule triggered by an Activity trigger (!82)
-* Add condition case custom field changed is one of
+* Add condition case custom field changed is one of (!96)
 
 ## Version 2.17
 
