@@ -1,6 +1,8 @@
 # CHANGELOG
 ## Version 2.22 (not yet released)
 
+* Fix #112 call to undefined getObjectName() for HasTag condition when used with CRON trigger !116
+
 ## Version 2.21
 
 * HasTag API4 compatibility with 5.28 (!110)
