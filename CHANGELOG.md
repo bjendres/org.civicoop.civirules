@@ -2,6 +2,7 @@
 ## Version 2.22 (not yet released)
 
 * Fix #112 call to undefined getObjectName() for HasTag condition when used with CRON trigger !116
+* Make sure entityID and contactID is always set when a rule is executed !117
 
 ## Version 2.21
 
