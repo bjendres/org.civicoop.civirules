@@ -25,6 +25,10 @@ class CRM_Civirules_Engine {
   public static function triggerRule(CRM_Civirules_Trigger $trigger, CRM_Civirules_TriggerData_TriggerData $triggerData) {
     try {
       $triggerData->setTrigger($trigger);
+      $triggerData->setEntityId($triggerData->getEntityData($triggerData->getEntity())['id']);
+      if ($triggerData->getEntity() === 'contact') {
+        $triggerData->setContactId($triggerData->getEntityId());
+      }
       $isRuleValid = self::areConditionsValid($triggerData);
 
       if ($isRuleValid) {
