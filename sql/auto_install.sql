@@ -63,12 +63,12 @@ CREATE TABLE `civirule_action` (
      `created_date` date   DEFAULT NULL ,
      `created_user_id` int   DEFAULT NULL ,
      `modified_date` date   DEFAULT NULL ,
-     `modified_user_id` int   DEFAULT NULL  
+     `modified_user_id` int   DEFAULT NULL
 ,
         PRIMARY KEY (`id`)
- 
- 
- 
+
+
+
 )  ENGINE=Innodb  ;
 
 -- /*******************************************************
@@ -89,12 +89,12 @@ CREATE TABLE `civirule_condition` (
      `created_date` date   DEFAULT NULL ,
      `created_user_id` int   DEFAULT NULL ,
      `modified_date` date   DEFAULT NULL ,
-     `modified_user_id` int   DEFAULT NULL  
+     `modified_user_id` int   DEFAULT NULL
 ,
         PRIMARY KEY (`id`)
- 
- 
- 
+
+
+
 )  ENGINE=Innodb  ;
 
 -- /*******************************************************
@@ -107,7 +107,7 @@ CREATE TABLE `civirule_condition` (
 CREATE TABLE `civirule_trigger` (
 
 
-     `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT 'Unique Triggger ID',
+     `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT 'Unique Trigger ID',
      `name` varchar(80)   DEFAULT NULL ,
      `label` varchar(128)   DEFAULT NULL ,
      `object_name` varchar(45)   DEFAULT NULL ,
@@ -115,16 +115,15 @@ CREATE TABLE `civirule_trigger` (
      `cron` int   DEFAULT 0 ,
      `class_name` varchar(128)   DEFAULT NULL ,
      `is_active` int NOT NULL  DEFAULT 1 ,
-     `help_text` text   DEFAULT NULL ,
      `created_date` date   DEFAULT NULL ,
      `created_user_id` int   DEFAULT NULL ,
      `modified_date` date   DEFAULT NULL ,
-     `modified_user_id` int   DEFAULT NULL  
+     `modified_user_id` int   DEFAULT NULL
 ,
         PRIMARY KEY (`id`)
- 
- 
- 
+
+
+
 )  ENGINE=Innodb  ;
 
 -- /*******************************************************
@@ -168,12 +167,12 @@ CREATE TABLE `civirule_rule_action` (
      `action_params` text   DEFAULT NULL ,
      `delay` text   DEFAULT NULL ,
      `ignore_condition_with_delay` int   DEFAULT 0 ,
-     `is_active` int   DEFAULT 1  
+     `is_active` int   DEFAULT 1
 ,
         PRIMARY KEY (`id`)
- 
- 
-,          CONSTRAINT FK_civirule_rule_action_rule_id FOREIGN KEY (`rule_id`) REFERENCES `civirule_rule`(`id`) ON DELETE CASCADE,          CONSTRAINT FK_civirule_rule_action_action_id FOREIGN KEY (`action_id`) REFERENCES `civirule_action`(`id`) ON DELETE CASCADE  
+
+
+,          CONSTRAINT FK_civirule_rule_action_rule_id FOREIGN KEY (`rule_id`) REFERENCES `civirule_rule`(`id`) ON DELETE CASCADE,          CONSTRAINT FK_civirule_rule_action_action_id FOREIGN KEY (`action_id`) REFERENCES `civirule_action`(`id`) ON DELETE CASCADE
 )  ENGINE=Innodb  ;
 
 -- /*******************************************************
@@ -214,10 +213,10 @@ CREATE TABLE `civirule_rule_log` (
      `contact_id` int unsigned   DEFAULT NULL ,
      `entity_table` varchar(255)   DEFAULT NULL ,
      `entity_id` int unsigned   DEFAULT NULL ,
-     `log_date` datetime   DEFAULT NULL  
+     `log_date` datetime   DEFAULT NULL
 ,
         PRIMARY KEY (`id`)
- 
+
     ,     INDEX `rule_id`(
         rule_id
   )
@@ -228,8 +227,8 @@ CREATE TABLE `civirule_rule_log` (
         rule_id
       , contact_id
   )
-  
- 
+
+
 )  ENGINE=Innodb  ;
 
 -- /*******************************************************
@@ -244,12 +243,12 @@ CREATE TABLE `civirule_rule_tag` (
 
      `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT 'Unique RuleTag ID',
      `rule_id` int unsigned    ,
-     `rule_tag_id` int   DEFAULT NULL  
+     `rule_tag_id` int   DEFAULT NULL
 ,
         PRIMARY KEY (`id`)
- 
- 
-,          CONSTRAINT FK_civirule_rule_tag_rule_id FOREIGN KEY (`rule_id`) REFERENCES `civirule_rule`(`id`) ON DELETE CASCADE  
+
+
+,          CONSTRAINT FK_civirule_rule_tag_rule_id FOREIGN KEY (`rule_id`) REFERENCES `civirule_rule`(`id`) ON DELETE CASCADE
 )  ENGINE=Innodb  ;
 
- 
+
