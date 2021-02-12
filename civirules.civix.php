@@ -475,42 +475,42 @@ function _civirules_civix_civicrm_alterSettingsFolders(&$metaDataFolders = NULL)
 function _civirules_civix_civicrm_entityTypes(&$entityTypes) {
   $entityTypes = array_merge($entityTypes, [
     'CRM_Civirules_DAO_Action' => [
-      'name' => 'Action',
+      'name' => 'CiviRulesAction',
       'class' => 'CRM_Civirules_DAO_Action',
       'table' => 'civirule_action',
     ],
     'CRM_Civirules_DAO_Condition' => [
-      'name' => 'Condition',
+      'name' => 'CiviRulesCondition',
       'class' => 'CRM_Civirules_DAO_Condition',
       'table' => 'civirule_condition',
     ],
     'CRM_Civirules_DAO_Rule' => [
-      'name' => 'Rule',
+      'name' => 'CiviRulesRule',
       'class' => 'CRM_Civirules_DAO_Rule',
       'table' => 'civirule_rule',
     ],
     'CRM_Civirules_DAO_RuleAction' => [
-      'name' => 'RuleAction',
+      'name' => 'CiviRulesRuleAction',
       'class' => 'CRM_Civirules_DAO_RuleAction',
       'table' => 'civirule_rule_action',
     ],
     'CRM_Civirules_DAO_RuleCondition' => [
-      'name' => 'RuleCondition',
+      'name' => 'CiviRulesRuleCondition',
       'class' => 'CRM_Civirules_DAO_RuleCondition',
       'table' => 'civirule_rule_condition',
     ],
     'CRM_Civirules_DAO_RuleLog' => [
-      'name' => 'RuleLog',
+      'name' => 'CiviRulesRuleLog',
       'class' => 'CRM_Civirules_DAO_RuleLog',
       'table' => 'civirule_rule_log',
     ],
     'CRM_Civirules_DAO_RuleTag' => [
-      'name' => 'RuleTag',
+      'name' => 'CiviRulesRuleTag',
       'class' => 'CRM_Civirules_DAO_RuleTag',
       'table' => 'civirule_rule_tag',
     ],
     'CRM_Civirules_DAO_Trigger' => [
-      'name' => 'Trigger',
+      'name' => 'CiviRulesTrigger',
       'class' => 'CRM_Civirules_DAO_Trigger',
       'table' => 'civirule_trigger',
     ],

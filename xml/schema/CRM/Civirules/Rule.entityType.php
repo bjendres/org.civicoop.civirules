@@ -3,7 +3,7 @@
 // https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes
 return [
   [
-    'name' => 'Rule',
+    'name' => 'CiviRulesRule',
     'class' => 'CRM_Civirules_DAO_Rule',
     'table' => 'civirule_rule',
   ],
