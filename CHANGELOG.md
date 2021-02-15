@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Version 2.22 (not yet released)
+## Version 2.23 (not yet released)
 
 ## Version 2.22
 
