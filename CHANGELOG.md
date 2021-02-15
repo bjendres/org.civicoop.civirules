@@ -1,4 +1,7 @@
 # CHANGELOG
+
+## Version 2.22 (not yet released)
+
 ## Version 2.22
 
 * Fixed #112: call to undefined getObjectName() for HasTag condition when used with CRON trigger by !116
