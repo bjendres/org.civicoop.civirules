@@ -19,6 +19,7 @@ class CRM_CivirulesActions_Tag_Form_TagId extends CRM_CivirulesActions_Form_Form
     $bao = new CRM_Core_BAO_Tag();
     switch ($this->trigger->object_name) {
       case 'Contact':
+      case 'Membership':
         $tableName = 'civicrm_contact';
         break;
 
