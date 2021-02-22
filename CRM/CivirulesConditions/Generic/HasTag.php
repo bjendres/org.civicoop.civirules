@@ -32,20 +32,29 @@ class CRM_CivirulesConditions_Generic_HasTag extends CRM_Civirules_Condition {
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData): bool {
     $isConditionValid = FALSE;
-    $entityID = $triggerData->getEntityId();
+    if ($triggerData->getEntity() == 'Membership') {
+      $entityID = $triggerData->getContactId();
+      $entityType = 'Contact';
+  	}
+    else {
+      $entityID = $triggerData->getEntityId();
+      //Capitalise entity type as local fix for CRM_Civirules_Utils_ObjectName::convertToEntity()
+      //which sets 'contact' as lower case.  Unless & until this is fixed at source.
+      $entityType = ucwords($triggerData->getEntity());
+    }
 
     if (empty($entityID)) {
       return FALSE;
     }
     switch($this->conditionParams['operator']) {
       case 'in one of':
-        $isConditionValid = $this->entityHasOneOfTags($entityID, $this->conditionParams['tag_ids'], $triggerData->getEntity());
+        $isConditionValid = $this->entityHasOneOfTags($entityID, $this->conditionParams['tag_ids'], $entityType);
         break;
       case 'in all of':
-        $isConditionValid = $this->entityHasAllTags($entityID, $this->conditionParams['tag_ids'], $triggerData->getEntity());
+        $isConditionValid = $this->entityHasAllTags($entityID, $this->conditionParams['tag_ids'], $entityType);
         break;
       case 'not in':
-        $isConditionValid = $this->entityHasNotTag($entityID, $this->conditionParams['tag_ids'], $triggerData->getEntity());
+        $isConditionValid = $this->entityHasNotTag($entityID, $this->conditionParams['tag_ids'], $entityType);
         break;
     }
     return $isConditionValid;

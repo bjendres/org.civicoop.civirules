@@ -17,6 +17,7 @@ class CRM_CivirulesConditions_Form_Contact_HasTag extends CRM_CivirulesCondition
     $bao = new CRM_Core_BAO_Tag();
     switch ($this->trigger->object_name) {
       case 'Contact':
+      case 'Membership':
         $tableName = 'civicrm_contact';
         break;
 
