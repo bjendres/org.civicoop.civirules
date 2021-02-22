@@ -2,6 +2,8 @@
 
 ## Version 2.23 (not yet released)
 
+* Fixed #120: Problems with HasTag Condition and Add/Remove Tag Actions by !120
+
 ## Version 2.22
 
 * Fixed #112: call to undefined getObjectName() for HasTag condition when used with CRON trigger by !116
