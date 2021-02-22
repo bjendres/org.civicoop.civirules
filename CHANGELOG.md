@@ -2,7 +2,7 @@
 
 ## Version 2.23 (not yet released)
 
-* Fixed #120: Problems with HasTag Condition and Add/Remove Tag Actions by !120
+* Fixed #116: Problems with HasTag Condition and Add/Remove Tag Actions by !120
 
 ## Version 2.22
 
