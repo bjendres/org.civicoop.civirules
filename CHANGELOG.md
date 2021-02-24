@@ -3,6 +3,7 @@
 ## Version 2.23 (not yet released)
 
 * Fixed #116: Problems with HasTag Condition and Add/Remove Tag Actions by !120
+* Added `getEntity` to `TriggerData` base class !122 fixes partially #121
 
 ## Version 2.22
 
