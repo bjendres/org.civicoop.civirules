@@ -59,6 +59,16 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
   }
 
   /**
+   * For triggers that have a "primary" entity return the EntityName (eg. Contact).
+   * Otherwise return NULL
+   *
+   * @return null|string
+   */
+  public function getEntity() {
+    return NULL;
+  }
+
+  /**
    * Set the trigger
    *
    * @param CRM_Civirules_Trigger $trigger
