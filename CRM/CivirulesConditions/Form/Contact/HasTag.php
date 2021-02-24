@@ -18,6 +18,7 @@ class CRM_CivirulesConditions_Form_Contact_HasTag extends CRM_CivirulesCondition
     switch ($this->trigger->object_name) {
       case 'Contact':
       case 'Membership':
+      case 'EntityTag':
         $tableName = 'civicrm_contact';
         break;
 

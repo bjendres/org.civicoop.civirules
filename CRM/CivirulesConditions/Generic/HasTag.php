@@ -32,7 +32,8 @@ class CRM_CivirulesConditions_Generic_HasTag extends CRM_Civirules_Condition {
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData): bool {
     $isConditionValid = FALSE;
-    if ($triggerData->getEntity() == 'Membership') {
+    $entityType = $triggerData->getEntity();
+    if ($entityType == 'Membership' || $entityType == 'EntityTag') {
       $entityID = $triggerData->getContactId();
       $entityType = 'Contact';
   	}
@@ -40,7 +41,7 @@ class CRM_CivirulesConditions_Generic_HasTag extends CRM_Civirules_Condition {
       $entityID = $triggerData->getEntityId();
       //Capitalise entity type as local fix for CRM_Civirules_Utils_ObjectName::convertToEntity()
       //which sets 'contact' as lower case.  Unless & until this is fixed at source.
-      $entityType = ucwords($triggerData->getEntity());
+      $entityType = ucwords($entityType);
     }
 
     if (empty($entityID)) {

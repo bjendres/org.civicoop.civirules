@@ -20,6 +20,7 @@ class CRM_CivirulesActions_Tag_Form_TagId extends CRM_CivirulesActions_Form_Form
     switch ($this->trigger->object_name) {
       case 'Contact':
       case 'Membership':
+      case 'EntityTag':
         $tableName = 'civicrm_contact';
         break;
 
