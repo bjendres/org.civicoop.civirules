@@ -17,7 +17,7 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
    */
   protected function alterApiParameters($params, CRM_Civirules_TriggerData_TriggerData $triggerData) {
     //this function could be overridden in subclasses to alter parameters to meet certain criteria
-    if ($triggerData->getEntity() == 'Membership') {
+    if ($triggerData->getEntity() == 'Membership' || $triggerData->getEntity() == 'EntityTag') {
       $params['entity_id'] = $triggerData->getContactId();
     }
     else {
@@ -28,6 +28,7 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
     switch (ucwords($triggerData->getEntity())) {
       case 'Contact':
       case 'Membership':
+      case 'EntityTag':
         $tableName = 'civicrm_contact';
         break;
 
