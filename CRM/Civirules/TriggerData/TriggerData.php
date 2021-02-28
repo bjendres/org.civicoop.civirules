@@ -64,8 +64,10 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
   public function getEntityId() {
     if ($this->entity_id) {
 	return $this->entity_id;
-    } else if ($this->entity_name) {
+    } else if ($this->entity_data[$this->entity_name]['id'] ?? false) {
 	return $this->entity_data[$this->entity_name]['id'];
+    } else {
+      return NULL;
     }
   }
 
@@ -209,7 +211,6 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
     if ($is_primary) {
       $this->setEntity($entity);
     }
-
 
     return $this;
   }
