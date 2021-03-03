@@ -23,6 +23,13 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
   protected $entity_id;
 
   /**
+   * Entity name of the primary trigger data e.g. 'contact' or 'activity'
+   *
+   * @var string
+   */
+  protected $entity_name = NULL;
+
+  /**
    * Contains data of custom fields.
    *
    * Takes the format of
@@ -55,8 +62,23 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
    * @return Int
    */
   public function getEntityId() {
-    return $this->entity_id;
+    if ($this->entity_id) {
+	return $this->entity_id;
+    } else if ($this->entity_data[$this->entity_name]['id'] ?? false) {
+	return $this->entity_data[$this->entity_name]['id'];
+    } else {
+      return NULL;
+    }
   }
+
+  /**
+   * Set which entity from the entitydata is the primary one EntityName (eg. Contact).
+   *
+   */
+  public function setEntity($entity_name) {
+    $this->entity_name = $entity_name;
+  }
+
 
   /**
    * For triggers that have a "primary" entity return the EntityName (eg. Contact).
@@ -65,7 +87,7 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
    * @return null|string
    */
   public function getEntity() {
-    return NULL;
+    return $this->entity_name;
   }
 
   /**
@@ -176,12 +198,20 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
    *
    * @param string $entity
    * @param array $data
+   * @param bool $is_primary
    * @return CRM_CiviRules_Engine_TriggerData
    */
-  public function setEntityData($entity, $data) {
+  public function setEntityData($entity, $data, $is_primary = false) {
+    $entity = strtolower($entity);
+
     if (is_array($data)) {
-      $this->entity_data[strtolower($entity)] = $data;
+      $this->entity_data[$entity] = $data;
     }
+
+    if ($is_primary) {
+      $this->setEntity($entity);
+    }
+
     return $this;
   }
 
