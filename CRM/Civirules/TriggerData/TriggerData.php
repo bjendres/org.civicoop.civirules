@@ -73,6 +73,7 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
 
   /**
    * Set which entity from the entitydata is the primary one EntityName (eg. Contact).
+   * This MUST use the correct capitalisation eg. Contact, EntityTag
    *
    */
   public function setEntity($entity_name) {
@@ -83,6 +84,7 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
   /**
    * For triggers that have a "primary" entity return the EntityName (eg. Contact).
    * Otherwise return NULL
+   * This MUST return the correct capitalisation eg. Contact, EntityTag
    *
    * @return null|string
    */
@@ -139,14 +141,12 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
    * @return array
    */
   public function getEntityData($entity) {
-    $validContacts = ['contact', 'organization', 'individual', 'household'];
-    //only lookup entities by their lower case name. Entity is now case insensitive
-    if (isset($this->entity_data[strtolower($entity)]) && is_array($this->entity_data[strtolower($entity)])) {
-      return $this->entity_data[strtolower($entity)];
-    //just for backwards compatibility also check case sensitive entity
-    } elseif (isset($this->entity_data[$entity]) && is_array($this->entity_data[$entity])) {
+    $validContacts = ['Contact', 'Organization', 'Individual', 'Household'];
+    if (isset($this->entity_data[$entity]) && is_array($this->entity_data[$entity])) {
       return $this->entity_data[$entity];
-    } elseif (in_array(strtolower($entity), $validContacts) && $this->getContactId()) {
+    } elseif (isset($this->entity_data[strtolower($entity)]) && is_array($this->entity_data[strtolower($entity)])) {
+      return $this->entity_data[strtolower($entity)];
+    } elseif (in_array($entity, $validContacts) && $this->getContactId()) {
       $contactObject = new CRM_Contact_BAO_Contact();
       $contactObject->id = $this->getContactId();
       $contactData = [];
@@ -201,8 +201,6 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
    * @param bool $is_primary
    */
   public function setEntityData($entity, $data, $is_primary = false) {
-    $entity = strtolower($entity);
-
     if (is_array($data)) {
       $this->entity_data[$entity] = $data;
     }

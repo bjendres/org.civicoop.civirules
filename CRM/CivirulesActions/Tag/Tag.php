@@ -23,9 +23,8 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
     else {
       $params['entity_id'] = $triggerData->getEntityId();
     }
-    //Capitalise entity name as local fix for CRM_Civirules_Utils_ObjectName::convertToEntity()
-    //which sets 'contact' as lower case.  Unless & until this is fixed at source.
-    switch (ucwords($triggerData->getEntity())) {
+
+    switch ($triggerData->getEntity()) {
       case 'Contact':
       case 'Membership':
       case 'EntityTag':

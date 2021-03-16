@@ -26,7 +26,7 @@ class CRM_Civirules_Engine {
     try {
       $triggerData->setTrigger($trigger);
       $triggerData->setEntityId($triggerData->getEntityData($triggerData->getEntity())['id']);
-      if ($triggerData->getEntity() === 'contact') {
+      if ($triggerData->getEntity() === 'Contact') {
         $triggerData->setContactId($triggerData->getEntityId());
       }
       $isRuleValid = self::areConditionsValid($triggerData);
