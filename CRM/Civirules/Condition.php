@@ -40,7 +40,7 @@ abstract class CRM_Civirules_Condition {
    *
    * @return bool|string
    */
-  abstract public function getExtraDataInputUrl(int $ruleConditionId);
+  abstract public function getExtraDataInputUrl($ruleConditionId);
 
   /**
    * Returns a user friendly text explaining the condition params
