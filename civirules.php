@@ -31,6 +31,10 @@ function civirules_civicrm_config(&$config) {
       ->addListener('civi.dao.preInsert', 'civirules_trigger_preinsert');
     \Civi::dispatcher()
       ->addListener('civi.dao.postInsert', 'civirules_trigger_postinsert');
+    \Civi::dispatcher()
+      ->addListener('civi.dao.preDelete', 'civirules_trigger_predelete');
+    \Civi::dispatcher()
+      ->addListener('civi.dao.postDelete', 'civirules_trigger_postdelete');
   }
   else {
     \Civi::dispatcher()->addListener('hook_civicrm_pre', 'civirules_symfony_civicrm_pre');
@@ -272,6 +276,23 @@ function civirules_trigger_postupdate($event) {
   }
   else {
     civirules_civicrm_post_callback('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  }
+}
+
+function civirules_trigger_predelete($event) {
+  CRM_Civirules_Utils_PreData::pre('delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)),
+    $event->object->id, $event->object, $event->eventID ?? 1);
+  CRM_Civirules_Utils_CustomDataFromPre::pre('delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class
+  ($event->object)), $event->object->id, $event->object, $event->eventID ?? 1);
+}
+
+function civirules_trigger_postdelete($event) {
+  if (CRM_Core_Transaction::isActive()) {
+    CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', ['delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID ?? 1]);
+  }
+  else {
+    civirules_civicrm_post_callback('delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)),
+      $event->object->id, $event->object, $event->eventID ?? 1);
   }
 }
 

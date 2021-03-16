@@ -17,9 +17,7 @@ class CRM_Civirules_Utils_PreData {
    * @param string $objectName
    * @param int $objectId
    * @param array $params
-   * @access public
-   * @static
-   *
+   * @param string $eventID
    */
   public static function pre($op, $objectName, $objectId, $params, $eventID) {
     // Do not trigger when objectName is empty. See issue #19
