@@ -5,12 +5,11 @@
  * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
  * @license AGPL-3.0
  */
-class CRM_Civirules_Config
-{
+class CRM_Civirules_Config {
   /*
    * singleton pattern
    */
-  static private $_singleton = NULL;
+  private static $_singleton = NULL;
   /*
    * properties to hold the valid entities and actions for civirule trigger
    */
@@ -20,7 +19,7 @@ class CRM_Civirules_Config
   /**
    * Constructor
    */
-  function __construct()   {
+  function __construct() {
     $this->setTriggerProperties();
   }
 
@@ -28,11 +27,8 @@ class CRM_Civirules_Config
    * Function to return singleton object
    *
    * @return object $_singleton
-   * @access public
-   * @static
    */
-  public static function &singleton()
-  {
+  public static function &singleton() {
     if (self::$_singleton === NULL) {
       self::$_singleton = new CRM_Civirules_Config();
     }
@@ -42,8 +38,7 @@ class CRM_Civirules_Config
   /**
    * Function to get the valid trigger entities
    *
-   * @return int
-   * @access public
+   * @return array
    */
   public function getValidTriggerObjectNames()
   {
@@ -53,8 +48,7 @@ class CRM_Civirules_Config
   /**
    * Function to get the valid trigger actions
    *
-   * @return int
-   * @access public
+   * @return array
    */
   public function getValidTriggerOperations()
   {
@@ -62,13 +56,14 @@ class CRM_Civirules_Config
   }
 
   protected function setTriggerProperties() {
-    $this->validTriggerOperations = array(
+    $this->validTriggerOperations = [
       'create',
       'edit',
       'delete',
       'restore',
       'trash',
-      'update');
+      'update'
+    ];
 
     // Load all entities from CiviCRM core.
     $this->validTriggerObjectNames = array_keys(CRM_Core_DAO_AllCoreTables::daoToClass());
