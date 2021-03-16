@@ -6,9 +6,8 @@ class CRM_Civirules_Utils_ObjectName {
    * Method to convert the object name to the entity for contacts
    *
    * @param string $objectName
-   * @return string $entity
-   * @access public
-   * @static
+   *
+   * @return string
    */
   public static function convertToEntity($objectName) {
     $entity = $objectName;
