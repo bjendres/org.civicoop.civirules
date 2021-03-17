@@ -7,6 +7,7 @@
 * Added `getEntity` to `TriggerData` base class !122 fixes partially #121
 * Code cleanup !126
 * Fix #124 Cannot use object of type CRM_Core_DAO_EntityTag  by !127
+* Fix #120 error 500 with newer PHP versions  by !130
 
 ## Version 2.22
 
