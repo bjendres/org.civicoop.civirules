@@ -8,6 +8,8 @@
 * Code cleanup !126
 * Fix #124 Cannot use object of type CRM_Core_DAO_EntityTag  by !127
 * Fix #120 error 500 with newer PHP versions  by !130
+* Fix #123 Some triggers don't fire anymore (delete triggers, GroupContact create trigger)
+* Fix #125 Set contact_id for membership edit trigger. Also fix inconsistencies with capitals/lowercase of entity name
 
 ## Version 2.22
 
