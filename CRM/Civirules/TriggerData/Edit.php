@@ -18,7 +18,7 @@ class CRM_Civirules_TriggerData_Edit extends CRM_Civirules_TriggerData_Post impl
   }
 
   public function getOriginalEntity() {
-    return $this->entity;
+    return $this->getEntity();
   }
 
 }
