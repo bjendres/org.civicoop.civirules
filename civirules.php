@@ -23,19 +23,17 @@ function civirules_civicrm_config(&$config) {
   // eventID param added in 5.34: https://github.com/civicrm/civicrm-core/pull/19209
   if (version_compare(CRM_Utils_System::version(), '5.34', '>=')) {
     // These events were added in 5.26: https://github.com/civicrm/civicrm-core/pull/16714
-    \Civi::dispatcher()
-      ->addListener('civi.dao.preUpdate', 'civirules_trigger_preupdate');
-    \Civi::dispatcher()
-      ->addListener('civi.dao.postUpdate', 'civirules_trigger_postupdate');
-    \Civi::dispatcher()
-      ->addListener('civi.dao.preInsert', 'civirules_trigger_preinsert');
-    \Civi::dispatcher()
-      ->addListener('civi.dao.postInsert', 'civirules_trigger_postinsert');
+    \Civi::dispatcher()->addListener('civi.dao.preUpdate', 'civirules_trigger_preupdate');
+    \Civi::dispatcher()->addListener('civi.dao.postUpdate', 'civirules_trigger_postupdate');
+    \Civi::dispatcher()->addListener('civi.dao.preInsert', 'civirules_trigger_preinsert');
+    \Civi::dispatcher()->addListener('civi.dao.postInsert', 'civirules_trigger_postinsert');
+    \Civi::dispatcher()->addListener('civi.dao.preDelete', 'civirules_trigger_predelete');
+    \Civi::dispatcher()->addListener('civi.dao.postDelete', 'civirules_trigger_postdelete');
   }
-  else {
-    \Civi::dispatcher()->addListener('hook_civicrm_pre', 'civirules_symfony_civicrm_pre');
-    \Civi::dispatcher()->addListener('hook_civicrm_post', 'civirules_symfony_civicrm_post');
-  }
+
+  // We add the "old" hooks because sometimes the DAO is bypassed (eg. GroupContact)
+  \Civi::dispatcher()->addListener('hook_civicrm_pre', 'civirules_symfony_civicrm_pre');
+  \Civi::dispatcher()->addListener('hook_civicrm_post', 'civirules_symfony_civicrm_post');
 }
 
 /**
@@ -125,7 +123,7 @@ function civirules_civicrm_managed(&$entities) {
   CRM_Civirules_Utils_Upgrader::insertTriggersFromJson(E::path('sql/triggers.json'));
   CRM_Civirules_Utils_Upgrader::insertActionsFromJson(E::path('sql/actions.json'));
   CRM_Civirules_Utils_Upgrader::insertConditionsFromJson(E::path('sql/conditions.json'));
-  return _civirules_civix_civicrm_managed($entities);
+  _civirules_civix_civicrm_managed($entities);
 }
 
 /**
@@ -189,7 +187,6 @@ function civirules_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
  */
 function civirules_civicrm_navigationMenu(&$menu) {
-
   _civirules_civix_insert_navigation_menu($menu, 'Administer', [
     'label' => E::ts('CiviRules'),
     'name' => 'CiviRules',
@@ -234,11 +231,35 @@ function civirules_civicrm_navigationMenu(&$menu) {
 
 
 function civirules_symfony_civicrm_pre($event) {
+  // New style pre/post Delete/Insert/Update events exist from 5.34.
+  if (version_compare(CRM_Utils_System::version(), '5.34', '>=')) {
+    // GroupContact "add" does not use the DAO:
+    // https://lab.civicrm.org/extensions/civirules/-/issues/123
+    // because CRM_Contact_BAO_GroupContact::bulkAddContactsToGroup circumvents dao->save() by directly writing to the DB in a query
+    // So we always process it via the "old" hooks.
+    $entities = ['GroupContact'];
+    if (!in_array($event->entity, $entities)) {
+      return;
+    }
+  }
+
   CRM_Civirules_Utils_PreData::pre($event->action, $event->entity, $event->id, $event->params, 1);
-  CRM_Civirules_Utils_CustomDataFromPre::pre($event->action, $event->entity, $event->id, $event->params);
+  CRM_Civirules_Utils_CustomDataFromPre::pre($event->action, $event->entity, $event->id, $event->params, 1);
 }
 
 function civirules_symfony_civicrm_post($event) {
+  // New style pre/post Delete/Insert/Update events exist from 5.34.
+  if (version_compare(CRM_Utils_System::version(), '5.34', '>=')) {
+    // GroupContact "add" does not use the DAO:
+    // https://lab.civicrm.org/extensions/civirules/-/issues/123
+    // because CRM_Contact_BAO_GroupContact::bulkAddContactsToGroup circumvents dao->save() by directly writing to the DB in a query
+    // So we always process it via the "old" hooks.
+    $entities = ['GroupContact'];
+    if (!in_array($event->entity, $entities)) {
+      return;
+    }
+  }
+
   if (CRM_Core_Transaction::isActive()) {
     CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', [$event->action, $event->entity, $event->id, $event->object, 1]);
   }
@@ -272,6 +293,23 @@ function civirules_trigger_postupdate($event) {
   }
   else {
     civirules_civicrm_post_callback('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  }
+}
+
+function civirules_trigger_predelete($event) {
+  CRM_Civirules_Utils_PreData::pre('delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)),
+    $event->object->id, $event->object, $event->eventID ?? 1);
+  CRM_Civirules_Utils_CustomDataFromPre::pre('delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class
+  ($event->object)), $event->object->id, $event->object, $event->eventID ?? 1);
+}
+
+function civirules_trigger_postdelete($event) {
+  if (CRM_Core_Transaction::isActive()) {
+    CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', ['delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID ?? 1]);
+  }
+  else {
+    civirules_civicrm_post_callback('delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)),
+      $event->object->id, $event->object, $event->eventID ?? 1);
   }
 }
 

@@ -4,7 +4,16 @@ class CRM_Civirules_Utils_CustomDataFromPre {
 
   private static $customValues = array();
 
-  public static function pre($op, $objectName, $objectId, $params) {
+  /**
+   * Method pre to store the entity custom data before the data in the database is changed
+   *
+   * @param string $op
+   * @param string $objectName
+   * @param int $objectId
+   * @param array $params
+   * @param string $eventID
+   */
+  public static function pre($op, $objectName, $objectId, $params, $eventID) {
     if (!is_array($params)) {
       return;
     }
