@@ -10,6 +10,7 @@
 * Fix #120 error 500 with newer PHP versions  by !130
 * Fix #123 Some triggers don't fire anymore (delete triggers, GroupContact create trigger)
 * Fix #125 Set contact_id for membership edit trigger. Also fix inconsistencies with capitals/lowercase of entity name
+* Fix #108 Hook function for `hook_civirules_alter_trigger_data` is never called by !99
 
 ## Version 2.22
 
