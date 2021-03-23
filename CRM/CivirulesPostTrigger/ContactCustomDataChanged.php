@@ -76,6 +76,7 @@ class CRM_CivirulesPostTrigger_ContactCustomDataChanged extends CRM_Civirules_Tr
     } else {
       $triggerData = new CRM_Civirules_TriggerData_Post('Contact', $entityID, $contact);
     }
+    
     self::trigger($triggerData);
   }
 
@@ -83,6 +84,7 @@ class CRM_CivirulesPostTrigger_ContactCustomDataChanged extends CRM_Civirules_Tr
     //find matching rules for this objectName and op
     $triggers = self::getTriggers();
     foreach($triggers as $trigger) {
+      $trigger->alterTriggerData($triggerData);
       CRM_Civirules_Engine::triggerRule($trigger, $triggerData);
     }
   }
@@ -98,5 +100,4 @@ class CRM_CivirulesPostTrigger_ContactCustomDataChanged extends CRM_Civirules_Tr
       }
     }
   }
-
 }
