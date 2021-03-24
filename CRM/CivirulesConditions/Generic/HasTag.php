@@ -150,7 +150,7 @@ class CRM_CivirulesConditions_Generic_HasTag extends CRM_Civirules_Condition {
    *
    * @return bool|string
    */
-  public function getExtraDataInputUrl(int $ruleConditionId) {
+  public function getExtraDataInputUrl($ruleConditionId) {
     return CRM_Utils_System::url('civicrm/civirule/form/condition/contact_hastag/', 'rule_condition_id=' . $ruleConditionId);
   }
 
