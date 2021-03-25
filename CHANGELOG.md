@@ -4,6 +4,7 @@
 
 * Fixed #116: Problems with HasTag Condition and Add/Remove Tag Actions by !120
 * Fix HasTag Condition and Tag Added/Removed Actions for the Contact Tagged/Untagged Triggers with !123 fixes partially #120
+* Fixed #126: Fatal Error in Has Tag Condition by !132
 * Added `getEntity` to `TriggerData` base class !122 fixes partially #121
 * Code cleanup !126
 * Fix #124 Cannot use object of type CRM_Core_DAO_EntityTag  by !127
