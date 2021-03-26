@@ -59,8 +59,6 @@ class CRM_CivirulesActions_Activity_Form_AssignToContact extends CRM_CivirulesAc
         $defaultValues = parent::setDefaultValues();
         $data = unserialize($this->ruleAction->action_params);
 
-        echo '<pre>' . print_r($data, true) . '</pre>';
-
         $defaultValues['use_contact_trigger'] = '0';
         if (!empty($data['use_contact_trigger'])) {
             $defaultValues['use_contact_trigger'] = $data['use_contact_trigger'];
@@ -123,7 +121,7 @@ class CRM_CivirulesActions_Activity_Form_AssignToContact extends CRM_CivirulesAc
         $data['send_email'] = $this->_submitValues['send_email'];
         $data['use_contact_trigger'] = $this->_submitValues['use_contact_trigger'];
 
-        if ($data['use_contact_trigger'] === 1) {
+        if ($data['use_contact_trigger'] === '0') {
             if ($this->use_old_contact_ref_fields) {
                 $values = $this->controller->exportValues();
                 if (!empty($values['contact_select_id']) && count($values['contact_select_id']) > 0) {

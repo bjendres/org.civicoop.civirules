@@ -35,7 +35,7 @@
         cj(function() {
             cj('input[type=radio][name=use_contact_trigger]').change(triggerDelayChange);
 
-            if(cj('input[type=radio][name=use_contact_trigger]').val() === '1'){
+            if(cj('input[type=radio][name=use_contact_trigger]:checked').val() === '1'){
                 cj('#selectContact').hide();
             }
         });

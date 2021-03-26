@@ -42,49 +42,45 @@ class CRM_CivirulesActions_Activity_AssignNemail extends CRM_CivirulesActions_Ac
     {
         $this->apiParams = $params;
         $action_params = $this->getActionParameters();
-
         $this->useTriggerContact = boolval($params['use_contact_trigger']);
+        $assignee = array();
 
-        if (boolval($this->useTriggerContact) === true) {
-            $this->asignedContacts = [$triggerData->getContactId()];
+        $params['id'] = ($triggerData->getEntityData('Activity'))['id'];
+        if ($this->useTriggerContact === true || empty($action_params['assignee_contact_id']) || !is_array($action_params['assignee_contact_id'])) {
+            array_push($assignee, $triggerData->getContactId());
         } else {
-            if (!empty($action_params['assignee_contact_id'])) {
-                $assignee = array();
-                if (is_array($action_params['assignee_contact_id'])) {
-                    foreach ($action_params['assignee_contact_id'] as $contact_id) {
-                        if ($contact_id) {
-                            $assignee[] = $contact_id;
-                        }
-                    }
-                } else {
-                    $assignee[] = $action_params['assignee_contact_id'];
-                }
-                if (count($assignee)) {
-                    $params['assignee_contact_id'] = $action_params['assignee_contact_id'];
-                } else {
-                    $params['assignee_contact_id'] = '';
-                }
-
-                // Store the assigned contacts to send a notification email
-                if (!empty($params['assignee_contact_id'])) {
-                    $this->asignedContacts = (array) $params['assignee_contact_id'];
+            foreach ($action_params['assignee_contact_id'] as $contact_id) {
+                if ($contact_id) {
+                    $assignee[] = $contact_id;
                 }
             }
+        }
+
+        if (count($assignee)) {
+            $params['assignee_id'] = $assignee;
+            $this->asignedContacts = $assignee;
+        } else {
+            $params['assignee_id'] = '';
         }
 
         return $params;
     }
 
     /**
-     * Process the action
+     * Executes the action
+     * Overrided to save new activity id
      *
-     * @param CRM_Civirules_TriggerData_TriggerData $triggerData
-     * @access public
+     * This method could be overridden if needed
+     *
+     * @param $entity
+     * @param $action
+     * @param $parameters
+     * @access protected
+     * @throws Exception on api error
      */
-    public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData)
+    protected function executeApiAction($entity, $action, $parameters)
     {
-        // Process the action, may throw Exceptions
-        parent::processAction($triggerData);
+        parent::executeApiAction($entity, $action, $parameters);
     }
 
     /**
