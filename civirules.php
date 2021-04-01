@@ -254,7 +254,7 @@ function civirules_symfony_civicrm_post($event) {
     // https://lab.civicrm.org/extensions/civirules/-/issues/123
     // because CRM_Contact_BAO_GroupContact::bulkAddContactsToGroup circumvents dao->save() by directly writing to the DB in a query
     // So we always process it via the "old" hooks.
-    $entities = ['GroupContact'];
+    $entities = ['GroupContact', 'Organization', 'Individual', 'Household'];
     if (!in_array($event->entity, $entities)) {
       return;
     }
