@@ -13,6 +13,7 @@
 * Fix #125 Set contact_id for membership edit trigger. Also fix inconsistencies with capitals/lowercase of entity name
 * Fix #108 Hook function for `hook_civirules_alter_trigger_data` is never called by !99
 * Extend 'Assign & Email' activity functionallity by !133
+* Fix #129 trigger for Individual, Organization or Household by !135
 
 ## Version 2.22
 
