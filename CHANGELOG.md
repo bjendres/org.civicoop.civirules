@@ -14,6 +14,8 @@
 * Fix #108 Hook function for `hook_civirules_alter_trigger_data` is never called by !99
 * Extend 'Assign & Email' activity functionallity by !133
 * Fix #129 trigger for Individual, Organization or Household by !135
+* Fix #130 and simplify permissions by !136
+
 
 ## Version 2.22
 
