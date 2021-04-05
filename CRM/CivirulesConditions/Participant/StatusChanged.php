@@ -7,137 +7,39 @@
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_Participant_StatusChanged extends CRM_Civirules_Condition {
-
-  private $_conditionParams = array();
+class CRM_CivirulesConditions_Participant_StatusChanged extends CRM_CivirulesConditions_Generic_FieldValueChangeComparison {
 
   /**
-   * Method to set the Rule Condition data
-   *
-   * @param array $ruleCondition
-   * @access public
-   */
-  public function setRuleConditionData($ruleCondition) {
-    parent::setRuleConditionData($ruleCondition);
-    $this->_conditionParams = [];
-    if (!empty($this->ruleCondition['condition_params'])) {
-      $this->_conditionParams = unserialize($this->ruleCondition['condition_params']);
-    }
-  }
-
-  /**
-   * Method to determine if the condition is valid
-   *
-   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
-   * @return bool
-   */
-  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
-    $participantData = $triggerData->getEntityData('Participant');
-    $originalData = $triggerData->getOriginalData();
-    if (!isset($originalData['participant_status_id'])) {
-      $originalStatus = NULL;
-    }
-    else {
-      $originalStatus = $originalData['participant_status_id'];
-    }
-    if (!isset($participantData['status_id'])) {
-      $newStatus = NULL;
-    }
-    else {
-      $newStatus = $participantData['status_id'];
-    }
-    $originalCheck = $this->checkCondition($originalStatus, $this->_conditionParams['original_operator'], $this->_conditionParams['original_status_id']);
-    $newCheck = $this->checkCondition($newStatus, $this->_conditionParams['new_operator'], $this->_conditionParams['new_status_id']);
-    if ($originalCheck && $newCheck) {
-      return TRUE;
-    }
-    return FALSE;
-  }
-
-  /**
-   * Method to check status condition
-   *
-   * @param $statusId
-   * @param $operator
-   * @param $conditionStatusId
-   * @return bool
-   */
-  private function checkCondition($statusId, $operator, $conditionStatusId) {
-    if ($operator == 1) {
-      // if not set, then not equal is true
-      if (!$statusId) {
-        return TRUE;
-      }
-      else {
-        if ($statusId != $conditionStatusId) {
-          return TRUE;
-        }
-      }
-    }
-    else {
-      if ($statusId && $statusId == $conditionStatusId) {
-        return TRUE;
-      }
-    }
-    return FALSE;
-  }
-
-  /**
-   * Returns a redirect url to extra data input from the user after adding a condition
-   *
-   * Return false if you do not need extra data input
-   *
-   * @param int $ruleConditionId
-   * @return bool|string
-   * @access public
-   * @abstract
-   */
-  public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/participant/statuschanged', 'rule_condition_id=' . $ruleConditionId);
-  }
-
-  /**
-   * Returns a user friendly text explaining the condition params
-   * e.g. 'Older than 65'
+   * Returns name of entity
    *
    * @return string
-   * @access public
-   * @throws Exception
    */
-  public function userFriendlyConditionParams() {
-    $participantStatusList = CRM_CivirulesConditions_Participant_Status::getEntityStatusList(TRUE, TRUE);
-    $friendlyText = "Original participant status ";
-    if ($this->_conditionParams['original_operator'] == 1) {
-      $friendlyText .= " is NOT equal " . $participantStatusList[$this->_conditionParams['original_status_id']];
-    }
-    else {
-      $friendlyText .= " is equal " . $participantStatusList[$this->_conditionParams['original_status_id']];
-    }
-    $friendlyText .= " and new status ";
-    if ($this->_conditionParams['new_operator'] == 1) {
-      $friendlyText .= " is NOT equal " . $participantStatusList[$this->_conditionParams['new_status_id']];
-    }
-    else {
-      $friendlyText .= " is equal " . $participantStatusList[$this->_conditionParams['new_status_id']];
-    }
-
-    return $friendlyText;
+  protected function getEntity() {
+    return 'Participant';
   }
 
   /**
-   * This function validates whether this condition works with the selected trigger.
+   * Returns name of the field
    *
-   * This function could be overriden in child classes to provide additional validation
-   * whether a condition is possible in the current setup. E.g. we could have a condition
-   * which works on contribution or on contributionRecur then this function could do
-   * this kind of validation and return false/true
-   *
-   * @param CRM_Civirules_Trigger $trigger
-   * @param CRM_Civirules_BAO_Rule $rule
-   * @return bool
+   * @return string
    */
-  public function doesWorkWithTrigger(CRM_Civirules_Trigger $trigger, CRM_Civirules_BAO_Rule $rule) {
-    return $trigger->doesProvideEntity('Participant');
+  protected function getEntityStatusFieldName() {
+    return 'participant_status_id';
+  }
+
+  /**
+   * Returns an array with all possible options for the field, in
+   * case the field is a select field, e.g. gender, or financial type
+   * Return false when the field is a select field
+   *
+   * This method could be overridden by child classes to return the option
+   *
+   * The return is an array with the field option value as key and the option label as value
+   *
+   * @return array
+   */
+  public function getFieldOptions() {
+    return CRM_CivirulesConditions_Participant_Status::getEntityStatusList(TRUE);
   }
 
 }
