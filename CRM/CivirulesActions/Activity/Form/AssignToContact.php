@@ -16,6 +16,7 @@ class CRM_CivirulesActions_Activity_Form_AssignToContact extends CRM_CivirulesAc
      */
     public function buildQuickForm()
     {
+        $this->add('hidden', 'rule_action_id');
         $this->addYesNo('use_contact_trigger', 'Assign to contact from trigger', false, true);
 
         $this->assign('use_old_contact_ref_fields', $this->use_old_contact_ref_fields);
