@@ -16,7 +16,7 @@
 * Fix #129 trigger for Individual, Organization or Household by !135
 * Fix #130 and simplify permissions by !136
 * Fix routing after edit rule action 'Assign and email' not correct by !137
-* Fix 64 Update Participant StatusChanged to generic, enable multiselect  by !138
+* Fix #64 Update Participant StatusChanged to generic, enable multiselect  by !138
 
 
 ## Version 2.22
