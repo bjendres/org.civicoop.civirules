@@ -15,6 +15,7 @@
 * Extend 'Assign & Email' activity functionallity by !133
 * Fix #129 trigger for Individual, Organization or Household by !135
 * Fix #130 and simplify permissions by !136
+* Fix routing after edit rule action 'Assign and email' not correct by !137
 
 
 ## Version 2.22
