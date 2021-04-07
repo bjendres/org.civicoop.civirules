@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## Version 2.24 (not yet released)
+
 ## Version 2.23
 
 * Fixed #116: Problems with HasTag Condition and Add/Remove Tag Actions by !120
