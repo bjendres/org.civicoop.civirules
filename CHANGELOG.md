@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Version 2.23 (not yet released)
+## Version 2.23
 
 * Fixed #116: Problems with HasTag Condition and Add/Remove Tag Actions by !120
 * Fix HasTag Condition and Tag Added/Removed Actions for the Contact Tagged/Untagged Triggers with !123 fixes partially #120
