@@ -58,7 +58,6 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
       CRM_Core_DAO::executeQuery("RENAME TABLE civirule_event TO civirule_trigger");
     } else {
       $this->executeSqlFile('sql/createCiviruleTrigger.sql');
-      $this->executeSqlFile('sql/insertCiviruleTrigger.sql');
     }
     // rename columns event_id and event_params in civirule_rule
     if (CRM_Core_DAO::checkTableExists("civirule_rule")) {
