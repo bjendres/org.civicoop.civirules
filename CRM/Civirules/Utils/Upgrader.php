@@ -261,7 +261,7 @@ class CRM_Civirules_Utils_Upgrader {
         'name' => 'contribution_recur_end_date',
       ),
       'CRM_CivirulesConditions_Email_PrimaryEmailChanged' => array(
-        'label' => 'Primary E-mail Address has Changed',
+        'label' => 'Primary Email Address has Changed',
         'name' => 'primary_email_changed',
       ),
       'CRM_CivirulesConditions_EntityTag_TagId' => array(
