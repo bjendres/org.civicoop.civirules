@@ -2,6 +2,8 @@
 
 ## Version 2.24 (not yet released)
 
+* Fix #132: GroupContact entity missing from Tag Conditions and Actions by !142
+
 ## Version 2.23
 
 * Fixed #116: Problems with HasTag Condition and Add/Remove Tag Actions by !120
