@@ -202,7 +202,7 @@ class CRM_CivirulesConditions_Generic_HasTag extends CRM_Civirules_Condition {
    */
   public function doesWorkWithTrigger(CRM_Civirules_Trigger $trigger, CRM_Civirules_BAO_Rule $rule) {
     $entities = $trigger->getProvidedEntities();
-    foreach (['Contact', 'Activity', 'Case', 'File'] as $entity) {
+    foreach (['Contact', 'GroupContact', 'Activity', 'Case', 'File'] as $entity) {
       if (isset($entities[$entity])) {
         return TRUE;
       }
