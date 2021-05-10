@@ -18,16 +18,7 @@
   <version>2.24-dev</version>
   <develStage>stable</develStage>
   <compatibility>
-    <ver>4.7</ver>
-    <ver>5.0</ver>
-    <ver>5.1</ver>
-    <ver>5.2</ver>
-    <ver>5.3</ver>
-    <ver>5.4</ver>
-    <ver>5.5</ver>
-    <ver>5.6</ver>
-    <ver>5.7</ver>
-    <ver>5.8</ver>
+    <ver>5.37.0</ver>
   </compatibility>
   <comments>This extension is in production</comments>
   <civix>
