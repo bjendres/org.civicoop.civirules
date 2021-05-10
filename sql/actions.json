@@ -6,6 +6,7 @@
   {"name":"set_date_field_on_case","label":"Set a Date Field on a Case","class_name":"CRM_CivirulesActions_Case_SetDateFieldOnCase"},
   {"name":"case_add_role","label":"Set role on case","class_name":"CRM_CivirulesActions_Case_AddRole"},
   {"name":"set_case_status","label":"Set the Status of a Case","class_name":"CRM_CivirulesActions_Case_SetStatus"},
+  {"name":"set_case_custom_field","label":"Set Custom Field on a Case","class_name":"CRM_CivirulesActions_Case_SetCustomField"},
   {"name":"set_contact_communication_preferences","label":"Set Communication Preferences of a Contact","class_name":"CRM_CivirulesActions_Contact_SetCommPref"},
   {"name":"set_contact_job_title","label":"Set Job Title of a Contact","class_name":"CRM_CivirulesActions_Contact_SetJobTitle"},
   {"name":"set_contact_privacy_options","label":"Set Privacy Options of a Contact","class_name":"CRM_CivirulesActions_Contact_SetPrivacyOptions"},

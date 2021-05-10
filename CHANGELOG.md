@@ -2,8 +2,12 @@
 
 ## Version 2.24 (not yet released)
 
+**CiviCRM version compatibility** >= 5.28.0
+
 * Fix #132: GroupContact entity missing from Tag Conditions and Actions by !142
 * Added comments in the code and error handling in `civirules.php`.
+* Added action to update custom fields on a case. Needed to test #96.
+* Fixed #96: Custom Data on case changed trigger also works with a condition field is changed. Reuiqres `hook_civicrm_customPre`. Available since CiviCRM version 5.28
 
 ## Version 2.23
 

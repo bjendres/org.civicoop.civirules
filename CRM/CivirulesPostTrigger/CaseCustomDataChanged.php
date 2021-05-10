@@ -13,8 +13,6 @@
  */
 class CRM_CivirulesPostTrigger_CaseCustomDataChanged extends CRM_Civirules_Trigger {
 
-  private static $preData = false;
-
   private static $triggers = false;
 
   private static function getTriggers() {
@@ -59,11 +57,9 @@ class CRM_CivirulesPostTrigger_CaseCustomDataChanged extends CRM_Civirules_Trigg
         $case['custom_' . $field['custom_field_id']] = $field['value'];
       }
     }
-    if (self::$preData !== false) {
-      $t = new CRM_Civirules_TriggerData_Edit('Case', $entityID, $case, self::$preData);
-    } else {
-      $t = new CRM_Civirules_TriggerData_Post('Case', $entityID, $case);
-    }
+
+    $oldData = CRM_Civirules_Utils_PreData::getPreData('Case', $entityID, 1);
+    $t = new CRM_Civirules_TriggerData_Edit('Case', $entityID, $case, $oldData);
 
     //trigger for each client
     $clients = CRM_Case_BAO_Case::getCaseClients($entityID);
@@ -96,17 +92,6 @@ class CRM_CivirulesPostTrigger_CaseCustomDataChanged extends CRM_Civirules_Trigg
     $triggers = self::getTriggers();
     foreach($triggers as $trigger) {
       CRM_Civirules_Engine::triggerRule($trigger, $triggerData);
-    }
-  }
-
-  public static function validateForm($form) {
-    if ($form instanceof CRM_Case_Form_CustomData) {
-      $defaults = $form->getVar('_defaultValues');
-      self::$preData = array();
-      foreach($defaults as $key => $value) {
-        list($_custom, $field_id, $rec_id) = explode("_", $key);
-        self::$preData['custom_'.$field_id] = $value;
-      }
     }
   }
 

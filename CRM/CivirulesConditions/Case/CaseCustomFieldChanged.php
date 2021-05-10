@@ -27,7 +27,7 @@ class CRM_CivirulesConditions_Case_CaseCustomFieldChanged extends CRM_Civirules_
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
     // if condition custom field not in entity data, return false
-    $caseData = $triggerData->getEntityData('case');
+    $caseData = $triggerData->getEntityData('Case');
     if ($caseData) {
       $appears = FALSE;
       foreach ($this->_conditionParams['case_custom_field_id'] as $customFieldId) {

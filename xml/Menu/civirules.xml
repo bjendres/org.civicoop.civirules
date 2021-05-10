@@ -422,6 +422,12 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/action/case/setcustomvalue</path>
+    <page_callback>CRM_CivirulesActions_Case_Form_SetCustomField</page_callback>
+    <title>Set Custom Field on a Case</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/ruledelete</path>
     <page_callback>CRM_Civirules_Form_RuleDelete</page_callback>
     <title>RuleDelete</title>

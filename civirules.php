@@ -438,11 +438,22 @@ function civirules_civicrm_post_callback($op, $objectName, $objectId, $objectRef
 }
 
 function civirules_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
-  CRM_CivirulesPostTrigger_CaseCustomDataChanged::validateForm($form);
   CRM_CivirulesPostTrigger_ContactCustomDataChanged::validateForm($form);
   CRM_CivirulesPostTrigger_IndividualCustomDataChanged::validateForm($form);
   CRM_CivirulesPostTrigger_OrganizationCustomDataChanged::validateForm($form);
   CRM_CivirulesPostTrigger_HouseholdCustomDataChanged::validateForm($form);
+}
+
+/**
+ * This is the pre hook before custom data has been changed.
+ *
+ * @param $op
+ * @param $groupID
+ * @param $entityID
+ * @param $params
+ */
+function civirules_civicrm_customPre($op, $groupID, $entityID, &$params) {
+  CRM_Civirules_Utils_PreData::customPre($op, $groupID, $entityID, $params, 1);
 }
 
 /**

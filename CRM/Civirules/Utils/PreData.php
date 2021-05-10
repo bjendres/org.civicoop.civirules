@@ -80,6 +80,26 @@ class CRM_Civirules_Utils_PreData {
   }
 
   /**
+   * Retrieve the original data when the customPre hook is called.
+   *
+   * @param $op
+   * @param $groupID
+   * @param $entityID
+   * @param $params
+   * @param $eventID
+   */
+  public static function customPre($op, $groupID, $entityID, $params, $eventID=1) {
+    // We use api version 3 here as there is no api v4 for the CustomValue table.
+    $entity = civicrm_api3('CustomGroup', 'getvalue', ['id' => $groupID, 'return' => 'extends']);
+    $customDataApiResult = civicrm_api3('CustomValue', 'get', ['entity_id' => $entityID, 'entity_table' => $entity]);
+    $data = array();
+    foreach($customDataApiResult['values'] as $customField) {
+      $data['custom_' . $customField['id']] = $customField['latest'];
+    }
+    self::setPreData($entity, $entityID, $data, $eventID);
+  }
+
+  /**
    * Method to set the pre operation data
    *
    * @param string $entity
