@@ -40,22 +40,32 @@ class CRM_CivirulesPostTrigger_GroupContact extends CRM_Civirules_Trigger_Post {
    * @param $objectRef
    */
   public function triggerTrigger($op, $objectName, $objectId, $objectRef, $eventID) {
-    //in case of GroupContact $objectRef consist of an array of contactIds
-    //so convert this array to group contact objects
-    //we do this by a query on the group_contact table to retrieve the latest records for this group and contact
-    $sql = "SELECT MAX(`id`), `group_id`, `contact_id`, `status`, `location_id`, `email_id`
-            FROM `civicrm_group_contact`
-            WHERE `group_id` = %1 AND `contact_id` IN (".implode(", ", $objectRef).")
-            GROUP BY `contact_id`";
-    $params[1] = array($objectId, 'Integer');
-    $dao = CRM_Core_DAO::executeQuery($sql, $params, true, 'CRM_Contact_DAO_GroupContact');
-    $group = civicrm_api3('Group', 'getsingle', array('id' => $objectId));
-    while ($dao->fetch()) {
-      $data = array();
-      CRM_Core_DAO::storeValues($dao, $data);
+    // $objectRef could be either an array of contact ids or it is an object of type CRM_Contact_BAO_GroupContact.
+    // So check with which signature we are dealing.
+    if (is_object($objectRef)) {
+      // We are dealing with the objectRef is an instance of CRM_Contact_DAO_GroupContact.
+      $group = civicrm_api3('Group', 'getsingle', ['id' => $objectRef->group_id]);
+      $data = [];
+      CRM_Core_DAO::storeValues($objectRef, $data);
       $triggerData = $this->getTriggerDataFromPost($op, $objectName, $objectId, $data, $eventID);
       $triggerData->setEntityData('Group', $group);
       CRM_Civirules_Engine::triggerRule($this, clone $triggerData);
+    } else {
+      // We are dealing with an array of contact ids.
+      $sql = "SELECT MAX(`id`), `group_id`, `contact_id`, `status`, `location_id`, `email_id`
+            FROM `civicrm_group_contact`
+            WHERE `group_id` = %1 AND `contact_id` IN (" . implode(", ", $objectRef) . ")
+            GROUP BY `contact_id`";
+      $params[1] = [$objectId, 'Integer'];
+      $dao = CRM_Core_DAO::executeQuery($sql, $params, TRUE, 'CRM_Contact_DAO_GroupContact');
+      $group = civicrm_api3('Group', 'getsingle', ['id' => $objectId]);
+      while ($dao->fetch()) {
+        $data = [];
+        CRM_Core_DAO::storeValues($dao, $data);
+        $triggerData = $this->getTriggerDataFromPost($op, $objectName, $objectId, $data, $eventID);
+        $triggerData->setEntityData('Group', $group);
+        CRM_Civirules_Engine::triggerRule($this, clone $triggerData);
+      }
     }
   }
 }

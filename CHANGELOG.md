@@ -10,6 +10,7 @@
 * Fixed #96: Custom Data on case changed trigger also works with a condition field is changed. Requires `hook_civicrm_customPre`. Available since CiviCRM version 5.28
 * Added condition Contact Custom Field Changed. Need to test #133.
 * Fixed #133: Contact Custom Data changed trigger works now with pre data. Requires `hook_civicrm_customPre`. Available since CiviCRM version 5.28.
+* Fixed #134: Made the GroupContact trigger compatible with all signatures.
 
 ## Version 2.23
 
