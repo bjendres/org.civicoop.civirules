@@ -54,7 +54,7 @@ You also get the option to add a delay, which means a certain time (number of mi
 
 There is a tick box which allows you to specify if the condition is ONLY checked when the rule is triggered (tick the box) or BOTH when the rule is triggered AND when the action is executed (which could be days later depending on the delay - untick the box).
 
-In this example I will select the action Send e-mail and leave the No Delay. If I click Save I get a form where I can enter details about the email:
+In this example I will select the action Send email and leave the No Delay. If I click Save I get a form where I can enter details about the email:
 
 ![](./img/CiviRules_cookbook_print09.png)
 

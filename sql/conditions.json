@@ -42,7 +42,7 @@
   {"name":"donor_has_recurring","label":"Contact has Recurring Contribution with future end date","class_name":"CRM_CivirulesConditions_ContributionRecur_DonorIsRecurring"},
   {"name":"contact_has_recurring","label":"Contact has recurring contribution(s) with status","class_name":"CRM_CivirulesConditions_Contact_HasRecur"},
   {"name":"contribution_recur_end_date","label":"End Date of Recurring Contribution","class_name":"CRM_CivirulesConditions_ContributionRecur_EndDate"},
-  {"name":"primary_email_changed","label":"Primary E-mail Address has Changed","class_name":"CRM_CivirulesConditions_Email_PrimaryEmailChanged"},
+  {"name":"primary_email_changed","label":"Primary Email Address has Changed","class_name":"CRM_CivirulesConditions_Email_PrimaryEmailChanged"},
   {"name":"entity_tag_tag_id","label":"Tag is","class_name":"CRM_CivirulesConditions_EntityTag_TagId"},
   {"name":"group_type","label":"Group is (not) one of Type(s)","class_name":"CRM_CivirulesConditions_Group_GroupType"},
   {"name":"group_contact_group_id","label":"Group is","class_name":"CRM_CivirulesConditions_GroupContact_GroupId"},
