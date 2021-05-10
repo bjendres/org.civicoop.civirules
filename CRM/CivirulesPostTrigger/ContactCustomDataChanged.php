@@ -9,8 +9,6 @@
  */
 class CRM_CivirulesPostTrigger_ContactCustomDataChanged extends CRM_Civirules_Trigger {
 
-  protected static $preData = false;
-
   protected static function getObjectName() {
     return 'Contact';
   }
@@ -58,6 +56,8 @@ class CRM_CivirulesPostTrigger_ContactCustomDataChanged extends CRM_Civirules_Tr
 
   public static function custom($op, $groupID, $entityID, &$params) {
     $custom_group = civicrm_api3('CustomGroup', 'getsingle', array('id' => $groupID));
+    $get_called_class = get_called_class();
+    $objectName = $get_called_class::getObjectName();
     $entity_extensions = self::getEntityExtensions();
     if (!in_array($custom_group['extends'] , $entity_extensions)) {
       return;
@@ -71,12 +71,10 @@ class CRM_CivirulesPostTrigger_ContactCustomDataChanged extends CRM_Civirules_Tr
         }
       }
     }
-    if (self::$preData !== false) {
-      $triggerData = new CRM_Civirules_TriggerData_Edit('Contact', $entityID, $contact, self::$preData);
-    } else {
-      $triggerData = new CRM_Civirules_TriggerData_Post('Contact', $entityID, $contact);
-    }
-    
+
+    $oldData = CRM_Civirules_Utils_PreData::getPreData($objectName, $entityID, 1);
+    $triggerData = new CRM_Civirules_TriggerData_Edit('Contact', $entityID, $contact, $oldData);
+
     self::trigger($triggerData);
   }
 
@@ -89,15 +87,4 @@ class CRM_CivirulesPostTrigger_ContactCustomDataChanged extends CRM_Civirules_Tr
     }
   }
 
-  public static function validateForm($form) {
-    if ($form instanceof CRM_Contact_Form_CustomData
-        or $form instanceof CRM_Contact_Form_Inline_CustomData) {
-      $defaults = $form->getVar('_defaultValues');
-      self::$preData = array();
-      foreach($defaults as $key => $value) {
-        list($_custom, $field_id, $rec_id) = explode("_", $key);
-        self::$preData['custom_'.$field_id] = $value;
-      }
-    }
-  }
 }
