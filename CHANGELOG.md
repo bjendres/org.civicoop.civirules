@@ -3,6 +3,7 @@
 ## Version 2.24 (not yet released)
 
 * Fix #132: GroupContact entity missing from Tag Conditions and Actions by !142
+* Added comments in the code and error handling in `civirules.php`.
 
 ## Version 2.23
 

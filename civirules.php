@@ -229,7 +229,17 @@ function civirules_civicrm_navigationMenu(&$menu) {
   _civirules_civix_navigationMenu($menu);
 }
 
-
+/**
+ * By default we use the Symfony event for preInsert, preUpdate, postInsert etc.
+ * However there a couple of entities which do not work yet with the symfony events.
+ *
+ * In the future this should be refactored so that this would be simplified
+ * so that the inner workings are unambiguously with symfony events but that also depends
+ * on CiviCRM core changes.
+ *
+ * @param $event
+ * @throws \CRM_Core_Exception
+ */
 function civirules_symfony_civicrm_pre($event) {
   // New style pre/post Delete/Insert/Update events exist from 5.34.
   if (version_compare(CRM_Utils_System::version(), '5.34', '>=')) {
@@ -247,6 +257,17 @@ function civirules_symfony_civicrm_pre($event) {
   CRM_Civirules_Utils_CustomDataFromPre::pre($event->action, $event->entity, $event->id, $event->params, 1);
 }
 
+/**
+ * By default we use the Symfony event for preInsert, preUpdate, postInsert etc.
+ * However there a couple of entities which do not work yet with the symfony events.
+ *
+ * In the future this should be refactored so that this would be simplified
+ * so that the inner workings are unambiguously with symfony events but that also depends
+ * on CiviCRM core changes.
+ *
+ * @param $event
+ * @throws \CRM_Core_Exception
+ */
 function civirules_symfony_civicrm_post($event) {
   // New style pre/post Delete/Insert/Update events exist from 5.34.
   if (version_compare(CRM_Utils_System::version(), '5.34', '>=')) {
@@ -270,53 +291,150 @@ function civirules_symfony_civicrm_post($event) {
   }
 }
 
+/**
+ * This event is called before an entity is inserted in the database.
+ *
+ * This is the old pre hook with action is create.
+ *
+ * @param $event
+ */
 function civirules_trigger_preinsert($event) {
-  CRM_Civirules_Utils_PreData::pre('create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
-  CRM_Civirules_Utils_CustomDataFromPre::pre('create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  try {
+    CRM_Civirules_Utils_PreData::pre('create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+    CRM_Civirules_Utils_CustomDataFromPre::pre('create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  } catch (\Exception $ex) {
+    // Do nothing.
+  }
 }
 
+/**
+ * This event is called after an entity is inserted in the database.
+ *
+ * This is the old post hook action is create.
+ *
+ * @param $event
+ */
 function civirules_trigger_postinsert($event) {
-  if (CRM_Core_Transaction::isActive()) {
-    CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', ['create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID]);
-  }
-  else {
-    civirules_civicrm_post_callback('create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  try {
+    if (CRM_Core_Transaction::isActive()) {
+      CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', [
+        'create',
+        CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)),
+        $event->object->id,
+        $event->object,
+        $event->eventID
+      ]);
+    }
+    else {
+      civirules_civicrm_post_callback('create', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+    }
+  } catch (\Exception $ex) {
+    // Do nothing.
   }
 }
 
+/**
+ * This event is called before an entity is updated in the database.
+ *
+ * This is the old pre hook with action is edit.
+ *
+ * @param $event
+ */
 function civirules_trigger_preupdate($event) {
-  CRM_Civirules_Utils_PreData::pre('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
-  CRM_Civirules_Utils_CustomDataFromPre::pre('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  try {
+    CRM_Civirules_Utils_PreData::pre('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+    CRM_Civirules_Utils_CustomDataFromPre::pre('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  } catch (\Exception $ex) {
+    // Do nothing.
+  }
 }
 
+/**
+ * This event is called after an entity is updated in the database.
+ *
+ * This is the old post hook with action is edit.
+ *
+ * @param $event
+ */
 function civirules_trigger_postupdate($event) {
-  if (CRM_Core_Transaction::isActive()) {
-    CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', ['edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID]);
-  }
-  else {
-    civirules_civicrm_post_callback('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+  try {
+    if (CRM_Core_Transaction::isActive()) {
+      CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', [
+        'edit',
+        CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)),
+        $event->object->id,
+        $event->object,
+        $event->eventID
+      ]);
+    }
+    else {
+      civirules_civicrm_post_callback('edit', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID);
+    }
+  } catch (\Exception $ex) {
+    // Do nothing.
   }
 }
 
+/**
+ * This event is called before an entity is deleted.
+ *
+ * This is the old pre hook with action is delete.
+ *
+ * @param $event
+ */
 function civirules_trigger_predelete($event) {
-  CRM_Civirules_Utils_PreData::pre('delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)),
-    $event->object->id, $event->object, $event->eventID ?? 1);
-  CRM_Civirules_Utils_CustomDataFromPre::pre('delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class
-  ($event->object)), $event->object->id, $event->object, $event->eventID ?? 1);
-}
-
-function civirules_trigger_postdelete($event) {
-  if (CRM_Core_Transaction::isActive()) {
-    CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', ['delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)), $event->object->id, $event->object, $event->eventID ?? 1]);
-  }
-  else {
-    civirules_civicrm_post_callback('delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)),
+  try {
+    CRM_Civirules_Utils_PreData::pre('delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)),
       $event->object->id, $event->object, $event->eventID ?? 1);
+    CRM_Civirules_Utils_CustomDataFromPre::pre('delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class
+    ($event->object)), $event->object->id, $event->object, $event->eventID ?? 1);
+  } catch (\Exception $ex) {
+    // Do nothing.
   }
 }
 
+/**
+ * This event is called after an entity is deleted.
+ *
+ * This is the old post hook with action delete.
+ *
+ * @param $event
+ */
+function civirules_trigger_postdelete($event) {
+  try {
+    if (CRM_Core_Transaction::isActive()) {
+      CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_civicrm_post_callback', [
+        'delete',
+        CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)),
+        $event->object->id,
+        $event->object,
+        $event->eventID ?? 1
+      ]);
+    }
+    else {
+      civirules_civicrm_post_callback('delete', CRM_Core_DAO_AllCoreTables::getBriefName(get_class($event->object)),
+        $event->object->id, $event->object, $event->eventID ?? 1);
+    }
+  } catch (\Exception $ex) {
+    // Do nothing.
+  }
+}
+
+/**
+ * This callback is called from the post hooks or after the transaction is completed.
+ *
+ * @param $op
+ * @param $objectName
+ * @param $objectId
+ * @param $objectRef
+ * @param $eventID
+ */
 function civirules_civicrm_post_callback($op, $objectName, $objectId, $objectRef, $eventID) {
-  CRM_Civirules_Trigger_Post::post($op, $objectName, $objectId, $objectRef, $eventID);
+  try {
+    CRM_Civirules_Trigger_Post::post($op, $objectName, $objectId, $objectRef, $eventID);
+  } catch (\Exception $ex) {
+    // Do nothing.
+  }
 }
 
 function civirules_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
@@ -327,6 +445,16 @@ function civirules_civicrm_validateForm($formName, &$fields, &$files, &$form, &$
   CRM_CivirulesPostTrigger_HouseholdCustomDataChanged::validateForm($form);
 }
 
+/**
+ * This is the post hook after custom data has been changed.
+ *
+ * @param $op
+ * @param $groupID
+ * @param $entityID
+ * @param $params
+ *
+ * @throws \CRM_Core_Exception
+ */
 function civirules_civicrm_custom($op, $groupID, $entityID, &$params) {
   /**
    * Fix/Hack for issue #208 (https://github.com/CiviCooP/org.civicoop.civirules/issues/208)
