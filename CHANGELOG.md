@@ -4,6 +4,7 @@
 
 **CiviCRM version compatibility** >= 5.28.0
 
+* Removed unit tests.
 * Fix #132: GroupContact entity missing from Tag Conditions and Actions by !142
 * Added comments in the code and error handling in `civirules.php`.
 * Added action to update custom fields on a case. Needed to test #96.
