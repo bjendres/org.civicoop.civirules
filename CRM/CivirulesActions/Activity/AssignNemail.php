@@ -63,6 +63,8 @@ class CRM_CivirulesActions_Activity_AssignNemail extends CRM_CivirulesActions_Ac
             $params['assignee_id'] = '';
         }
 
+        $this->apiParams['send_email'] = 1; //Tell parent::processAction() to send an email
+
         return $params;
     }
 
