@@ -627,5 +627,32 @@ class CRM_Civirules_Utils {
     return $columns;
   }
 
+  /**
+   * Returns the object name of a certain object.
+   * When the object is contact it will try to retrieve the contact type
+   * and use this as the object name.
+   *
+   * @param \CRM_Core_DAO $object
+   *
+   * @return array|string|NULL
+   */
+  public static function getObjectNameFromObject(\CRM_Core_DAO $object) {
+    static $contact_types = []; // Array with contact ID and value the contact type.
+    $objectName = CRM_Core_DAO_AllCoreTables::getBriefName(get_class($object));
+    if ($objectName == 'Contact' && isset($object->contact_type)) {
+      $objectName = $object->contact_type;
+    } elseif ($objectName == 'Contact' && isset($contact_types[$object->id])) {
+      $objectName = $contact_types[$object->id];
+    } elseif ($objectName == 'Contact' && isset($object->id)) {
+      try {
+        $contact_types[$object->id] = civicrm_api3('Contact', 'getvalue', ['return' => 'contact_type', 'id' => $object->id]);
+        $objectName = $contact_types[$object->id];
+      } catch (\Exception $e) {
+        // Do nothing
+      }
+    }
+    return $objectName;
+  }
+
 }
 
