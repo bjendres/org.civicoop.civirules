@@ -13,6 +13,7 @@
 * Fixed #134: Made the GroupContact trigger compatible with all signatures.
 * Fixed #135: When custom data on a contact changes then also fire the contact is changed trigger.
 * Fixed regression bug from !96 and refactored cleaned up the code.
+* Fixed #138: by adding a generic set custom field action. Based on !68
 
 ## Version 2.23
 

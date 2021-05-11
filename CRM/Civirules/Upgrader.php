@@ -793,8 +793,14 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
   }
 
   public function upgrade_2069() {
-    $this->ctx->log->info('Applying update 2068 - Added new action Set Custom Data on a case.');
+    $this->ctx->log->info('Applying update 2068 - Added new condition.');
     CRM_Civirules_Utils_Upgrader::insertConditionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/conditions.json');
+    return TRUE;
+  }
+
+  public function upgrade_2070() {
+    $this->ctx->log->info('Applying update 2068 - Added new genric action Set Custom Data.');
+    CRM_Civirules_Utils_Upgrader::insertActionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/actions.json');
     return TRUE;
   }
 

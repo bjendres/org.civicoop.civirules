@@ -326,6 +326,12 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/action/generic/setcustomvalue</path>
+    <page_callback>CRM_CivirulesActions_Generic_Form_SetCustomField</page_callback>
+    <title>Set Custom Field</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/action/contact/setcustomvalue</path>
     <page_callback>CRM_CivirulesActions_Contact_Form_SetCustomField</page_callback>
     <title>Set Custom Field</title>
