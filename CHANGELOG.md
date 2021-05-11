@@ -3,6 +3,7 @@
 ## Version 2.24 (not yet released)
 
 * Fix #132: GroupContact entity missing from Tag Conditions and Actions by !142
+* Fix #116: Introduce actions Add Tag to / Remove Tag from Activity/Case/Contact/File + add method to check if API4 active in CRM_Civirules_Utils
 
 ## Version 2.23
 
