@@ -636,7 +636,8 @@ class CRM_Civirules_Utils {
    *
    * @return array|string|NULL
    */
-  public static function getObjectNameFromObject(\CRM_Core_DAO $object) {
+  public static function getObjectNameFromObject(\CRM_Core_DAO $object)
+  {
     static $contact_types = []; // Array with contact ID and value the contact type.
     $objectName = CRM_Core_DAO_AllCoreTables::getBriefName(get_class($object));
     if ($objectName == 'Contact' && isset($object->contact_type)) {
@@ -652,6 +653,18 @@ class CRM_Civirules_Utils {
       }
     }
     return $objectName;
+  }
+
+  /**
+   * Method to check if Api4 is active in the current installation
+   *
+   * @return bool
+   */
+  public static function isApi4Active() {
+    if (function_exists('civicrm_api4')) {
+      return TRUE;
+    }
+    return FALSE;
   }
 
 }

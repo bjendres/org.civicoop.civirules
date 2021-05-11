@@ -301,6 +301,12 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/action/tag/entitytag</path>
+    <page_callback>CRM_CivirulesActions_Tag_Form_EntityTag</page_callback>
+    <title>Entity Tag</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/action/contact/subtype</path>
     <page_callback>CRM_CivirulesActions_Contact_Form_Subtype</page_callback>
     <title>Set contact subtype</title>
