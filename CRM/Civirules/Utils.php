@@ -627,5 +627,17 @@ class CRM_Civirules_Utils {
     return $columns;
   }
 
+  /**
+   * Method to check if Api4 is active in the current installation
+   *
+   * @return bool
+   */
+  public static function isApi4Active() {
+    if (function_exists('civicrm_api4')) {
+      return TRUE;
+    }
+    return FALSE;
+  }
+
 }
 
