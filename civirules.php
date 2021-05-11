@@ -373,7 +373,7 @@ function civirules_trigger_preinsert(\Civi\Core\DAO\Event\PreUpdate $event) {
 function civirules_trigger_postinsert($event) {
   $objectName = CRM_Civirules_Utils::getObjectNameFromObject($event->object);
   $eventID = $event->eventID ?? 1;
-  if (!civirules_use_posthook('create', $objectName, $event->object->id, $event->object,)) {
+  if (!civirules_use_posthook('create', $objectName, $event->object->id, $event->object)) {
     civirules_instanciate_post_trigger('create', $objectName, $event->object->id, $event->object, $eventID);
   }
 }
@@ -405,7 +405,7 @@ function civirules_trigger_preupdate(\Civi\Core\DAO\Event\PreUpdate $event) {
 function civirules_trigger_postupdate($event) {
   $objectName = CRM_Civirules_Utils::getObjectNameFromObject($event->object);
   $eventID = $event->eventID ?? 1;
-  if (!civirules_use_posthook('edit', $objectName, $event->object->id, $event->object,)) {
+  if (!civirules_use_posthook('edit', $objectName, $event->object->id, $event->object)) {
     civirules_instanciate_post_trigger('edit', $objectName, $event->object->id, $event->object, $eventID);
   }
 }
@@ -437,7 +437,7 @@ function civirules_trigger_predelete(\Civi\Core\DAO\Event\PreDelete $event) {
 function civirules_trigger_postdelete($event) {
   $objectName = CRM_Civirules_Utils::getObjectNameFromObject($event->object);
   $eventID = $event->eventID ?? 1;
-  if (!civirules_use_posthook('delete', $objectName, $event->object->id, $event->object,)) {
+  if (!civirules_use_posthook('delete', $objectName, $event->object->id, $event->object)) {
     civirules_instanciate_post_trigger('delete', $objectName, $event->object->id, $event->object, $eventID);
   }
 }
