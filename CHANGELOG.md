@@ -18,6 +18,7 @@
 * Fixed #128: by adding a generic set custom field action. Based on !68
 * Fixed #43: Conditions and action who check for Contact also work Individual, Household or Organization Changed triggers.
 * Fix #116: Introduce actions Add Tag to / Remove Tag from Activity/Case/Contact/File + add method to check if API4 active in CRM_Civirules_Utils
+* Restore sending emails to trigger contact in Action Assign and email !144
 
 ## Version 2.23
 
