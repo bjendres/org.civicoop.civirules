@@ -23,7 +23,9 @@ class CRM_CivirulesPostTrigger_Form_Activity extends CRM_CivirulesTrigger_Form_F
       'field' => "record_type_id",
     ]);
     $options[0] = E::ts('For all contacts');
-    $options = array_merge($options, $result['values']);
+    foreach($result['values'] as $val => $opt) {
+      $options[$val] = $opt;
+    }
 
     $this->add('select', 'record_type', E::ts('Trigger for'),$options, true, ['class' => 'crm-select2 huge']);
 

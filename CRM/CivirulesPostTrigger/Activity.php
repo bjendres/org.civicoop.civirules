@@ -94,7 +94,9 @@ class CRM_CivirulesPostTrigger_Activity extends CRM_Civirules_Trigger_Post {
       'field' => "record_type_id",
     ]);
     $options[0] = E::ts('For all contacts');
-    $options = array_merge($options, $result['values']);
+    foreach($result['values'] as $val => $opt) {
+      $options[$val] = $opt;
+    }
     return E::ts('Trigger for %1', array(1=>$options[$this->triggerParams['record_type']]));
   }
 
