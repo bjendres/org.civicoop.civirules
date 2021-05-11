@@ -15,6 +15,7 @@
 * Fixed regression bug from !96 and refactored cleaned up the code.
 * Fixed activity trigger configuration. The activity assignee and activity target values weren't set correctly.
 * Fixed #128: by adding a generic set custom field action. Based on !68
+* Fixed #43: Conditions and action who check for Contact also work Individual, Household or Organization Changed triggers.
 
 ## Version 2.23
 

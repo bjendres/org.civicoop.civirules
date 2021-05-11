@@ -20,4 +20,49 @@ class CRM_CivirulesPostTrigger_Contact extends CRM_Civirules_Trigger_Post {
     return 'CRM_Contact_DAO_Contact';
   }
 
+  /**
+   * Checks whether the trigger provides a certain entity.
+   *
+   * @param string $entity
+   * @return bool
+   */
+  public function doesProvideEntity($entity) {
+    if ($entity == 'Contact') {
+      return TRUE;
+    }
+    $availableEntities = $this->getProvidedEntities();
+    foreach($availableEntities as $providedEntity) {
+      if (strtolower($providedEntity->entity) == strtolower($entity)) {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
+   * Checks whether the trigger provides a certain set of entities
+   *
+   * @param array<string> $entities
+   * @return bool
+   */
+  public function doesProvideEntities($entities) {
+    $availableEntities = $this->getProvidedEntities();
+    foreach($entities as $entity) {
+      $entityPresent = false;
+      if ($entity == 'Contact') {
+        $entityPresent = true;
+      } else {
+        foreach ($availableEntities as $providedEntity) {
+          if (strtolower($providedEntity->entity) == strtolower($entity)) {
+            $entityPresent = TRUE;
+          }
+        }
+      }
+      if (!$entityPresent) {
+        return false;
+      }
+    }
+    return true;
+  }
+
 }
