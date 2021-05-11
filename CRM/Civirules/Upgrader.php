@@ -57,8 +57,7 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     if (CRM_Core_DAO::checkTableExists("civirule_event")) {
       CRM_Core_DAO::executeQuery("RENAME TABLE civirule_event TO civirule_trigger");
     } else {
-      $this->executeSqlFile('sql/createCiviruleTrigger.sql');
-      $this->executeSqlFile('sql/insertCiviruleTrigger.sql');
+      $this->executeSqlFile('sql/upgrade_1002.sql');
     }
     // rename columns event_id and event_params in civirule_rule
     if (CRM_Core_DAO::checkTableExists("civirule_rule")) {
@@ -213,7 +212,7 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
    * Update for rule tag (check <https://github.com/CiviCooP/org.civicoop.civirules/issues/98>)
    */
   public function upgrade_1020() {
-    $this->executeSqlFile('sql/createCiviruleRuleTag.sql');
+    $this->executeSqlFile('sql/upgrade_1020.sql');
     $ruleTagOptionGroup = CRM_Civirules_Utils_OptionGroup::getSingleWithName('civirule_rule_tag');
     if (empty($ruleTagOptionGroup)) {
       CRM_Civirules_Utils_OptionGroup::create('civirule_rule_tag', 'Tags for CiviRules', 'Tags used to filter CiviRules on the CiviRules page');
@@ -271,8 +270,9 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     }
 
     // now insert all Civirules Actions and Conditions
-    $this->executeSqlFile('sql/insertCivirulesActions.sql');
-    $this->executeSqlFile('sql/insertCivirulesConditions.sql');
+    // commented obsolete insert actions
+    // $this->executeSqlFile('sql/insertCivirulesActions.sql');
+    // $this->executeSqlFile('sql/insertCivirulesConditions.sql');
 
     // Now check whether we have a backup and restore the backup
     if (CRM_Core_DAO::checkTableExists('civirule_rule_action_backup')) {
