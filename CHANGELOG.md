@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Version 2.24
+## Version 2.24 (not released yet)
 
 **CiviCRM version compatibility** >= 5.28.0
 
