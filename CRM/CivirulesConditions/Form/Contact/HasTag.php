@@ -1,4 +1,5 @@
 <?php
+use CRM_Civirules_ExtensionUtil as E;
 /**
  * Class for CiviRules Condition parameters form - entity has tag
  *
@@ -9,80 +10,19 @@
 class CRM_CivirulesConditions_Form_Contact_HasTag extends CRM_CivirulesConditions_Form_Form {
 
   /**
-   * Method to get tags
-   *
-   * @return array
-   */
-  protected function getTags() {
-    $bao = new CRM_Core_BAO_Tag();
-    switch ($this->trigger->object_name) {
-      case 'Contact':
-      case 'Membership':
-      case 'EntityTag':
-        $tableName = 'civicrm_contact';
-        break;
-
-      case 'Activity':
-        $tableName = 'civicrm_activity';
-        break;
-
-      case 'Case':
-        $tableName = 'civicrm_case';
-        break;
-
-      case 'File':
-        $tableName = 'civicrm_file';
-        break;
-
-      default:
-        return [];
-    };
-
-    $tags = $bao->getTree($tableName);
-    $options = [];
-    foreach ($tags as $tag_id => $tag) {
-      $parent = '';
-      $this->buildOptionsFromTree($options, $tags, $parent);
-    }
-    asort($options);
-    return $options;
-  }
-
-  /**
-   * @param array $options
-   * @param array $tree
-   * @param string $parent
-   */
-  protected function buildOptionsFromTree(array &$options, array $tree, string $parent) {
-    foreach ($tree as $tag_id => $tag) {
-      if ($tag['is_selectable']) {
-        $options[$tag_id] = trim($parent . ' ' . $tag['name']);
-      }
-      if (isset($tag['children']) && is_array($tag['children'])) {
-        $this->buildOptionsFromTree($options, $tag['children'], $tag['name'] . ':');
-      }
-    }
-  }
-
-  /**
-   * Method to get operators
-   *
-   * @return array
-   */
-  protected function getOperators() {
-    return CRM_CivirulesConditions_Generic_HasTag::getOperatorOptions();
-  }
-
-  /**
    * Overridden parent method to build form
    */
   public function buildQuickForm() {
-    $this->add('hidden', 'rule_condition_id');
-
-    $tag = $this->add('select', 'tag_ids', ts('Tags'), $this->getTags(), TRUE);
-    $tag->setMultiple(TRUE);
-    $this->add('select', 'operator', ts('Operator'), $this->getOperators(), TRUE);
-
+    $tableName = "civicrm_contact";
+    $genericTag = new CRM_CivirulesConditions_Generic_HasTag();
+    $genericTag->setEntityTable($tableName);
+    $this->add('hidden', 'rule_action_id');
+    $this->add('select', 'operator', ts('Operator'), $genericTag->getOperatorOptions(), TRUE);
+    $this->add('select', 'tag_ids', E::ts('Select Tag(s)'), $genericTag->getEntityTags(), TRUE, [
+      'class' => 'crm-select2',
+      'multiple' => TRUE,
+      'placeholder' => '--- select tag(s) ---',
+    ]);
     $this->addButtons([
       ['type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,],
       ['type' => 'cancel', 'name' => ts('Cancel')]

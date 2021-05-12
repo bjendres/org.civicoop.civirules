@@ -20,7 +20,7 @@
   {"name":"contact_has_been_in_group","label":"Contact Has (Never) Been in Group","class_name":"CRM_CivirulesConditions_Contact_HasBeenInGroup"},
   {"name":"contact_has_phone","label":"Contact Has Phone","class_name":"CRM_CivirulesConditions_Contact_HasPhone"},
   {"name":"contact_has_subtype","label":"Contact is (not) of Subtype(s)","class_name":"CRM_CivirulesConditions_Contact_HasSubtype"},
-  {"name":"contact_has_tag","label":"Entity Has\/Does Not Have Tag(s)","class_name":"CRM_CivirulesConditions_Generic_HasTag"},
+  {"name":"contact_has_tag","label":"Contact Has\/Does Not Have Tag(s)","class_name":"CRM_CivirulesConditions_Contact_HasTag"},
   {"name":"contact_in_group","label":"Contact (not) in Group(s)","class_name":"CRM_CivirulesConditions_Contact_InGroup"},
   {"name":"contact_sub_type_changed","label":"Contact Subtypes Changed","class_name":"CRM_CivirulesConditions_Contact_SubtypesChanged"},
   {"name":"contact_in_country","label":"Contact Lives in Country","class_name":"CRM_CivirulesConditions_Contact_LivesInCountry"},

@@ -6,177 +6,122 @@
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_Generic_HasTag extends CRM_Civirules_Condition {
-
-  protected $conditionParams = [];
+class CRM_CivirulesConditions_Generic_HasTag {
+  protected $entityTable = "civicrm_contact";
 
   /**
-   * Method to set the Rule Condition data
-   *
-   * @param array $ruleCondition
+   * @param $entityTable
    */
-  public function setRuleConditionData(array $ruleCondition) {
-    parent::setRuleConditionData($ruleCondition);
-    $this->conditionParams = [];
-    if (!empty($this->ruleCondition['condition_params'])) {
-      $this->conditionParams = unserialize($this->ruleCondition['condition_params']);
-    }
+  public function setEntityTable($entityTable) {
+    $this->entityTable = $entityTable;
   }
 
   /**
-   * This method returns TRUE or FALSE when an condition is valid or not
-   *
-   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
-   *
-   * @return bool
+   * Method to get tags with API4
+   * @param $entityId
+   * @return array
    */
-  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData): bool {
-    $isConditionValid = FALSE;
-    $entityType = $triggerData->getEntity();
-    if ($entityType == 'Membership' || $entityType == 'EntityTag') {
-      $entityID = $triggerData->getContactId();
-      $entityType = 'Contact';
-  	}
-    else {
-      $entityID = $triggerData->getEntityId();
-      //Capitalise entity type as local fix for CRM_Civirules_Utils_ObjectName::convertToEntity()
-      //which sets 'contact' as lower case.  Unless & until this is fixed at source.
-      $entityType = ucwords($entityType);
+  public function getApi4TagsWithEntityId($entityId) {
+    $tags = [];
+    try {
+      $tags = \Civi\Api4\EntityTag::get()
+        ->setCheckPermissions(FALSE)
+        ->addSelect('tag_id')
+        ->addWhere('entity_table', '=', $this->entityTable)
+        ->addWhere('entity_id', '=', $entityId)
+        ->execute()->column('tag_id');
     }
-
-    if (empty($entityID)) {
-      return FALSE;
+    catch (API_Exception $ex) {
     }
-    switch($this->conditionParams['operator']) {
-      case 'in one of':
-        $isConditionValid = $this->entityHasOneOfTags($entityID, $this->conditionParams['tag_ids'], $entityType);
-        break;
-      case 'in all of':
-        $isConditionValid = $this->entityHasAllTags($entityID, $this->conditionParams['tag_ids'], $entityType);
-        break;
-      case 'not in':
-        $isConditionValid = $this->entityHasNotTag($entityID, $this->conditionParams['tag_ids'], $entityType);
-        break;
-    }
-    return $isConditionValid;
+    return $tags;
   }
 
   /**
-   * @param int $entityID
-   * @param array $tag_ids
-   * @param string $entity
+   * Method to get tags with API3
    *
+   * @param $entityId
+   * @return array
+   */
+  public function getApi3TagsWithEntityId($entityId) {
+    $tags = [];
+    try {
+      $tags = civicrm_api3('Tag', 'get', [
+        'options' => ['limit' => 0],
+        'entity_table' => $this->entityTable,
+        'entity_id' => $entityId,
+        'return' => 'id',
+      ])['values'];
+    }
+    catch (CiviCRM_API3_Exception $ex) {
+    }
+    return $tags;
+  }
+
+  /**
+   * @param int $entityId
+   * @param array $tagIds
    * @return bool
    */
-  protected function entityHasNotTag(int $entityID, array $tag_ids, string $entity = 'Contact'): bool {
+  public function entityHasNotTag(int $entityId, array $tagIds): bool {
     $isValid = TRUE;
-
-    $tags = \Civi\Api4\EntityTag::get()
-      ->setCheckPermissions(FALSE)
-      ->addSelect('tag_id')
-      ->addWhere('entity_table:name', '=', $entity)
-      ->addWhere('entity_id', '=', $entityID)
-      ->execute()->column('tag_id');
-    foreach($tag_ids as $tag_id) {
-      if (in_array($tag_id, $tags)) {
+    if (CRM_Civirules_Utils::isApi4Active()) {
+      $tags = $this->getApi4TagsWithEntityId($entityId);
+    }
+    else {
+      $tags = $this->getApi3TagsWithEntityId($entityId);
+    }
+    foreach ($tagIds as $tagId) {
+      if (in_array($tagId, $tags)) {
         $isValid = FALSE;
       }
     }
-
     return $isValid;
   }
 
   /**
-   * @param int $entityID
-   * @param array $tag_ids
-   * @param string $entity
-   *
+   * @param int $entityId
+   * @param array $tagIds
    * @return bool
    */
-  protected function entityHasAllTags(int $entityID, array $tag_ids, string $entity = 'Contact'): bool {
+  public function entityHasAllTags(int $entityId, array $tagIds):bool {
     $isValid = 0;
-
-    $tags = \Civi\Api4\EntityTag::get()
-      ->setCheckPermissions(FALSE)
-      ->addSelect('tag_id')
-      ->addWhere('entity_table:name', '=', $entity)
-      ->addWhere('entity_id', '=', $entityID)
-      ->execute()->column('tag_id');
-    foreach($tag_ids as $tag_id) {
-      if (in_array($tag_id, $tags)) {
+    if (CRM_Civirules_Utils::isApi4Active()) {
+      $tags = $this->getApi4TagsWithEntityId($entityId);
+    }
+    else {
+      $tags = $this->getApi3TagsWithEntityId($entityId);
+    }
+    foreach($tagIds as $tagId) {
+      if (in_array($tagId, $tags)) {
         $isValid++;
       }
     }
-
-    if (count($tag_ids) == $isValid && count($tag_ids) > 0) {
+    if (count($tagIds) == $isValid && count($tagIds) > 0) {
       return TRUE;
     }
-
     return FALSE;
   }
 
   /**
-   * @param int $entityID
-   * @param array $tag_ids
-   * @param string $entity
-   *
+   * @param int $entityId
+   * @param array $tagIds
    * @return bool
    */
-  protected function entityHasOneOfTags(int $entityID, array $tag_ids, string $entity = 'Contact'): bool {
+  public function entityHasOneOfTags(int $entityId, array $tagIds): bool {
     $isValid = FALSE;
-
-    $tags = \Civi\Api4\EntityTag::get()
-      ->setCheckPermissions(FALSE)
-      ->addSelect('tag_id')
-      ->addWhere('entity_table:name', '=', $entity)
-      ->addWhere('entity_id', '=', $entityID)
-      ->execute()->column('tag_id');
-    foreach($tag_ids as $tag_id) {
-      if (in_array($tag_id, $tags)) {
+    if (CRM_Civirules_Utils::isApi4Active()) {
+      $tags = $this->getApi4TagsWithEntityId($entityId);
+    }
+    else {
+      $tags = $this->getApi3TagsWithEntityId($entityId);
+    }
+    foreach($tagIds as $tagId) {
+      if (in_array($tagId, $tags)) {
         $isValid = TRUE;
         break;
       }
     }
-
     return $isValid;
-  }
-
-  /**
-   * Returns a redirect url to extra data input from the user after adding a condition
-   *
-   * Return FALSE if you do not need extra data input
-   *
-   * @param int $ruleConditionId
-   *
-   * @return bool|string
-   */
-  public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/contact_hastag/', 'rule_condition_id=' . $ruleConditionId);
-  }
-
-  /**
-   * Returns a user friendly text explaining the condition params
-   * e.g. 'Older than 65'
-   *
-   * @return string
-   */
-  public function userFriendlyConditionParams(): string {
-    $operators = self::getOperatorOptions();
-    $operator = $this->conditionParams['operator'];
-    $operatorLabel = ts('unknown');
-    if (isset($operators[$operator])) {
-      $operatorLabel = $operators[$operator];
-    }
-
-    $tags = '';
-    foreach($this->conditionParams['tag_ids'] as $tid) {
-      if (strlen($tags)) {
-        $tags .= ', ';
-      }
-      $tags .= civicrm_api3('Tag', 'getvalue', ['return' => 'name', 'id' => $tid]);
-    }
-
-    return $operatorLabel.' tags ('.$tags.')';
   }
 
   /**
@@ -184,30 +129,69 @@ class CRM_CivirulesConditions_Generic_HasTag extends CRM_Civirules_Condition {
    *
    * @return array
    */
-  public static function getOperatorOptions(): array {
+  public function getOperatorOptions(): array {
     return [
-      'in one of' => ts('In one of selected'),
+      'is one of' => ts('In one of selected'),
       'in all of' => ts('In all selected'),
       'not in' => ts('Not in selected'),
     ];
   }
 
   /**
-   * This function validates whether this condition works with the selected trigger.
+   * Method to get the tags for the entity
    *
-   * @param CRM_Civirules_Trigger $trigger
-   * @param CRM_Civirules_BAO_Rule $rule
-   *
-   * @return bool
+   * @return array
    */
-  public function doesWorkWithTrigger(CRM_Civirules_Trigger $trigger, CRM_Civirules_BAO_Rule $rule) {
-    $entities = $trigger->getProvidedEntities();
-    foreach (['Contact', 'GroupContact', 'Activity', 'Case', 'File'] as $entity) {
-      if (isset($entities[$entity])) {
-        return TRUE;
+  public function getEntityTags() {
+    if (CRM_Civirules_Utils::isApi4Active()) {
+      return $this->getApi4Tags();
+    }
+    else {
+      return $this->getApi3Tags();
+    }
+  }
+
+  /**
+   * Method to get all contact tags with API4
+   */
+  private function getApi4Tags() {
+    $tags = [];
+    try {
+      $apiTags = \Civi\Api4\Tag::get()
+        ->addSelect('name')
+        ->addWhere('used_for', 'LIKE', '%' . $this->entityTable . '%')
+        ->execute();
+      foreach ($apiTags as $apiTag) {
+        if (!isset($tags[$apiTag['id']])) {
+          $tags[$apiTag['id']] = $apiTag['name'];
+        }
       }
     }
-    return FALSE;
+    catch (API_Exception $ex) {
+    }
+    return $tags;
+  }
+
+  /**
+   * Method to get all contact tags with API3
+   */
+  private function getApi3Tags() {
+    $tags = [];
+    try {
+      $apiTags = civicrm_api3('Tag', 'get', [
+        'return' => ["name"],
+        'used_for' => ['LIKE' => "%" . $this->entityTable ."%"],
+        'options' => ['limit' => 0],
+      ]);
+      foreach ($apiTags['values'] as $apiTagId => $apiTag) {
+        if (!isset($tags[$apiTagId])) {
+          $tags[$apiTagId] = $apiTag['name'];
+        }
+      }
+    }
+    catch (CiviCRM_API3_Exception $ex) {
+    }
+    return $tags;
   }
 
 }

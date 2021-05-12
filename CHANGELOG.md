@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Version 2.24 (not released yet)
+## Version 2.24
 
 **CiviCRM version compatibility** >= 5.28.0
 
@@ -17,7 +17,7 @@
 * Fixed activity trigger configuration. The activity assignee and activity target values weren't set correctly.
 * Fixed #128: by adding a generic set custom field action. Based on !68
 * Fixed #43: Conditions and action who check for Contact also work Individual, Household or Organization Changed triggers.
-* Fix #116: Introduce actions Add Tag to / Remove Tag from Activity/Case/Contact/File + add method to check if API4 active in CRM_Civirules_Utils
+* Fix #116: Introduce actions Add Tag to / Remove Tag from Activity/Case/Contact/File + add method to check if API4 active in CRM_Civirules_Utils + add conditions Contact Has Tag, Case Has Tag, Activity Has Tag and File Has Tag
 
 ## Version 2.23
 
