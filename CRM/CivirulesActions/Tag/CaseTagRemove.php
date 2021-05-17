@@ -10,17 +10,17 @@ class CRM_CivirulesActions_Tag_CaseTagRemove extends CRM_Civirules_Action {
    * @throws
    */
   public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
-    $contactId = $triggerData->getContactId();
+    $entityId = $triggerData->getEntityId();
     $actionParams = $this->getActionParameters();
     $entityTable = "civicrm_case";
     $api4 = CRM_Civirules_Utils::isApi4Active();
     if (isset($actionParams['tag_id'])) {
       foreach ($actionParams['tag_id'] as $tagId) {
         if ($api4) {
-          CRM_CivirulesActions_Tag_EntityTag::deleteApi4EntityTag($entityTable, $contactId, $tagId);
+          CRM_CivirulesActions_Tag_EntityTag::deleteApi4EntityTag($entityTable, $entityId, $tagId);
         }
         else {
-          CRM_CivirulesActions_Tag_EntityTag::deleteApi3EntityTag($entityTable, $contactId, $tagId);
+          CRM_CivirulesActions_Tag_EntityTag::deleteApi3EntityTag($entityTable, $entityId, $tagId);
         }
       }
     }

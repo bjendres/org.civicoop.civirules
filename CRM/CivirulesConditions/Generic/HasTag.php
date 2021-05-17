@@ -131,7 +131,7 @@ class CRM_CivirulesConditions_Generic_HasTag {
    */
   public function getOperatorOptions(): array {
     return [
-      'is one of' => ts('In one of selected'),
+      'in one of' => ts('In one of selected'),
       'in all of' => ts('In all selected'),
       'not in' => ts('Not in selected'),
     ];

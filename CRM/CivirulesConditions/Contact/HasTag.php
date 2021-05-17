@@ -34,27 +34,21 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData): bool {
     $isConditionValid = FALSE;
-    $entityType = $triggerData->getEntity();
-    if ($entityType == 'Membership' || $entityType == 'EntityTag') {
-      $entityID = $triggerData->getContactId();
-  	}
-    else {
-      $entityID = $triggerData->getEntityId();
-    }
-    if (empty($entityID)) {
+    $contactId = $triggerData->getContactId();
+    if (empty($contactId)) {
       return FALSE;
     }
     $generic = new CRM_CivirulesConditions_Generic_HasTag();
     $generic->setEntityTable('civicrm_contact');
-    switch($this->conditionParams['operator']) {
+    switch ($this->conditionParams['operator']) {
       case 'in one of':
-        $isConditionValid = $generic->entityHasOneOfTags($entityID, $this->conditionParams['tag_ids']);
+        $isConditionValid = $generic->entityHasOneOfTags($contactId, $this->conditionParams['tag_ids']);
         break;
       case 'in all of':
-        $isConditionValid = $generic->entityHasAllTags($entityID, $this->conditionParams['tag_ids']);
+        $isConditionValid = $generic->entityHasAllTags($contactId, $this->conditionParams['tag_ids']);
         break;
       case 'not in':
-        $isConditionValid = $generic->entityHasNotTag($entityID, $this->conditionParams['tag_ids']);
+        $isConditionValid = $generic->entityHasNotTag($contactId, $this->conditionParams['tag_ids']);
         break;
     }
     return $isConditionValid;

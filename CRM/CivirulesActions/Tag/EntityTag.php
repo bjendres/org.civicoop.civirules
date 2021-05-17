@@ -115,7 +115,8 @@ class CRM_CivirulesActions_Tag_EntityTag {
         ->addWhere('entity_table', '=', $entityTable)
         ->addWhere('entity_id', '=', $entityId)
         ->addWhere('tag_id', '=', $tagId)
-        ->execute();    }
+        ->execute();
+    }
     catch (API_Exception $ex) {
       Civi::log()->error(E::ts("Error from API4 EntityTag delete in ") . __METHOD__ . E::ts(" with message: ") . $ex->getMessage());
     }

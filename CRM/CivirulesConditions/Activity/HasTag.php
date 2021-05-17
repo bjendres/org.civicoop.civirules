@@ -34,13 +34,7 @@ class CRM_CivirulesConditions_Activity_HasTag extends CRM_Civirules_Condition {
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData): bool {
     $isConditionValid = FALSE;
-    $entityType = $triggerData->getEntity();
-    if ($entityType == 'Membership' || $entityType == 'EntityTag') {
-      $entityID = $triggerData->getContactId();
-  	}
-    else {
-      $entityID = $triggerData->getEntityId();
-    }
+    $entityID = $triggerData->getEntityId();
     if (empty($entityID)) {
       return FALSE;
     }

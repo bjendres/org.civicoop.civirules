@@ -8,7 +8,7 @@ use CRM_Civirules_ExtensionUtil as E;
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_Case_HasTag extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_File_HasTag extends CRM_Civirules_Condition {
 
   protected $conditionParams = [];
 
@@ -34,13 +34,7 @@ class CRM_CivirulesConditions_Case_HasTag extends CRM_Civirules_Condition {
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData): bool {
     $isConditionValid = FALSE;
-    $entityType = $triggerData->getEntity();
-    if ($entityType == 'Membership' || $entityType == 'EntityTag') {
-      $entityID = $triggerData->getContactId();
-  	}
-    else {
-      $entityID = $triggerData->getEntityId();
-    }
+    $entityID = $triggerData->getEntityId();
     if (empty($entityID)) {
       return FALSE;
     }
