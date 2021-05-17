@@ -92,6 +92,7 @@ class CRM_CivirulesActions_Tag_EntityTag {
         ->addValue('entity_id', $entityId)
         ->addValue('tag_id', $tagId)
         ->execute();
+      Civi::log()->debug('Toegevoegd tag ' . $tagId . ' met tabel ' . $entityTable . ' en entity ' . $entityId);
     }
     catch (API_Exception $ex) {
       Civi::log()->error(E::ts("Error from API4 EntityTag create in ") . __METHOD__ . E::ts(" with message: ") . $ex->getMessage());

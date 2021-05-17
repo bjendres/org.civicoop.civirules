@@ -390,7 +390,7 @@ function civirules_trigger_preupdate(\Civi\Core\DAO\Event\PreUpdate $event) {
     $eventID = $event->eventID ?? 1;
     $params = array();
     CRM_Core_DAO::storeValues($event->object, $params);
-    CRM_Civirules_Utils_PreData::pre('edit', $objectName, $$objectId, $params, $eventID);
+    CRM_Civirules_Utils_PreData::pre('edit', $objectName, $objectId, $params, $eventID);
     CRM_Civirules_Utils_CustomDataFromPre::pre('edit', $objectName, $objectId, $params, $eventID);
   } catch (\Exception $ex) {
     // Do nothing.
