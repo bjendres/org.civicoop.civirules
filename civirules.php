@@ -452,7 +452,7 @@ function civirules_trigger_postdelete($event) {
  * @param $objectRef
  * @param $eventId
  */
-function civirules_instanciate_post_trigger($op, $objectName, $objectId, &$objectRef, $eventId) {
+function civirules_instanciate_post_trigger($op, $objectName, $objectId, $objectRef, $eventId) {
   try {
     if (CRM_Core_Transaction::isActive()) {
       CRM_Core_Transaction::addCallback(CRM_Core_Transaction::PHASE_POST_COMMIT, 'civirules_call_post_trigger', [
@@ -480,7 +480,7 @@ function civirules_instanciate_post_trigger($op, $objectName, $objectId, &$objec
  * @param $objectRef
  * @param $eventID
  */
-function civirules_call_post_trigger($op, $objectName, $objectId, &$objectRef, $eventID) {
+function civirules_call_post_trigger($op, $objectName, $objectId, $objectRef, $eventID) {
   try {
     CRM_Civirules_Trigger_Post::post($op, $objectName, $objectId, $objectRef, $eventID);
   } catch (\Exception $ex) {
