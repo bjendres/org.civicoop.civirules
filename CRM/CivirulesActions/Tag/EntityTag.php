@@ -83,7 +83,6 @@ class CRM_CivirulesActions_Tag_EntityTag {
    */
   public static function createApi4EntityTag($entityTable, $entityId, $tagId) {
     if (empty($entityTable) || empty($entityId) || empty($tagId)) {
-      Civi::log()->error(E::ts("Empty parameter entityTable, entityId or tagId in ") . __METHOD__);
       return;
     }
     try {
@@ -92,7 +91,6 @@ class CRM_CivirulesActions_Tag_EntityTag {
         ->addValue('entity_id', $entityId)
         ->addValue('tag_id', $tagId)
         ->execute();
-      Civi::log()->debug('Toegevoegd tag ' . $tagId . ' met tabel ' . $entityTable . ' en entity ' . $entityId);
     }
     catch (API_Exception $ex) {
       Civi::log()->error(E::ts("Error from API4 EntityTag create in ") . __METHOD__ . E::ts(" with message: ") . $ex->getMessage());
@@ -108,7 +106,6 @@ class CRM_CivirulesActions_Tag_EntityTag {
    */
   public static function deleteApi4EntityTag($entityTable, $entityId, $tagId) {
     if (empty($entityTable) || empty($entityId) || empty($tagId)) {
-      Civi::log()->error(E::ts("Empty parameter entityTable, entityId or tagId in ") . __METHOD__);
       return;
     }
     try {
@@ -119,7 +116,6 @@ class CRM_CivirulesActions_Tag_EntityTag {
         ->execute();
     }
     catch (API_Exception $ex) {
-      Civi::log()->error(E::ts("Error from API4 EntityTag delete in ") . __METHOD__ . E::ts(" with message: ") . $ex->getMessage());
     }
   }
 
