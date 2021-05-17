@@ -1,14 +1,14 @@
 <?php
 use CRM_Civirules_ExtensionUtil as E;
 /**
- * Class for CiviRules Contact HasTag condition
+ * Class for CiviRules Activity HasTag condition
  *
  * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
- * @date 12 May 2021
+ * @date 17 May 2021
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_Activity_HasTag extends CRM_Civirules_Condition {
 
   protected $conditionParams = [];
 
@@ -45,7 +45,7 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
       return FALSE;
     }
     $generic = new CRM_CivirulesConditions_Generic_HasTag();
-    $generic->setEntityTable('civicrm_contact');
+    $generic->setEntityTable('civicrm_activity');
     switch($this->conditionParams['operator']) {
       case 'in one of':
         $isConditionValid = $generic->entityHasOneOfTags($entityID, $this->conditionParams['tag_ids']);
@@ -71,7 +71,7 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
    */
   public function getExtraDataInputUrl($ruleConditionId) {
     return CRM_Utils_System::url('civicrm/civirule/form/condition/entity_hastag/', 'rule_condition_id=' . $ruleConditionId
-      . '&tn=civicrm_contact');
+      . '&tn=civicrm_activity');
   }
 
   /**
@@ -109,13 +109,7 @@ class CRM_CivirulesConditions_Contact_HasTag extends CRM_Civirules_Condition {
    * @return bool
    */
   public function doesWorkWithTrigger(CRM_Civirules_Trigger $trigger, CRM_Civirules_BAO_Rule $rule) {
-    $entities = $trigger->getProvidedEntities();
-    foreach (['Contact', 'GroupContact'] as $entity) {
-      if (isset($entities[$entity])) {
-        return TRUE;
-      }
-    }
-    return FALSE;
+    return $trigger->doesProvideEntities(array('Activity', 'ActivityContact'));
   }
 
 }

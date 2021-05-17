@@ -7,18 +7,21 @@ use CRM_Civirules_ExtensionUtil as E;
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_Form_Contact_HasTag extends CRM_CivirulesConditions_Form_Form {
+class CRM_CivirulesConditions_Form_EntityTag_HasTag extends CRM_CivirulesConditions_Form_Form {
 
   /**
    * Overridden parent method to build form
    */
   public function buildQuickForm() {
-    $tableName = "civicrm_contact";
+    $tableName = CRM_Utils_Request::retrieveValue('tn', "String");
+    if (!$tableName) {
+      $tableName = "civicrm_contact";
+    }
     $genericTag = new CRM_CivirulesConditions_Generic_HasTag();
     $genericTag->setEntityTable($tableName);
     $this->add('hidden', 'rule_action_id');
     $this->add('select', 'operator', ts('Operator'), $genericTag->getOperatorOptions(), TRUE);
-    $this->add('select', 'tag_ids', E::ts('Select Tag(s)'), $genericTag->getEntityTags(), TRUE, [
+       $this->add('select', 'tag_ids', E::ts('Select Tag(s)'), $genericTag->getEntityTags(), TRUE, [
       'class' => 'crm-select2',
       'multiple' => TRUE,
       'placeholder' => '--- select tag(s) ---',

@@ -813,6 +813,31 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
   public function upgrade_2072() {
     $this->ctx->log->info('Applying update 2071 - Add conditions contact has tag, activity has tag, case has tag, file has tag');
     CRM_Civirules_Utils_Upgrader::insertConditionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/conditions.json');
+    // rename existing contact has tag and warn user of changes
+    $conditionName = "contact_has_tag";
+    $className = "CRM_CivirulesConditions_Contact_HasTag";
+    $conditionId = CRM_Core_DAO::singleValueQuery("SELECT id FROM civirule_condition WHERE name = %1", [
+      1 => [$conditionName, "String"],
+      2 => [$className, "String"],
+      ]);
+    if ($conditionId) {
+      // check if there are any usages of this condition and if so, warn user
+      $query = "SELECT a.rule_id, b.label FROM civirule_rule_condition AS a
+        JOIN civirule_rule AS b ON a.rule_id = b.id WHERE a.condition_id = %1";
+      $dao = CRM_Core_DAO::executeQuery($query, [1 => [(int) $conditionId, "Integer"]]);
+      while ($dao->fetch()) {
+        $message = E::ts("The condition Entity Has/Does Not Have Tag is used in the rule ") . $dao->label . E::ts(" (rule ID ") . $dao->rule_id
+          . E::ts(") but this condition is now changed to Contact Has/Does Not Have Tag. Please inspect this rule to see if the configuration is still applicable");
+        Civi::log()->warning($message);
+        CRM_Core_Session::setStatus($message, E::ts("Condition on rule " . $dao->rule_id . " changed"));
+      }
+      $update = "UPDATE civirule_condition SET class_name = %1, label = %2 WHERE id = %3";
+      CRM_Core_DAO::executeQuery($update, [
+        1 => [$className, "String"],
+        2 => ["Contact Has/Does Not Have Tag", "String"],
+        3 => [(int) $conditionId, "Integer"],
+      ]);
+    }
     return TRUE;
   }
 
