@@ -42,7 +42,7 @@ class CRM_CivirulesConditions_Campaign_Type extends CRM_Civirules_Condition {
     $campaignData = $triggerData->getEntityData('Campaign');
     // issue 139, get campaign data if not complete (@link https://lab.civicrm.org/extensions/civirules/-/issues/139)
     if (!isset($campaignData['campaign_type_id'])) {
-      CRM_CivirulesConditions_Generic_Campaign::getCampaignData((int) $campaignData['id']);
+      $campaignData = CRM_CivirulesConditions_Generic_Campaign::getCampaignData((int) $campaignData['id']);
     }
     switch ($this->_conditionParams['operator']) {
       case '0':

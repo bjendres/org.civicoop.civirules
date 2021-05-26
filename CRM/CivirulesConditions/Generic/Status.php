@@ -94,7 +94,7 @@ abstract class CRM_CivirulesConditions_Generic_Status extends CRM_Civirules_Cond
     // issue 139, get campaign data if not complete (@link https://lab.civicrm.org/extensions/civirules/-/issues/139)
     $entity = $triggerData->getEntity();
     if ($entity == "Campaign") {
-      CRM_CivirulesConditions_Generic_Campaign::getCampaignData((int) $entityData['id']);
+      $entityData = CRM_CivirulesConditions_Generic_Campaign::getCampaignData((int) $entityData['id']);
     }
     switch ($this->conditionParams['operator']) {
       case 0:
