@@ -40,13 +40,9 @@ class CRM_CivirulesConditions_Campaign_Type extends CRM_Civirules_Condition {
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
     $campaignData = $triggerData->getEntityData('campaign');
-    // temp workaround for issue 113, get campaign data if not complete
+    // issue 139, get campaign data if not complete (@link https://lab.civicrm.org/extensions/civirules/-/issues/139)
     if (!isset($campaignData['campaign_type_id'])) {
-      try {
-        $campaignData = civicrm_api3('Campaign', 'getsingle', ['id' => $campaignData['id']]);
-      }
-      catch (CiviCRM_API3_Exception $ex) {
-      }
+      CRM_CivirulesConditions_Generic_Campaign::getCampaignData((int) $campaignData['id']);
     }
     switch ($this->_conditionParams['operator']) {
       case '0':

@@ -91,7 +91,11 @@ abstract class CRM_CivirulesConditions_Generic_Status extends CRM_Civirules_Cond
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
     $entityData = $triggerData->getEntityData($this->getEntity());
-
+    // issue 139, get campaign data if not complete (@link https://lab.civicrm.org/extensions/civirules/-/issues/139)
+    $entity = $triggerData->getEntity();
+    if ($entity == "Campaign") {
+      CRM_CivirulesConditions_Generic_Campaign::getCampaignData((int) $entityData['id']);
+    }
     switch ($this->conditionParams['operator']) {
       case 0:
         if (in_array($entityData[$this->getEntityStatusFieldName()], $this->conditionParams['status_id'])) {
