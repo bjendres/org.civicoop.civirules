@@ -841,5 +841,11 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     return TRUE;
   }
 
+  public function upgrade_2073() {
+    $this->ctx->log->info('Applying update 2073 - Add actions: Create pending group subscription');
+    CRM_Civirules_Utils_Upgrader::insertActionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/actions.json');
+    return TRUE;
+  }
+
 }
 

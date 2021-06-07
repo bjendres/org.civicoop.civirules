@@ -3,6 +3,7 @@
 ## Version 2.25 (not released yet)
 
 * Fix 139: retrieve campaign data because entity data is not empty for type and status conditions. Add generic condition class for campaign.
+* Added action Create Pending Group Subscription #141
 
 ## Version 2.24
 

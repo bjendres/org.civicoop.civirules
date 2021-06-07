@@ -18,6 +18,7 @@
   {"name":"set_custom_field","label":"Set Custom Field on contact","class_name":"CRM_CivirulesActions_Contact_SetCustomField"},
   {"name":"set_contribution_thank_date","label":"Set Thank You Date for a Contribution","class_name":"CRM_CivirulesActions_Contribution_ThankYouDate"},
   {"name":"add_contact_group","label":"Add Contact to a Group","class_name":"CRM_CivirulesActions_GroupContact_Add"},
+  {"name":"subscribe_contact_group","label":"Create Pending Group Subscription","class_name":"CRM_CivirulesActions_GroupContact_Subscribe"},
   {"name":"remove_contact_group","label":"Remove Contact from a Group","class_name":"CRM_CivirulesActions_GroupContact_Remove"},
   {"name":"add_tag_contact","label":"Add Tag to Entity","class_name":"CRM_CivirulesActions_Tag_Add"},
   {"name":"remove_tag_contact","label":"Remove Tag from Entity","class_name":"CRM_CivirulesActions_Tag_Remove"},
