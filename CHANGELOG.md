@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## Version 2.26 (not yet released)
+## Version 2.26
 
+* Fix Issue With Class Not Found Error by !145
 * Added action to set a custom field with data from another custom field.
 
 ## Version 2.25
