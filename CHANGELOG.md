@@ -2,6 +2,8 @@
 
 ## Version 2.26 (not yet released)
 
+* Added action to set a custom field with data from another custom field.
+
 ## Version 2.25
 
 * Fix 139: retrieve campaign data because entity data is not empty for type and status conditions. Add generic condition class for campaign.

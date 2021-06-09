@@ -16,6 +16,7 @@
   {"name":"update_date_value","label":"Update Date Value","class_name":"CRM_CivirulesActions_Contact_UpdateDateValue"},
   {"name":"advanced_update_date_value","label":"Advanced Update Date Value","class_name":"CRM_CivirulesActions_Generic_UpdateDateValue"},
   {"name":"set_custom_field","label":"Set Custom Field on contact","class_name":"CRM_CivirulesActions_Contact_SetCustomField"},
+  {"name":"copy_custom_field","label":"Set Custom Field on a contact with data from another Custom Field","class_name":"CRM_CivirulesActions_Contact_CopyCustomField"},
   {"name":"set_contribution_thank_date","label":"Set Thank You Date for a Contribution","class_name":"CRM_CivirulesActions_Contribution_ThankYouDate"},
   {"name":"add_contact_group","label":"Add Contact to a Group","class_name":"CRM_CivirulesActions_GroupContact_Add"},
   {"name":"subscribe_contact_group","label":"Create Pending Group Subscription","class_name":"CRM_CivirulesActions_GroupContact_Subscribe"},
