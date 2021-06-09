@@ -32,7 +32,7 @@ class CRM_CivirulesConditions_Case_StatusChanged extends CRM_CivirulesConditions
    * @return array
    */
   public function getFieldOptions() {
-    return CRM_CivirulesConditions_Case_CaseStatus::getEntityStatusList(TRUE);
+    return CRM_CivirulesConditions_Case_Status::getEntityStatusList(TRUE);
   }
 
   /**
