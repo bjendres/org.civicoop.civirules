@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## Version 2.27 (not yet released)
+
 ## Version 2.26
 
 * Fix Issue With Class Not Found Error by !145
