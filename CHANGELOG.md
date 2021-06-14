@@ -2,6 +2,8 @@
 
 ## Version 2.27 (not yet released)
 
+* Fixed issue !144. Contact is tagged and is untagged works again.
+
 ## Version 2.26
 
 * Fix Issue With Class Not Found Error by !145

@@ -33,21 +33,37 @@ class CRM_CivirulesPostTrigger_EntityTag extends CRM_Civirules_Trigger_Post {
 
     $entity = CRM_Civirules_Utils_ObjectName::convertToEntity($objectName);
 
-    //only execute entity tag for setting or removing tags from contacts
-    //because we need to know the contact id for the trigger engine
-    //and we only know this when the tag is on contact level
-    if (!isset($objectRef->entity_table) || $objectRef->entity_table != 'civicrm_contact') {
-      return;
+    $entityTags = array();
+    // $objectRef is either an object or an array.
+    if (is_object($objectRef)) {
+      $entityTags[] = [
+        'tag_id' => $objectId,
+        'entity_id' => $objectRef->entity_id,
+        'entity_table' => $objectRef->entity_table,
+        'contact_id' => $objectRef->entity_id,
+      ];
+    } elseif (is_array($objectRef)) {
+      foreach($objectRef['0'] as $entity_id) {
+        $entityTags[] = [
+          'tag_id' => $objectId,
+          'entity_id' => $entity_id,
+          'entity_table' => $objectRef['1'],
+          'contact_id' => $entity_id,
+        ];
+      }
     }
 
-    $data = [
-      'tag_id' => $objectId,
-      'entity_id' => $objectRef->entity_id,
-      'entity_table' => $objectRef->entity_table,
-      'contact_id' => $objectRef->entity_id,
-    ];
-    $triggerData = new CRM_Civirules_TriggerData_Post($entity, $objectId, $data);
-    CRM_Civirules_Engine::triggerRule($this, $triggerData);
+    foreach($entityTags as $entityTag) {
+      //only execute entity tag for setting or removing tags from contacts
+      //because we need to know the contact id for the trigger engine
+      //and we only know this when the tag is on contact level
+      if ($entityTag['entity_table'] != 'civicrm_contact') {
+        continue;
+      }
+      $triggerData = new CRM_Civirules_TriggerData_Post($entity, $objectId, $entityTag);
+      CRM_Civirules_Engine::triggerRule($this, $triggerData);
+    }
+
   }
 
 }
