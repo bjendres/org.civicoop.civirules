@@ -19,7 +19,7 @@ class CRM_CivirulesConditions_Form_EntityTag_HasTag extends CRM_CivirulesConditi
     }
     $genericTag = new CRM_CivirulesConditions_Generic_HasTag();
     $genericTag->setEntityTable($tableName);
-    $this->add('hidden', 'rule_action_id');
+    $this->add('hidden', 'rule_condition_id');
     $this->add('select', 'operator', ts('Operator'), $genericTag->getOperatorOptions(), TRUE);
        $this->add('select', 'tag_ids', E::ts('Select Tag(s)'), $genericTag->getEntityTags(), TRUE, [
       'class' => 'crm-select2',
