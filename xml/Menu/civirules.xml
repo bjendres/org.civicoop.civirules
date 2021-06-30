@@ -301,6 +301,12 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/action/sync_tag</path>
+    <page_callback>CRM_CivirulesActions_Tag_Form_Sync</page_callback>
+    <title>Syncronize Contact Tags</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/action/tag/entitytag</path>
     <page_callback>CRM_CivirulesActions_Tag_Form_EntityTag</page_callback>
     <title>Entity Tag</title>
