@@ -15,7 +15,7 @@
     <email>helpdesk@civicoop.org</email>
   </maintainer>
   <releaseDate>2021-06-30</releaseDate>
-  <version>2.27</version>
+  <version>2.28-dev</version>
   <develStage>stable</develStage>
   <compatibility>
     <ver>5.28</ver>
