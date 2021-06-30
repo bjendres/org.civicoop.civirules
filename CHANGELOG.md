@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## Version 2.28 (not yet released)
+
 ## Version 2.27
 
 * Fixed issue !144. Contact is tagged and is untagged works again.
