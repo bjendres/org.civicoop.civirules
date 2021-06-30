@@ -853,5 +853,11 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     return TRUE;
   }
 
+  public function upgrade_2075() {
+    $this->ctx->log->info('Applying update 2075 - Add actions: add target contact to activity');
+    CRM_Civirules_Utils_Upgrader::insertActionsFromJson($this->extensionDir . DIRECTORY_SEPARATOR . 'sql/actions.json');
+    return TRUE;
+  }
+
 }
 

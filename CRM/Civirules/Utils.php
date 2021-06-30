@@ -325,6 +325,30 @@ class CRM_Civirules_Utils {
    * @param bool $onlyActive
    * @return array
    */
+  public static function getRelationshipTypes($onlyActive = TRUE) {
+    $return = array();
+    if ($onlyActive) {
+      $params = array('is_active' => 1);
+    } else {
+      $params = array();
+    }
+    $params['options'] = array('limit' => 0);
+    try {
+      $relationshipTypes = civicrm_api3("RelationshipType", "Get", $params);
+      foreach ($relationshipTypes['values'] as $relationshipType) {
+        $return['a_b_' . $relationshipType['id']] = $relationshipType['label_a_b'] . ' (A-B)';
+        $return['b_a_' . $relationshipType['id']] = $relationshipType['label_b_a'] . ' (B-A)';
+      }
+    } catch (CiviCRM_API3_Exception $ex) {}
+    asort($return);
+    return $return;
+  }
+
+  /**
+   * Method to get the membership types
+   * @param bool $onlyActive
+   * @return array
+   */
   public static function getMembershipTypes($onlyActive = TRUE) {
     $return = array();
     if ($onlyActive) {

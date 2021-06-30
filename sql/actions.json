@@ -3,6 +3,7 @@
   {"name":"activity_edit","label":"Edit triggering activity","class_name":"CRM_CivirulesActions_Activity_Edit"},
   {"name":"activity_assign_email","label":"Assign activity & email","class_name":"CRM_CivirulesActions_Activity_AssignNemail"},
   {"name":"activity_update_status","label":"Update activity status","class_name":"CRM_CivirulesActions_Activity_UpdateStatus"},
+  {"name":"activity_add_target_contact","label":"Add target contact to activity","class_name":"CRM_CivirulesActions_Activity_AddTargetContact"},
   {"name":"set_date_field_on_case","label":"Set a Date Field on a Case","class_name":"CRM_CivirulesActions_Case_SetDateFieldOnCase"},
   {"name":"case_add_role","label":"Set role on case","class_name":"CRM_CivirulesActions_Case_AddRole"},
   {"name":"set_case_status","label":"Set the Status of a Case","class_name":"CRM_CivirulesActions_Case_SetStatus"},

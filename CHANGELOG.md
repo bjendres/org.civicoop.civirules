@@ -4,6 +4,7 @@
 
 * Fixed issue !144. Contact is tagged and is untagged works again.
 * Fixed issue #145. Contact has tag not saved. By !146
+* Added action: Add Target Contact to activity so that additional contacts could be added to the activity.
 
 ## Version 2.26
 
