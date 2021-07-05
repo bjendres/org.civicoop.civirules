@@ -829,7 +829,7 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
         $message = E::ts("The condition Entity Has/Does Not Have Tag is used in the rule ") . $dao->label . E::ts(" (rule ID ") . $dao->rule_id
           . E::ts(") but this condition is now changed to Contact Has/Does Not Have Tag. Please inspect this rule to see if the configuration is still applicable");
         Civi::log()->warning($message);
-        CRM_Core_Session::setStatus($message, E::ts("Condition on rule " . $dao->rule_id . " changed"));
+        CRM_Core_Session::setStatus($message, E::ts("Condition on rule [%1] changed", [1 => $dao->rule_id]), 'error');
       }
       $update = "UPDATE civirule_condition SET class_name = %1, label = %2 WHERE id = %3";
       CRM_Core_DAO::executeQuery($update, [
